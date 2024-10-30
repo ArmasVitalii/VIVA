@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/Language-C++-00599C?style=flat&logo=cplusplus&logoColor=white"/>
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat"/>
   <br>
-  <strong>Ether Board Game - Modern C++ Project</strong>
+  <strong>Eter Board Game - Modern C++ Project</strong>
 </p>
 
 ---
@@ -89,7 +89,7 @@
 
 ## 🎮 Project Overview
 
-**VIVA** presents the **Ether Board Game**, a strategic, turn-based game implemented in modern C++. The game involves tactical decisions and careful planning to outsmart opponents and secure victory. This project is crafted to demonstrate proficiency in modern C++ principles.
+**VIVA** presents the **Eter Board Game**, a strategic, turn-based game implemented in modern C++. The game involves tactical decisions and careful planning to outsmart opponents and secure victory. This project is crafted to demonstrate proficiency in modern C++ principles.
 
 <!--
 ### 🛠 Features
