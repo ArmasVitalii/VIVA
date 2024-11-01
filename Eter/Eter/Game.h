@@ -3,6 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <algorithm>
+#include <unordered_set>
+#include "Card.h"
+#include <Player.h>
 
 using gameboard = std::vector<std::vector<std::stack<Card>>>;
 
@@ -37,7 +41,9 @@ private:
 	std::pair<int, int>		getGridMiddle();
 	void					printGameboard();
 	bool					validatePositionInGrid() const;		//Verify if the gridmiddle is in the grid and if all inserted elements are inside the grid
-	bool					winCondition(bool currentPlayer);
+	bool					winCondition(bool currentPlayer);	//Returns a bool wich decides who won the game
 	int						verifyLockCase(bool player);		//Verify if we are in a lock case
 
+public:
+	void					start();
 };
