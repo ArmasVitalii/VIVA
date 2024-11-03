@@ -14,7 +14,7 @@ private:
 public:
 	Player(bool playerNumber);		//, const std::list<Card>& playerCards = {});
 
-	std::list<int>& getCards();
+	std::list<int>&				getCards();
 	void						addCard(const Card& card);
 	bool						removeCard(const Card& card);//MAYBE WITH NUMBERS, NOT CARDS
 

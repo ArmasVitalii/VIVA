@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include "Card.h"
-#include <Player.h>
+#include "Player.h"
 
 using gameboard = std::vector<std::vector<std::stack<Card>>>;
 
@@ -37,7 +37,7 @@ private:
 
 	gameboard&				getGameBoard();
 	const Player&			getPlayer1() const;
-	const PLayer&			getPlayer2() const;
+	const Player&			getPlayer2() const;
 	std::pair<int, int>		getGridMiddle();
 	void					printGameboard();
 	bool					validatePositionInGrid() const;		//Verify if the gridmiddle is in the grid and if all inserted elements are inside the grid

@@ -8,6 +8,6 @@ private:
 public:
 	Card(int value, bool whoPlayer);
 	bool				operator==(const Card& other) const;
-	const int& getValue() const;
-	const bool& getWhoPlayed() const;
+	const int&			getValue() const;
+	const bool&			getWhoPlayed() const;
 };
