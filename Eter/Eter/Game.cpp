@@ -33,4 +33,38 @@ void Game::start()
 
 	bool firstMove = true, forInsert = true, currentPlayer = 0;
 	int lockCase = -1;
+
+
+	do
+	{
+		if (firstMove)//LOGIC FOR THE FIRST MOVE
+		{
+			std::cout << "Currently Playing As PLAYER " << currentPlayer + 1;
+			m_players[currentPlayer].printPlayableCards();
+			std::cout << "Enter 1st choice: ";
+			std::cin >> choice_v;
+
+			if (!m_players[currentPlayer].removeCard({ choice_v,currentPlayer }))
+			{
+				std::cout << "Value not available.\n";
+				continue;
+			}
+
+			//DELETE THIS AFTER GUI
+			if (choice_v <= 0 || choice_v > 5)
+			{
+				std::cout << "Value too high!\n";
+				continue;
+			}
+
+			//MAYBE MAKE THIS INTO A FUNCTION?
+			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].pop();
+			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].push({ choice_v,currentPlayer });
+			m_numberOfCardsAdded++;
+		}
+
+
+	} while (true);
+
+
 }
