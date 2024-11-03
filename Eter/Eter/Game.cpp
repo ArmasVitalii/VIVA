@@ -16,7 +16,6 @@ const Player& Game::getPlayer2() const
 	return m_players[1];
 }
 
-<<<<<<< HEAD
 std::pair<int, int> Game::getGridMiddle()
 {
 	return m_gridMiddle;
@@ -42,8 +41,27 @@ void Game::printGameboard()
 	}
 }
 
+bool Game::validatePositionInGrid() const
+{
+	int counter = 0;
+	bool containsGridMiddle = false;
+	for (int i = m_gridMiddle.first - 1; i <= m_gridMiddle.first + 1; i++)
+	{
+		for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++)
+		{
+			if (i >= 0 && i < m_gameBoard.size() && j >= 0 && j < m_gameBoard[i].size())
+			{
+				if (m_gameBoard[i][j].top().getValue() != -1)
+					counter++;
+				if (i == m_gridMiddle.first && j == m_gridMiddle.second)
+					containsGridMiddle = true;
+			}
+		}
+	}
 
-=======
+	return containsGridMiddle && counter == m_numberOfCardsAdded - 1;
+}
+
 void Game::start()
 {
 	//ADD THIS AS PARAMETER { 1,1,2,2,3,3,4 }
@@ -96,4 +114,4 @@ void Game::start()
 
 
 }
->>>>>>> origin/main
+
