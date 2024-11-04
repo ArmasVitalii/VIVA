@@ -83,6 +83,8 @@ void Game::start()
 
 	do
 	{
+		int choice_v, choice_i, choice_j;
+
 		if (firstMove)//LOGIC FOR THE FIRST MOVE
 		{
 			std::cout << "Currently Playing As PLAYER " << currentPlayer + 1;
@@ -108,6 +110,36 @@ void Game::start()
 			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].push({ choice_v,currentPlayer });
 			m_numberOfCardsAdded++;
 		}
+
+		//WIN CASE 2
+		if (m_numberOfCardsAdded == 9)
+		{
+			std::cout << "Game Won by PLAYER " << !currentPlayer + 1 << "! THE LAST SQUARE WAS FILLED\n";
+			break;
+		}
+
+		std::cout << "\nCurrently Playing As PLAYER " << currentPlayer + 1;
+		m_players[currentPlayer].printPlayableCards();
+
+
+		std::cout << "Enter (x,y) value: ";
+		std::cin >> choice_i >> choice_j >> choice_v; // READ POSITION AND VALUE
+
+		if (!m_players[currentPlayer].removeCard({ choice_v,currentPlayer }))
+		{
+			std::cout << "Value not available.\n";
+			continue;
+		}
+
+		//WIN CASE 3
+		if (m_players[currentPlayer].getCards().empty())
+		{
+			std::cout << "\nGame Won by PLAYER " << !currentPlayer + 1 << "! Reasone: No more cards!";
+			break;
+		}
+
+
+
 
 
 	} while (true);
