@@ -139,6 +139,45 @@ void Game::start()
 		}
 
 
+		if (validPositions.find({ choice_i, choice_j }) != validPositions.end())
+		{
+			// VALIDATE STACK RULE
+			if (choice_v <= m_gameBoard[choice_i][choice_j].top().getValue())
+			{
+				std::cout << "Incorrect value for stacking!\n";
+				m_players[currentPlayer].getCards().push_back(choice_v);
+				continue;
+			}
+			m_numberOfCardsAdded++;
+
+			if (lockCase < 3)
+			{
+				if (lockCase != 0)
+				{
+					switch (lockCase)//TODO: DELETE OPTIONS FROM VALIDATION LIST
+					{
+					case 2:
+						if (choice_i < m_gridMiddle.first - 1  || choice_i > m_gridMiddle.first + 1)
+						{// ENSURE VALID COLUMN
+							m_numberOfCardsAdded--;
+							std::cout << "Invalid position! Not in a valid COLUMN\n";
+							m_players[currentPlayer].getCards().push_back(choice_v);
+							continue;
+						}
+						break;//BREAK SWITCH
+					case 1:
+						if (choice_j < m_gridMiddle.second - 1 || choice_j > m_gridMiddle.second + 1 )
+						{ //ENSURE VALID ROW
+							m_numberOfCardsAdded--;
+							std::cout << "Invalid position! Not in a valid ROW\n";
+							m_players[currentPlayer].getCards().push_back(choice_v);
+							continue;
+						}
+						break;
+					}
+				}
+			}
+
 
 
 
