@@ -157,7 +157,7 @@ void Game::start()
 					switch (lockCase)//TODO: DELETE OPTIONS FROM VALIDATION LIST
 					{
 					case 2:
-						if (choice_i < m_gridMiddle.first - 1  || choice_i > m_gridMiddle.first + 1)
+						if (choice_i < m_gridMiddle.first - 1 || choice_i > m_gridMiddle.first + 1)
 						{// ENSURE VALID COLUMN
 							m_numberOfCardsAdded--;
 							std::cout << "Invalid position! Not in a valid COLUMN\n";
@@ -166,7 +166,7 @@ void Game::start()
 						}
 						break;//BREAK SWITCH
 					case 1:
-						if (choice_j < m_gridMiddle.second - 1 || choice_j > m_gridMiddle.second + 1 )
+						if (choice_j < m_gridMiddle.second - 1 || choice_j > m_gridMiddle.second + 1)
 						{ //ENSURE VALID ROW
 							m_numberOfCardsAdded--;
 							std::cout << "Invalid position! Not in a valid ROW\n";
@@ -181,8 +181,8 @@ void Game::start()
 
 
 
-	} while (true);
+		}
 
 
+	}  while (true);
 }
-
