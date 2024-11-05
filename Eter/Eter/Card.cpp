@@ -1,6 +1,6 @@
 #include "Card.h"
 
-Card::Card(int value, bool whoPlayer) :m_value(value), m_whoPlayed(whoPlayer) {}
+Card::Card(int value, bool whoPlayer) :m_value{value}, m_whoPlayed{whoPlayer} {}
 
 bool Card::operator==(const Card& other) const
 {

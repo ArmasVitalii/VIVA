@@ -1,7 +1,8 @@
 #include "Player.h"
 
-Player::Player(bool playerNumber /*,const std::list<Card>& playerCards*/) : m_playerNumber(playerNumber)
-{}
+Player::Player(bool playerNumber /*,const std::list<Card>& playerCards*/) : m_playerNumber{ playerNumber }
+{
+}
 
 std::list<int>& Player::getCards()
 {

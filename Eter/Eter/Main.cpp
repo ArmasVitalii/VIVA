@@ -1,6 +1,6 @@
-#include "Game.h"
 #include <array>
 #include <iostream>
+#include "Game.h"
 
 int main() {
 
@@ -9,8 +9,6 @@ int main() {
 	g->start();
 
 	delete g;
-
-
 
 	return 0;
 }
