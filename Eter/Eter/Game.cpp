@@ -175,6 +175,22 @@ void Game::start()
 						}
 						break;
 					}
+
+					//VERIFY IF I CAN MOVE THE GRID
+					m_gridMiddle.first += (choice_i - m_gridMiddle.first) / 2; // NEW GRID CENTER X
+					m_gridMiddle.second += (choice_j - m_gridMiddle.second) / 2; // NEW GRID CENTER Y
+					if (!validatePositionInGrid())
+					{
+						m_gridMiddle.first -= (choice_i - m_gridMiddle.first) / 2;
+						m_gridMiddle.second -= (choice_j - m_gridMiddle.second) / 2;
+						m_players[currentPlayer].getCards().push_back(choice_v);
+						m_numberOfCardsAdded--;
+						std::cout << "Invalid insert position => GRID\n";
+						continue;
+					}//END VALIDATION 
+					//std::cout << "\n" << m_gridMiddle.first << " " << m_gridMiddle.second << "\n";//DISPLAY GRID MIDDLE FOR DEBUG
+
+
 				}
 			}
 
