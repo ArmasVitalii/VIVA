@@ -187,11 +187,9 @@ void Game::start()
 						m_numberOfCardsAdded--;
 						std::cout << "Invalid insert position => GRID\n";
 						continue;
-					}//END VALIDATION 
-					//std::cout << "\n" << m_gridMiddle.first << " " << m_gridMiddle.second << "\n";//DISPLAY GRID MIDDLE FOR DEBUG
-
-
-				}
+					}
+					//END VALIDATION 
+				}//std::cout << "\n" << m_gridMiddle.first << " " << m_gridMiddle.second << "\n";//DISPLAY GRID MIDDLE FOR DEBUG
 			}
 
 
@@ -202,3 +200,25 @@ void Game::start()
 
 	}  while (true);
 }
+
+bool Game::winCondition(bool currentPlayer)
+{
+	std::vector<std::vector<bool>> g(3, std::vector<bool>(3));
+	// -> Will not need this if we normalize coordinates
+
+	int count = 0, options_checked = 0;
+
+	//Populating the real grid
+	for (int i = m_gridMiddle.first - 1;i <= m_gridMiddle.first + 1;i++)
+	{
+		for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++)
+		{
+			if (i >= 0 && i < m_gameBoard.size() && j >= 0 && j < m_gameBoard[i].size() && !m_gameBoard[i][j].empty())
+			{
+				g[i - (m_gridMiddle.first - 1)][j - (m_gridMiddle.second - 1)] =
+					(m_gameBoard[i][j].top().getValue() != -1 && m_gameBoard[i][j].top().getWhoPlayed() == currentPlayer) ? 1 : 0;
+			}
+		}
+	}
+}
+
