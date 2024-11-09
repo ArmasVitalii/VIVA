@@ -250,6 +250,34 @@ int Game::verifyLockCase(bool playerNumber)
 
 	int conditions = 0;
 
+	bool control = true;
+	for (const auto& x : vec_linii)
+	{
+		if (x == 0) { control = false; break; }
+	}
+	if (control) conditions += 1;
+
+
+	control = true;
+	for (const auto& x : vec_coloane)
+	{
+		if (x == 0) { control = false; break; }
+	}
+	if (control) conditions += 2;
+
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (vec_linii[i] == 0 || vec_coloane[i] == 0)
+		{
+			control = false; break;
+		}
+	}
+
+	if (control) conditions += 3;
+
+	return conditions;
+
 }
 
 bool Game::winCondition(bool currentPlayer)
