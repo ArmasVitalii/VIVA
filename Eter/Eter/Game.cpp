@@ -201,6 +201,40 @@ void Game::start()
 	}  while (true);
 }
 
+int Game::verifyLockCase(bool playerNumber)
+{
+	//TODO: DONT KEEP THE MATRIX SAVED, JUST TRANSFER THE COORDONATES OF THE LAST INSERION INTO THE "POKET" OF THE PLAYER IT PLACED
+	//REFER TO M_COLUMNVECTOR AND M_ROWVECTOR
+	//DO THE SAME FOR WINCONDITON
+
+
+	std::vector<std::vector<bool>> g(3, std::vector<bool>(3)); // Will not need this if we normalize coordinates
+	int count = 0, options_checked = 0;
+
+	// Populate the real grid
+	for (int i = m_gridMiddle.first - 1; i <= m_gridMiddle.first + 1; i++)
+	{
+		for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++)
+		{
+			if (i >= 0 && i < m_gameBoard.size() && j >= 0 && j < m_gameBoard[i].size() && !m_gameBoard[i][j].empty())
+			{
+				g[i - (m_gridMiddle.first - 1)][j - (m_gridMiddle.second - 1)] = (m_gameBoard[i][j].top().getValue() != -1) ? 1 : 0;
+			}
+		}
+	}
+
+	std::vector<int> vec_linii(3, 0);
+	for (int j = 0; j < 3; j++)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			vec_linii[j] += (int)g[i][j];
+		}
+	}
+
+
+}
+
 bool Game::winCondition(bool currentPlayer)
 {
 	std::vector<std::vector<bool>> g(3, std::vector<bool>(3));
