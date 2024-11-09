@@ -18,12 +18,15 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+=======
+>>>>>>> Stashed changes
     <ClCompile Include="Card.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

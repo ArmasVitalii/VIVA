@@ -232,6 +232,23 @@ int Game::verifyLockCase(bool playerNumber)
 		}
 	}
 
+	std::vector<int> vec_coloane(3, 0);
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			vec_coloane[i] += (int)g[i][j];
+		}
+	}
+
+	std::cout << "\nvec linii: ";
+	for (const auto& x : vec_linii)std::cout << x << " ";
+
+	std::cout << "vec coloane: ";
+	for (const auto& x : vec_coloane)std::cout << x << " ";
+	std::cout << "\n";
+
+	int conditions = 0;
 
 }
 
