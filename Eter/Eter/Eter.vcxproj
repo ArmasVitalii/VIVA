@@ -134,10 +134,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
-<<<<<<< Updated upstream
-    <ClCompile Include="Game.cpp" />
-=======
->>>>>>> Stashed changes
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
