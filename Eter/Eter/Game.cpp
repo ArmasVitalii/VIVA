@@ -279,5 +279,74 @@ bool Game::winCondition(bool currentPlayer)
 			}
 		}
 	}
+
+	std::vector<int> vec_linii(3, 0);
+	for (int j = 0;j < 3;j++)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			vec_linii[j] += (int)g[i][j];
+		}
+	}
+
+	std::vector<int> vec_coloane(3, 0);
+	for (int i = 0;i < 3;i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			vec_coloane[i] += (int)g[i][j];
+		}
+	}
+	
+	int sum = 0;
+	for (const auto& x : vec_linii) sum += x;
+	if (sum < 3) return false;
+
+	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
+	std::sort(vec_linii.begin(), vec_linii.end());
+	std::sort(vec_coloane.begin(), vec_coloane.end());
+
+	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
+	if (vec_linii[0] == 0 && vec_coloane[0] == 0) return false;
+
+
+	bool condition1 = true;
+	for (int i = 0; i < 3; i++)
+	{
+		if (vec_linii[i] != vec_coloane[i])
+		{
+			condition1 = false;
+			break;
+		}
+	}
+
+	if (condition1) return true;
+
+
+	bool lineWin = false;
+	bool columnWin = false;
+
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (vec_linii[i] > 0 && vec_linii[i] == 3)
+		{
+			lineWin = true;
+			break;
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (vec_coloane[i] > 0 && vec_coloane[i] == 3)
+		{
+			columnWin = true;
+			break;
+		}
+	}
+
+	if (lineWin || columnWin) return true;
+
+	return false;
 }
 
