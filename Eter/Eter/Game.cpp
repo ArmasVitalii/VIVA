@@ -248,36 +248,16 @@ int Game::verifyLockCase(bool playerNumber)
 	for (const auto& x : vec_coloane)std::cout << x << " ";
 	std::cout << "\n";
 
+	
 	int conditions = 0;
+	bool allRowsFilled = std::all_of(vec_linii.begin(), vec_linii.end(), [](int x) { return x > 0; });
+	bool allColsFilled = std::all_of(vec_coloane.begin(), vec_coloane.end(), [](int x) { return x > 0; });
 
-	bool control = true;
-	for (const auto& x : vec_linii)
-	{
-		if (x == 0) { control = false; break; }
-	}
-	if (control) conditions += 1;
-
-
-	control = true;
-	for (const auto& x : vec_coloane)
-	{
-		if (x == 0) { control = false; break; }
-	}
-	if (control) conditions += 2;
-
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (vec_linii[i] == 0 || vec_coloane[i] == 0)
-		{
-			control = false; break;
-		}
-	}
-
-	if (control) conditions += 3;
+	if (allRowsFilled) conditions += 1;
+	if (allColsFilled) conditions += 2;
+	if (allRowsFilled && allColsFilled) conditions += 3;
 
 	return conditions;
-
 }
 
 bool Game::winCondition(bool currentPlayer)
