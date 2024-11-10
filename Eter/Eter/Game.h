@@ -6,9 +6,11 @@
 #include <algorithm>
 #include <unordered_set>
 #include "Card.h"
+<<<<<<< Updated upstream
 #include "Player.h"
-
-
+=======
+#include "Player.h" 
+>>>>>>> Stashed changes
 
 using gameboard = std::vector<std::vector<std::stack<Card>>>;
 
@@ -39,9 +41,11 @@ private:
 
 	gameboard&				getGameBoard();
 	const Player&			getPlayer1() const;
-
+<<<<<<< Updated upstream
 	const Player&			getPlayer2() const;
-
+=======
+	const PLayer&			getPlayer2() const; 
+>>>>>>> Stashed changes
 	std::pair<int, int>		getGridMiddle();
 	void					printGameboard();
 	bool					validatePositionInGrid() const;		//Verify if the gridmiddle is in the grid and if all inserted elements are inside the grid

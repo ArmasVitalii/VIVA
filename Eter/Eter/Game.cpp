@@ -299,11 +299,5 @@ bool Game::winCondition(bool currentPlayer)
 			}
 		}
 	}
-
-
-
-
-
-	return false;
 }
 

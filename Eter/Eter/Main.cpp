@@ -2,8 +2,7 @@
 #include <iostream>
 #include "Game.h"
 
-int main() 
-{
+int main() {
 
 	Game* g = new Game();
 	
