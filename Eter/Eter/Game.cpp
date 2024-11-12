@@ -109,6 +109,24 @@ void Game::start()
 			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].pop();
 			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].push({ choice_v,currentPlayer });
 			m_numberOfCardsAdded++;
+
+
+			firstMove = false;
+
+			//TOBE OBSEVED
+			lockCase = verifyLockCase(currentPlayer);
+
+			printGameboard();
+			std::cout << '\n';
+
+			//TOBE OBSEVED
+			for (const auto& x : validPositions)
+			{
+				printf("(%d,%d), ", x.first, x.second);
+			}
+			std::cout << "\n";
+
+			currentPlayer = !currentPlayer;
 		}
 
 		//WIN CASE 2
