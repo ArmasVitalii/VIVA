@@ -191,6 +191,36 @@ void Game::start()
 					//END VALIDATION 
 				}//std::cout << "\n" << m_gridMiddle.first << " " << m_gridMiddle.second << "\n";//DISPLAY GRID MIDDLE FOR DEBUG
 			}
+			// IF IT IS NULL
+			if (m_gameBoard[choice_i][choice_j].top().getValue() == -1)
+			{
+				m_gameBoard[choice_i][choice_j].pop();
+			}
+			else m_numberOfCardsAdded--;
+
+			m_gameBoard[choice_i][choice_j].push(Card(choice_v, currentPlayer));
+
+			if (forInsert && winCondition(currentPlayer))
+			{
+				std::cout << "\nGame Won by PLAYER " << currentPlayer + 1 << "\n";
+				printGameboard();
+				break;
+			}
+
+			printGameboard();
+
+			if (forInsert)
+			{
+				if (choice_i - 1 >= 0) validPositions.insert({ choice_i - 1, choice_j });
+				if (choice_i + 1 <= 5) validPositions.insert({ choice_i + 1, choice_j });
+				if (choice_j - 1 >= 0) validPositions.insert({ choice_i, choice_j - 1 });
+				if (choice_j + 1 <= 5) validPositions.insert({ choice_i, choice_j + 1 });
+				if (choice_i - 1 >= 0 && choice_j - 1 >= 0) validPositions.insert({ choice_i - 1, choice_j - 1 });
+				if (choice_i + 1 <= 5 && choice_j + 1 <= 5) validPositions.insert({ choice_i + 1, choice_j + 1 });
+				if (choice_i - 1 >= 0 && choice_j + 1 <= 5) validPositions.insert({ choice_i - 1, choice_j + 1 });
+				if (choice_i + 1 <= 5 && choice_j - 1 >= 0) validPositions.insert({ choice_i + 1, choice_j - 1 });
+			}
+
 
 
 
