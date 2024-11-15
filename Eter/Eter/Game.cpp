@@ -259,8 +259,20 @@ void Game::start()
 				break;
 			}
 
+			std::cout << "\n";
+			for (const auto& x : validPositions)
+			{
+				printf("(%d, %d), ", x.first, x.second);
+			}
+			std::cout << "\n";
 
+			currentPlayer = !currentPlayer;
 
+		}
+		else
+		{
+			std::cout << "Invalid position!\n";
+			m_players[currentPlayer].getCards().push_back(choice_v);
 		}
 
 
