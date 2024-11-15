@@ -301,35 +301,35 @@ int Game::verifyLockCase(bool playerNumber)
 		}
 	}
 
-	std::vector<int> vec_linii(3, 0);
+	std::vector<int> vec_rows(3, 0);
 	for (int j = 0; j < 3; j++)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			vec_linii[j] += (int)g[i][j];
+			vec_rows[j] += (int)g[i][j];
 		}
 	}
 
-	std::vector<int> vec_coloane(3, 0);
+	std::vector<int> vec_cols(3, 0);
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			vec_coloane[i] += (int)g[i][j];
+			vec_cols[i] += (int)g[i][j];
 		}
 	}
 
 	std::cout << "\nvec linii: ";
-	for (const auto& x : vec_linii)std::cout << x << " ";
+	for (const auto& x : vec_rows)std::cout << x << " ";
 
 	std::cout << "vec coloane: ";
-	for (const auto& x : vec_coloane)std::cout << x << " ";
+	for (const auto& x : vec_cols)std::cout << x << " ";
 	std::cout << "\n";
 
 	
 	int conditions = 0;
-	bool allRowsFilled = std::all_of(vec_linii.begin(), vec_linii.end(), [](int x) { return x > 0; });
-	bool allColsFilled = std::all_of(vec_coloane.begin(), vec_coloane.end(), [](int x) { return x > 0; });
+	bool allRowsFilled = std::all_of(vec_rows.begin(), vec_rows.end(), [](int x) { return x > 0; });
+	bool allColsFilled = std::all_of(vec_cols.begin(), vec_cols.end(), [](int x) { return x > 0; });
 
 	if (allRowsFilled) conditions += 1;
 	if (allColsFilled) conditions += 2;
@@ -358,40 +358,40 @@ bool Game::winCondition(bool currentPlayer)
 		}
 	}
 
-	std::vector<int> vec_linii(3, 0);
+	std::vector<int> vec_rows(3, 0);
 	for (int j = 0;j < 3;j++)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			vec_linii[j] += (int)g[i][j];
+			vec_rows[j] += (int)g[i][j];
 		}
 	}
 
-	std::vector<int> vec_coloane(3, 0);
+	std::vector<int> vec_cols(3, 0);
 	for (int i = 0;i < 3;i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			vec_coloane[i] += (int)g[i][j];
+			vec_cols[i] += (int)g[i][j];
 		}
 	}
 	
 	int sum = 0;
-	for (const auto& x : vec_linii) sum += x;
+	for (const auto& x : vec_rows) sum += x;
 	if (sum < 3) return false;
 
 	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
-	std::sort(vec_linii.begin(), vec_linii.end());
-	std::sort(vec_coloane.begin(), vec_coloane.end());
+	std::sort(vec_rows.begin(), vec_rows.end());
+	std::sort(vec_cols.begin(), vec_cols.end());
 
 	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
-	if (vec_linii[0] == 0 && vec_coloane[0] == 0) return false;
+	if (vec_rows[0] == 0 && vec_cols[0] == 0) return false;
 
 
 	bool condition1 = true;
 	for (int i = 0; i < 3; i++)
 	{
-		if (vec_linii[i] != vec_coloane[i])
+		if (vec_rows[i] != vec_cols[i])
 		{
 			condition1 = false;
 			break;
@@ -407,7 +407,7 @@ bool Game::winCondition(bool currentPlayer)
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (vec_linii[i] > 0 && vec_linii[i] == 3)
+		if (vec_rows[i] > 0 && vec_rows[i] == 3)
 		{
 			lineWin = true;
 			break;
@@ -416,7 +416,7 @@ bool Game::winCondition(bool currentPlayer)
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (vec_coloane[i] > 0 && vec_coloane[i] == 3)
+		if (vec_cols[i] > 0 && vec_cols[i] == 3)
 		{
 			columnWin = true;
 			break;
