@@ -239,7 +239,25 @@ void Game::start()
 				if (choice_i + 1 <= 5 && choice_j - 1 >= 0) validPositions.insert({ choice_i + 1, choice_j - 1 });
 			}
 
+			lockCase = verifyLockCase(currentPlayer);
+			if (lockCase >= 3 && forInsert)
+			{
+				std::cout << "THE GAME BOARD HAS BEEN SET!\n";
+				validPositions.clear();
+				forInsert = false;
+				for (int i = m_gridMiddle.first - 1; i <= m_gridMiddle.first + 1; i++)
+				{
+					for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++) {
+						validPositions.insert({ i,j });
+					}
+				}
+			}
 
+			if (!forInsert && winCondition(currentPlayer))
+			{
+				std::cout << "\n Game Won by PLAYER " << currentPlayer + 1 << "\n";
+				break;
+			}
 
 
 
