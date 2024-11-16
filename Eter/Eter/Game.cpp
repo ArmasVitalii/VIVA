@@ -1,7 +1,7 @@
 #include "Game.h"
 
 
-gameboard& Game::getGameBoard()
+gameboard& Game::getGameboard()
 {
 	return m_gameBoard;
 }
