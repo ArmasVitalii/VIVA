@@ -38,6 +38,8 @@ private:
 		std::cout << "Removing a row\n";
 		int row;
 		
+		//not complete!
+
 		MarkUsedPower(2);
 	}
 	bool isValidRow(Game& game, int row)
@@ -72,3 +74,68 @@ private:
 
 //TO BE CONTINUED: EARTH MASTERS; AIR MASTERS; WATER MASTERS
 
+class EarthMasters : public Mage
+{
+public:
+	EarthMasters() { m_name = "Earth Masters"; }
+	void activate(Game& game) override
+	{
+		if (!power1Used)
+		{
+			//First power: cover opponent's card
+			usePower1(game);
+		}
+		else if (!power2Used)
+		{
+			//Second power: create pit
+			usePower2(game);
+		}
+	}
+private:
+	void usePower1(Game& game);
+	void usePower2(Game& game);
+};
+
+class AirMasters : public Mage
+{
+public:
+	AirMasters() { m_name = "Air Masters"; }
+	void activate(Game& game) override
+	{
+		if (!power1Used)
+		{
+			//First power: move stack of cards
+			usePower1(game);
+		}
+		else if (!power2Used)
+		{
+			//Second power: get an eter card
+			usePower2(game);
+		}
+	}
+private:
+	void usePower1(Game& game);
+	void usePower2(Game& game);
+};
+
+class WaterMasters : public Mage
+{
+public:
+	WaterMasters() { m_name = "Water Masters"; }
+	void activate(Game& game) override
+	{
+		if (!power1Used)
+		{
+			//First power: move opponent's card
+			usePower1(game);
+		}
+		else if (!power2Used)
+		{
+			//Second power: move a row
+			usePower2(game);
+		}
+	}
+private:
+	void usePower1(Game& game);
+	void usePower2(Game& game);
+};
