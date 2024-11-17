@@ -11,5 +11,6 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Mage.h" />
   </ItemGroup>
 </Project>
