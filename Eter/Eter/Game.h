@@ -42,7 +42,8 @@ private:
 	bool						winCondition(bool currentPlayer);
 
 public:
-	void						start();								//WILL RETURN A BOOL DEPICTING WHO WON
+	void						start(); //WILL RETURN A BOOL DEPICTING WHO WON
+	void						removeOpponentCard(int row, int col); //FOR FIREMASTERS (1st power)
 };
 
 

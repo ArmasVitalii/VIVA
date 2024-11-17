@@ -12,5 +12,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Mage.h" />
+    <ClInclude Include="Mages.h" />
   </ItemGroup>
 </Project>
