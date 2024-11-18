@@ -4,13 +4,15 @@
 #include <list>
 #include "Card.h"
 
+
 class Player
 {
 private:
 	bool						m_playerNumber;
 	std::list<int>				m_playerCards;				//RETHINK FOR LIST OF CARDS
 	std::vector<int>			m_columnVector{ 0,0,0 };
-	std::vector<int>			m_rowVector{ 0,0,0 };	//RETHINK/ FIND WAY FOR 4X4, MAYBE SET FUNCTION
+	std::vector<int>			m_rowVector{ 0,0,0 };  //RETHINK/ FIND WAY FOR 4X4, MAYBE SET FUNCTION
+
 public:
 	Player(bool playerNumber);		//, const std::list<Card>& playerCards = {});
 
@@ -24,5 +26,7 @@ public:
 
 
 	void						printPlayableCards() const;
+
+
 };
 

@@ -31,7 +31,7 @@ private:
 	int							m_numberOfCardsAdded = 0;
 
 private:
-	gameboard&					getGameboard();
+	//gameboard&					getGameboard();
 	const Player&				getPlayer1() const;							//CONST COULD BE A PROBLEM FOR WHEN WE UPDATE THE "POKET"
 	const Player&				getPlayer2() const;
 	std::pair<int, int>			getGridMiddle();
@@ -42,7 +42,11 @@ private:
 	bool						winCondition(bool currentPlayer);
 
 public:
-	void						start();								//WILL RETURN A BOOL DEPICTING WHO WON
+	void						start(); //WILL RETURN A BOOL DEPICTING WHO WON
+
+	void						removeOpponentCard(int row, int col); //FOR FIREMASTERS (1st power)
+	void						removeRow(int row); //FOR FIREMASTERS (2nd power)
+	gameboard& getGameboard();
 };
 
 

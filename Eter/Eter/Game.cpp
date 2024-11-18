@@ -279,6 +279,27 @@ void Game::start()
 	}  while (true);
 }
 
+void Game::removeOpponentCard(int row, int col)
+{
+	if (!m_gameBoard[row][col].empty())
+	{
+		m_gameBoard[row][col].pop();
+		std::cout << "Card removed on the position: " << row << " " << col << "\n";
+	}
+}
+
+void Game::removeRow(int row)
+{
+	for (int col = 0;col < m_gameBoard[row].size();col++)
+	{
+		while (!m_gameBoard[row][col].empty())
+		{
+			m_gameBoard[row][col].pop();
+		}
+	}
+	std::cout << "Row " << row << " removed. \n";
+}
+
 int Game::verifyLockCase(bool playerNumber)
 {
 	//TODO: DONT KEEP THE MATRIX SAVED, JUST TRANSFER THE COORDONATES OF THE LAST INSERION INTO THE "POKET" OF THE PLAYER IT PLACED
