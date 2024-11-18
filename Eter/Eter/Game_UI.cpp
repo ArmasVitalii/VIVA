@@ -23,6 +23,22 @@ void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int hei
 
 		std::cout << "Subsistems Initialized" << std::endl;
 		window = SDL_CreateWindow(title, x_pos, y_pos, width, height, flags);
+		if (window)
+		{
+			std::cout << "Window created" << std::endl;
+		}
+
+		renderer = SDL_CreateRenderer(window, -1, 0);
+		if (renderer)
+		{
+			std::cout << "Renderer created" << std::endl;
+		}
+
+		isRunning = true;
+	}
+	else
+	{
+		isRunning = false;
 	}
 
 }
