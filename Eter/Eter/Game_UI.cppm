@@ -2,7 +2,7 @@ export module Game_UI;
 
 import <SDL.h>;
 
-export class Game_UI
+export class __declspec(dllexport) Game_UI
 {
 public:
 	Game_UI();
