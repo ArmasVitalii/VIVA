@@ -1,5 +1,6 @@
 export module Game_UI;
 
+import <iostream>;
 import <SDL.h>;
 
 export class __declspec(dllexport) Game_UI
@@ -7,7 +8,7 @@ export class __declspec(dllexport) Game_UI
 public:
 	Game_UI();
 	~Game_UI();
-	void initUI(const char* title, int x_poz, int y_poz, int width, int height, bool fullscreen);
+	void initUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);
 	
 	void handleEvents();
 	
@@ -15,7 +16,7 @@ public:
 	void render();
 	void clean();
 
-	bool running();
+	bool running() { return isRunning; };
 private:
 
 	bool isRunning;
