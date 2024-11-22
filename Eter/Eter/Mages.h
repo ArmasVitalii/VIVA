@@ -137,7 +137,29 @@ private:
 		game.getGameboard()[row][col].push(Card(newCardValue, game.getCurrentPlayer()));
 		MarkUsedPower(1);
 	}
-	void usePower2(Game& game);
+	void usePower2(Game& game)
+	{
+		std::cout << "Creating a pit\n";
+		int row, col;
+		std::cout << "Enter the row and column where you want to create a pit: ";
+		std::cin >> row >> col;
+
+		if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+		{
+			std::cout << "Invalid position. Please enter valid coordinates.\n";
+			return;
+		}
+
+		if (!game.getGameboard()[row][col].empty()) {
+			std::cout << "This space is not empty! Please choose an empty space to create a pit.\n";
+			return;
+		}
+
+		game.getGameboard()[row][col].push(Card(-1, false)); 
+		std::cout << "A pit has been created at (" << row << ", " << col << ").\n";
+
+		MarkUsedPower(2);
+	}
 };
 
 class AirMasters : public Mage
