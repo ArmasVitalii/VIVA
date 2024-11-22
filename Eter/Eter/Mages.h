@@ -104,7 +104,39 @@ public:
 		}
 	}
 private:
-	void usePower1(Game& game);
+	void usePower1(Game& game)
+	{
+		std::cout << "Covering opponent's card with a lower card.\n";
+		int row, col;
+		std::cout << "Enter the row and column of the opponent's card: ";
+		std::cin >> row >> col;
+
+		if (!game.getGameboard()[row][col].empty())
+		{
+			std::cout << "No card at this position.\n";
+			return;
+		}
+
+		Card opponentCard = game.getGameboard()[row][col].top();
+		if (opponentCard.getWhoPlayed() == game.getCurrentPlayer())
+		{
+			std::cout << "This is your card, not an opponent's.\n";
+			return;
+		}
+
+		int newCardValue;
+		std::cout << "Enter a card value from your hand that is lower than the oppnent's card: ";
+		std::cin >> newCardValue;
+
+		if (newCardValue >= opponentCard.getValue())
+		{
+			std::cout << "Card value must be strictly lower than the oppenent's card.\n";
+			return;
+		}
+
+		game.getGameboard()[row][col].push(Card(newCardValue, game.getCurrentPlayer()));
+		MarkUsedPower(1);
+	}
 	void usePower2(Game& game);
 };
 
