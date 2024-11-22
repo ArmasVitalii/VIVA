@@ -35,11 +35,19 @@ private:
 	}
 	void usePower2(Game& game)
 	{
-		std::cout << "Removing a row\n";
+		std::cout << "Removing a row of cards.\n";
 		int row;
 		
-		//not complete!
+		std::cout << "Enter the row to remove: ";
+		std::cin >> row;
 
+		if (!isValidRow(game, row)) 
+		{
+			std::cout << "Invalid row. Row must have at least 3 cards and contain your own card.\n";
+			return;
+		}
+
+		game.removeRow(row);
 		MarkUsedPower(2);
 	}
 	bool isValidRow(Game& game, int row)
@@ -67,6 +75,10 @@ private:
 			Card topCard = cardStack.top();
 			//Add an function to get the current player's index
 			//return topCard.getWhoPlayed() = game.getCurrentPlayer;
+			if (topCard.getWhoPlayed() == game.getCurrentPlayer())
+			{
+				return true;
+			}
 		}
 		return false;
 	}
