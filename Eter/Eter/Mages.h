@@ -180,7 +180,44 @@ public:
 		}
 	}
 private:
-	void usePower1(Game& game);
+	void usePower1(Game& game)
+	{
+		std::cout << "Move your stack to another position\n";
+		int row, col;
+		std::cout << "Enter the row and column where you want to move your stack: ";
+		std::cin >> row >> col;
+
+		if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+		{
+			std::cout << "Invalid position. Please enter valid coordinates.\n";
+			return;
+		}
+
+		if (!game.getGameboard()[row][col].empty())
+		{
+			std::cout << "This position is not empty. Please choose an empty space.\n";
+			return;
+		}
+
+		for (int i = 0; i < game.getGameboard().size(); i++)
+		{
+			for (int j = 0; j < game.getGameboard()[i].size(); j++)
+			{
+				if (!game.getGameboard()[i][j].empty() && game.getGameboard()[i][j].top().getWhoPlayed() == true)
+				{
+					std::stack<Card>stackToMove = game.getGameboard()[i][j];
+					game.getGameboard()[i][j] = std::stack<Card>();
+
+					game.getGameboard()[row][col] = stackToMove;
+					std::cout << "Your stack has been moved to position (" << row << ", " << col << ").\n";
+					return;
+				}
+			}
+		}
+		std::cout << "No stack with your card found on the board.\n";
+
+		MarkUsedPower(1);
+	}
 	void usePower2(Game& game);
 };
 
