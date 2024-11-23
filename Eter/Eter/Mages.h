@@ -84,7 +84,6 @@ private:
 	}
 };
 
-//TO BE CONTINUED: EARTH MASTERS; AIR MASTERS; WATER MASTERS
 
 class EarthMasters : public Mage
 {
@@ -260,6 +259,44 @@ public:
 		}
 	}
 private:
-	void usePower1(Game& game);
+	void usePower1(Game& game)
+	{
+		int row, col;
+		std::cout << "Where do you want to place the stack of cards? /n";
+		std::cin >> row >> col;
+
+		if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+		{
+			std::cout << "Invalid positions! \n";
+			return;
+		}
+
+		if (!game.getGameboard()[row][col].empty())
+		{
+			std::cout << "The position is occupied! Choose an empty space \n ";
+			return;
+		}
+
+		for (int 0; i < game.getGameboard().size();i++)
+		{
+			for (int j = 0;j < game.getGameboard()[i].size();j++)
+			{
+				if (!game.getGameboard()[i][j].empty())
+				{
+					Card topCard = game.getGameboard()[i][j].top();
+					if (!topCard.getWhoPlayed())
+					{
+						std::stack<Card> opponentStack = game.getGameboard()[i][j];
+						game.getGameboard()[i][j] = std::stack<Card>(); 
+						game.getGameboard()[row][col] = opponentStack;
+
+						MarkUsedPower(1);
+						return;
+					}
+
+				}
+			}
+		}
+	}
 	void usePower2(Game& game);
 };
