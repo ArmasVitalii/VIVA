@@ -298,5 +298,54 @@ private:
 			}
 		}
 	}
-	void usePower2(Game& game);
+
+	void usePower2(Game& game)
+	{
+		int row, targetRow;
+		std::cout << "Enter the row you want to move: ";
+		std::cin >> row;
+		std::cout << "Enter the row where you want to move it the chosen row: ";
+		std::cin >> targetRow;
+
+		if (row < 0 || row >= game.getGameboard().size() || targetRow < 0 || targetRow >= game.getGameboard().size())
+		{
+			std::cout << "Invalid rows! \n";
+			return;
+		}
+
+		if (row == targetRow)
+		{
+			std::cout << "The rows cannot be the same! \n";
+			return;
+		}
+
+		int occupiedPos = 0;
+		for (const auto& col : game.getGameboard()[row])
+		{
+			if (!col.empty())
+				occupiedPos++;
+		}
+
+		if (occupiedPos < 3)
+		{
+			std::cout << "The source row must have at least 3 occupied positions.\n";
+			return;
+		}
+
+		for (const auto& col : game.getGameboard()[targetRow])
+		{
+			if (!col.empty())
+			{
+				std::cout << "The target row is not occupied! Please choose another row.\n";
+				return;
+			}
+		}
+
+		for (int col = 0; col < game.getGameboard()[row].size();col++)
+		{
+			game.getGameboard()[targetRow][col] = game.getGameboard()[row][col];
+			game.getGameboard()[row][col] = std::stack<Card>(); //change?
+		}
+		MarkUsedPower(2);
+	}
 };
