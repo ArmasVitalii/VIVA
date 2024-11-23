@@ -300,6 +300,11 @@ void Game::removeRow(int row)
 	std::cout << "Row " << row << " removed. \n";
 }
 
+int Game::getCurrentPlayer() const
+{
+	return currentPlayer;
+}
+
 int Game::verifyLockCase(bool playerNumber)
 {
 	//TODO: DONT KEEP THE MATRIX SAVED, JUST TRANSFER THE COORDONATES OF THE LAST INSERION INTO THE "POKET" OF THE PLAYER IT PLACED

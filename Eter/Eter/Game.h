@@ -29,6 +29,7 @@ private:
 	std::vector<Player>			m_players{ {0/*Player1*/},{1/*Player2*/} };	//MAYBE ARRAY?
 	std::pair<int, int>			m_gridMiddle{ 2,2 };
 	int							m_numberOfCardsAdded = 0;
+	bool                        currentPlayer;
 
 private:
 	//gameboard&					getGameboard();
@@ -46,6 +47,7 @@ public:
 
 	void						removeOpponentCard(int row, int col); //FOR FIREMASTERS (1st power)
 	void						removeRow(int row); //FOR FIREMASTERS (2nd power)
+	int                         getCurrentPlayer() const;
 	gameboard& getGameboard();
 };
 
