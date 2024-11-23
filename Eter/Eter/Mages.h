@@ -26,7 +26,7 @@ private:
 		std::cout << "Removing opponent's card \n";
 		bool cardRemoved = false;
 		int row, col;
-		std::cout << "Introduce the row and column for removing a card: ";
+		std::cout << "Introduce the row and column for removing a card: "; 
 		std::cin >> row >> col;
 		game.removeOpponentCard(row, col);
 
@@ -133,7 +133,6 @@ private:
 			std::cout << "Card value must be strictly lower than the oppenent's card.\n";
 			return;
 		}
-
 		game.getGameboard()[row][col].push(Card(newCardValue, game.getCurrentPlayer()));
 		MarkUsedPower(1);
 	}
@@ -218,7 +217,29 @@ private:
 
 		MarkUsedPower(1);
 	}
-	void usePower2(Game& game);
+	void usePower2(Game& game)
+	{
+		std::cout << "You can place an ETER card \n";
+		int row, col;
+		std::cout << "Enter the position where to place it: ";
+		std::cin >> row >> col;
+
+		if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+		{
+			std::cout << "Invalid position! \n";
+			return;
+		}
+
+		if (!game.getGameboard()[row][col].empty())
+		{
+			std::cout << "This position is occupied! You cannot place an ETER card. \n";
+			return;
+		}
+
+		Card ETERcard(1, false);
+		game.getGameboard()[row][col] = ETERcard;
+		MarkUsedPower(2);
+	}
 };
 
 class WaterMasters : public Mage
