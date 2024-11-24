@@ -67,6 +67,7 @@ private:
 		}
 		return cards >= 3 && hasOwnCard;
 	}
+
 	bool isOwnCard(Game& game, int row, int col)
 	{
 		std::stack<Card>& cardStack = game.getGameboard()[row][col];
@@ -117,6 +118,7 @@ private:
 		}
 
 		Card opponentCard = game.getGameboard()[row][col].top();
+
 		if (opponentCard.getWhoPlayed() == game.getCurrentPlayer())
 		{
 			std::cout << "This is your card, not an opponent's.\n";
@@ -133,8 +135,10 @@ private:
 			return;
 		}
 		game.getGameboard()[row][col].push(Card(newCardValue, game.getCurrentPlayer()));
+
 		MarkUsedPower(1);
 	}
+
 	void usePower2(Game& game)
 	{
 		std::cout << "Creating a pit\n";
@@ -216,6 +220,7 @@ private:
 
 		MarkUsedPower(1);
 	}
+
 	void usePower2(Game& game)
 	{
 		std::cout << "You can place an ETER card \n";
@@ -236,7 +241,9 @@ private:
 		}
 
 		Card ETERcard(1, false);
-		game.getGameboard()[row][col] = ETERcard;
+		
+		game.getGameboard()[row][col].push(ETERcard);
+
 		MarkUsedPower(2);
 	}
 };
@@ -277,7 +284,7 @@ private:
 			return;
 		}
 
-		for (int 0; i < game.getGameboard().size();i++)
+		for (int i=0; i < game.getGameboard().size();i++)
 		{
 			for (int j = 0;j < game.getGameboard()[i].size();j++)
 			{
@@ -287,6 +294,7 @@ private:
 					if (!topCard.getWhoPlayed())
 					{
 						std::stack<Card> opponentStack = game.getGameboard()[i][j];
+
 						game.getGameboard()[i][j] = std::stack<Card>(); 
 						game.getGameboard()[row][col] = opponentStack;
 
@@ -346,6 +354,7 @@ private:
 			game.getGameboard()[targetRow][col] = game.getGameboard()[row][col];
 			game.getGameboard()[row][col] = std::stack<Card>(); //change?
 		}
+
 		MarkUsedPower(2);
 	}
 };
