@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="Game_UI.cpp" />
     <ClCompile Include="Game_UI.cppm" />
     <ClCompile Include="Main.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Card.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameMode.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Mages.h" />
     <ClInclude Include="Player.h" />

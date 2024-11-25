@@ -7,6 +7,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Game_UI.cppm" />
     <ClCompile Include="Game_UI.cpp" />
+    <ClCompile Include="GameMode.cpp">
+      <Filter>SECRET</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
@@ -14,5 +17,13 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Mages.h" />
+    <ClInclude Include="GameMode.h">
+      <Filter>SECRET</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="SECRET">
+      <UniqueIdentifier>{8ce7f653-f699-4040-bd0f-0ff6d19c9803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
