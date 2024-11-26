@@ -45,6 +45,15 @@ void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int hei
 
 void Game_UI::handleEvents()
 {
+	SDL_Event event;
+	SDL_PollEvent(&event);
+	switch (event.type) {
+	case SDL_QUIT:
+		isRunning = false;
+		break;
+	default:
+		break;
+	}
 }
 
 void Game_UI::update()
@@ -53,6 +62,9 @@ void Game_UI::update()
 
 void Game_UI::render()
 {
+	SDL_RenderClear(renderer);
+	//Render Stuff
+
 }
 
 void Game_UI::clean()
