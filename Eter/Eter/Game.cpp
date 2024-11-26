@@ -64,6 +64,20 @@ bool Game::validatePositionInGrid() const
 
 void Game::start()
 {
+	Game_UI* game = new Game_UI();
+	game->handleEvents();
+	game->update();
+	game->render();
+	/*
+	while (game is running)
+	{
+		handle any user input
+		update all object eg. position etc
+		render changes to the display
+	}
+	*/
+
+
 	//ADD THIS AS PARAMETER { 1,1,2,2,3,3,4 }
 	m_players[0].getCards() = { 1,1,2,2,3,3,4 };
 	m_players[1].getCards() = { 1,1,2,2,3,3,4 };
@@ -268,15 +282,25 @@ void Game::start()
 
 			currentPlayer = !currentPlayer;
 
+			game->handleEvents();
+			game->update();
+			game->render();
+
 		}
 		else
 		{
 			std::cout << "Invalid position!\n";
 			m_players[currentPlayer].getCards().push_back(choice_v);
+
+			game->handleEvents();
+			game->update();
+			game->render();
 		}
 
 
-	}  while (true);
+	}  while (game->running());
+
+	game->clean();
 }
 
 void Game::removeOpponentCard(int row, int col)

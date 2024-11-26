@@ -58,6 +58,7 @@ void Game_UI::handleEvents()
 	default:
 		break;
 	}
+	std::cout << "Hi!";
 }
 
 void Game_UI::update()
