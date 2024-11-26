@@ -31,6 +31,7 @@ void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int hei
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer)
 		{
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			std::cout << "Renderer created" << std::endl;
 		}
 
@@ -64,10 +65,13 @@ void Game_UI::render()
 {
 	SDL_RenderClear(renderer);
 	//Render Stuff
-
+	SDL_RenderPresent(renderer);
 }
 
 void Game_UI::clean()
 {
-
+	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
+	SDL_Quit();
+	std::cout << "Game cleaned";
 }
