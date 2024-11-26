@@ -2,6 +2,7 @@ export module Game_UI;
 
 import <iostream>;
 import <SDL.h>;
+import <SDL_image.h>;
 
 export class __declspec(dllexport) Game_UI
 {

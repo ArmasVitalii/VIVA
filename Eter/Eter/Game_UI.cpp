@@ -1,5 +1,8 @@
 #include <SDL.h>
+#include <SDL_Image.h>
 module Game_UI;
+
+SDL_Texture* texture;
 
 Game_UI::Game_UI()
 {
@@ -45,6 +48,9 @@ void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int hei
 		isRunning = false;
 	}
 
+	SDL_Surface* temporarySurface = IMG_Load("Eter.png");
+	texture = SDL_CreateTextureFromSurface(renderer, temporarySurface);
+	SDL_FreeSurface(temporarySurface);
 }
 
 void Game_UI::handleEvents()
@@ -69,6 +75,7 @@ void Game_UI::render()
 {
 	SDL_RenderClear(renderer);
 	//Render Stuff
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 }
 
