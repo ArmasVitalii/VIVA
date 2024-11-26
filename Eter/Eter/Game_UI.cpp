@@ -1,11 +1,14 @@
 #include <SDL.h>
 module Game_UI;
 
-Game_UI::Game_UI() {
+Game_UI::Game_UI()
+{
+	this->initUI("Eter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
 
 }
 
-Game_UI::~Game_UI() {
+Game_UI::~Game_UI()
+{
 
 }
 

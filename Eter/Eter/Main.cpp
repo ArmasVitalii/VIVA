@@ -2,22 +2,22 @@
 #include <iostream>
 #include "Game.h"
 #include <SDL.h>
+import Game_UI;
 
 int main(int argc, char* argv[]) {
 
 
-	SDL_Init(SDL_INIT_EVERYTHING);
+	Game_UI* game = new Game_UI();
+	Game* g = new Game();
 
-	SDL_Window* window = SDL_CreateWindow("Eter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_SHOWN);
+	g->start();
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-
-	SDL_RenderClear(renderer);
-
-	SDL_RenderPresent(renderer);
-
+	while (game->running()) {
+		game->handleEvents();
+		game->update();
+		game->render();
+	}
 	/*
 	while (game is running)
 	{
@@ -27,11 +27,9 @@ int main(int argc, char* argv[]) {
 	}
 	*/
 
-	Game* g = new Game();
-	
-	g->start();
-
 	delete g;
+
+	game->clean();
 
 	return 0;
 }
