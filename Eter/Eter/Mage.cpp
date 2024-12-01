@@ -14,3 +14,8 @@ bool Mage::IsUsedPower()
 {
 	 return powerUsed; 
 }
+bool Mage::IsOwnCard(Game& game, int row, int col)
+{
+	return false;
+	//return game.e(row, col) == this;
+}

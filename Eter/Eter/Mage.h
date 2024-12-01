@@ -15,4 +15,5 @@ protected:
 
 	void MarkUsedPower();
 	bool IsUsedPower();
+	bool IsOwnCard(Game& game, int row, int col);
 };

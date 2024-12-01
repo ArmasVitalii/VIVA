@@ -14,6 +14,8 @@ class  RemoveRowMage : public Mage //Mage 2
 public:
 	RemoveRowMage(const std::string& name);
 	void Activate(Game& game) override;
+private:
+	bool IsValidRow(Game& game, int row);
 };
 
 class CoverCardMage : public Mage
