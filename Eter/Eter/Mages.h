@@ -30,36 +30,30 @@ public:
 	void Activate(Game& game) override;
 };
 
-/*class EarthMasters : public Mage
+class MoveStackMage : public Mage
 {
 public:
-	EarthMasters();
+	MoveStackMage(const std::string& name);
 	void Activate(Game& game) override;
-
-private:
-	void UsePower1(Game& game);
-	void UsePower2(Game& game);
 };
 
-class AirMasters : public Mage
+class GetEterCardMage : public Mage
 {
 public:
-	AirMasters();
+	GetEterCardMage(const std::string& name);
 	void Activate(Game& game) override;
-
-private:
-	void UsePower1(Game& game);
-	void UsePower2(Game& game);
 };
 
-class WaterMasters : public Mage
+class MoveCardMage : public Mage
 {
 public:
-	WaterMasters();
+	MoveCardMage(const std::string& name);
 	void Activate(Game& game) override;
+};
 
-private:
-	void UsePower1(Game& game);
-	void UsePower2(Game& game);
-};*/
-
+class MoveRowMage : public Mage
+{
+public:
+	MoveRowMage(const std::string& name);
+	void Activate(Game& game) override;
+};
