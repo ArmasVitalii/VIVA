@@ -16,3 +16,38 @@ bool GameMode::getIs4x4() const
 {
 	return m_is4x4;
 }
+
+const std::list<uint8_t>& GameMode::getCardList() const
+{
+	return m_cardList;
+}
+
+uint8_t GameMode::getMaxNumberOfGames() const
+{
+	return m_maxNumberOfGames;
+}
+
+bool GameMode::gethasMage() const
+{
+	return m_hasMage;
+}
+
+bool GameMode::gethasMagical() const
+{
+	return m_hasMagic;
+}
+
+bool GameMode::gethasExplosions() const
+{
+	return m_hasExplosions;
+}
+
+bool GameMode::gethasIlusions() const
+{
+	return m_hasIlusions;
+}
+
+bool GameMode::gethasTimer() const
+{
+	return m_hasTimer;
+}
