@@ -2,21 +2,35 @@
 #include "Mage.h"
 #include "Game.h"
 
-class FireMasters : public Mage //Mage 1: MASTERS OF FIRE
+class RemoveCardMage : public Mage //Mage 1: removing opponent's card
 {
 public:
-	FireMasters();
+	RemoveCardMage(const std::string& name);
 	void Activate(Game& game) override;
-
-private:
-	void UsePower1(Game& game);
-	void UsePower2(Game& game);
-	bool IsValidRow(Game& game, int row);
-	bool IsOwnCard(Game& game, int row, int col);
 };
 
+class  RemoveRowMage : public Mage //Mage 2
+{
+public:
+	RemoveRowMage(const std::string& name);
+	void Activate(Game& game) override;
+};
 
-class EarthMasters : public Mage
+class CoverCardMage : public Mage
+{
+public:
+	CoverCardMage(const std::string& name);
+	void Activate(Game& game) override;
+};
+
+class CreatePitMage : public Mage
+{
+public:
+	CreatePitMage(const std::string& name);
+	void Activate(Game& game) override;
+};
+
+/*class EarthMasters : public Mage
 {
 public:
 	EarthMasters();
@@ -47,4 +61,5 @@ public:
 private:
 	void UsePower1(Game& game);
 	void UsePower2(Game& game);
-};
+};*/
+

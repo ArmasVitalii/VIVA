@@ -1,37 +1,30 @@
 #include "Mages.h"
 
-FireMasters::FireMasters()
+RemoveCardMage::RemoveCardMage(const std::string& name)
 {
-	m_name = "Fire Masters";
+	m_name = "RemoveCardMage";
 }
 
-void FireMasters::Activate(Game& game)
+void RemoveCardMage::Activate(Game& game)
 {
-	if (!power1Used)
+	if (IsUsedPower())
 	{
-		//First power: remove opponent's card
-		UsePower1(game);
+		std::cout << "Power already used! ";
+		return;
 	}
-	else if (!power2Used)
-	{
-		//Second power: remove one row
-		UsePower2(game);
-	}
-}
-
-void FireMasters::UsePower1(Game& game)
-{
 	std::cout << "Removing opponent's card \n";
 	bool cardRemoved = false;
 	int row, col;
 
 	std::cout << "Introduce the row and column for removing a card: ";
 	std::cin >> row >> col;
-	
+
 	game.removeOpponentCard(row, col);
-	MarkUsedPower(1);
+	MarkUsedPower();
 }
 
+
+/*
 void FireMasters::UsePower2(Game& game)
 {
 
@@ -362,4 +355,4 @@ void WaterMasters::UsePower2(Game& game)
 	}
 
 	MarkUsedPower(2);
-}
+}*/
