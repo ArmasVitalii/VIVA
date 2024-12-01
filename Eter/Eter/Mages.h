@@ -35,7 +35,7 @@ public:
 
 private:
 	void UsePower1(Game& game);
-	void usePower2(Game& game);
+	void UsePower2(Game& game);
 };
 
 class WaterMasters : public Mage
