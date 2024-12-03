@@ -17,10 +17,10 @@ public:
 	void render();
 	void clean();
 
-	bool running() { return isRunning; };
+	bool Running();
 private:
 
-	bool				isRunning;
-	SDL_Window*			window;
-	SDL_Renderer*		renderer;
+	bool				m_isRunning;
+	SDL_Window*			m_window;
+	SDL_Renderer*		m_renderer;
 };

@@ -28,28 +28,28 @@ void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int hei
 	{
 
 		std::cout << "Subsistems Initialized" << std::endl;
-		window = SDL_CreateWindow(title, x_pos, y_pos, width, height, flags);
-		if (window)
+		m_window = SDL_CreateWindow(title, x_pos, y_pos, width, height, flags);
+		if (m_window)
 		{
 			std::cout << "Window created" << std::endl;
 		}
 
-		renderer = SDL_CreateRenderer(window, -1, 0);
-		if (renderer)
+		m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+		if (m_renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 			std::cout << "Renderer created" << std::endl;
 		}
 
-		isRunning = true;
+		m_isRunning = true;
 	}
 	else
 	{
-		isRunning = false;
+		m_isRunning = false;
 	}
 
 	SDL_Surface* temporarySurface = IMG_Load("Eter.png");
-	texture = SDL_CreateTextureFromSurface(renderer, temporarySurface);
+	texture = SDL_CreateTextureFromSurface(m_renderer, temporarySurface);
 	SDL_FreeSurface(temporarySurface);
 }
 
@@ -59,7 +59,7 @@ void Game_UI::handleEvents()
 	SDL_PollEvent(&event);
 	switch (event.type) {
 	case SDL_QUIT:
-		isRunning = false;
+		m_isRunning = false;
 		break;
 	default:
 		break;
@@ -73,16 +73,18 @@ void Game_UI::update()
 
 void Game_UI::render()
 {
-	SDL_RenderClear(renderer);
+	SDL_RenderClear(m_renderer);
 	//Render Stuff
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
-	SDL_RenderPresent(renderer);
+	SDL_RenderCopy(m_renderer, texture, NULL, NULL);
+	SDL_RenderPresent(m_renderer);
 }
 
 void Game_UI::clean()
 {
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(m_window);
+	SDL_DestroyRenderer(m_renderer);
 	SDL_Quit();
 	std::cout << "Game cleaned";
 }
+
+bool Game_UI::Running() { return m_isRunning; };

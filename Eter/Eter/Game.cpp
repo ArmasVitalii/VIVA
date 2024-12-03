@@ -298,7 +298,7 @@ void Game::start()
 		}
 
 
-	}  while (game->running());
+	}  while (game->Running());
 
 	game->clean();
 }
