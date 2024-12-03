@@ -66,8 +66,8 @@ void Game::start()
 {
 	Game_UI* game = new Game_UI();
 	game->handleEvents();
-	game->update();
-	game->render();
+	game->Update();
+	game->Render();
 	/*
 	while (game is running)
 	{
@@ -283,8 +283,8 @@ void Game::start()
 			currentPlayer = !currentPlayer;
 
 			game->handleEvents();
-			game->update();
-			game->render();
+			game->Update();
+			game->Render();
 
 		}
 		else
@@ -293,14 +293,14 @@ void Game::start()
 			m_players[currentPlayer].getCards().push_back(choice_v);
 
 			game->handleEvents();
-			game->update();
-			game->render();
+			game->Update();
+			game->Render();
 		}
 
 
 	}  while (game->Running());
 
-	game->clean();
+	game->Clean();
 }
 
 void Game::removeOpponentCard(int row, int col)

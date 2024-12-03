@@ -67,11 +67,11 @@ void Game_UI::handleEvents()
 	std::cout << "Hi!";
 }
 
-void Game_UI::update()
+void Game_UI::Update()
 {
 }
 
-void Game_UI::render()
+void Game_UI::Render()
 {
 	SDL_RenderClear(m_renderer);
 	//Render Stuff
@@ -79,7 +79,7 @@ void Game_UI::render()
 	SDL_RenderPresent(m_renderer);
 }
 
-void Game_UI::clean()
+void Game_UI::Clean()
 {
 	SDL_DestroyWindow(m_window);
 	SDL_DestroyRenderer(m_renderer);
