@@ -1,16 +1,16 @@
 #pragma once
 #include <list>
-class GameMode
+class Gamemode
 {
 private:
-	bool						m_is4x4{ 0 };
+	bool						m_is4x4{ false };
 	std::list<uint8_t>			m_cardList{};
 	uint8_t						m_maxNumberOfGames{ 0 };
-	bool						m_hasMage{ 0 };
-	bool						m_hasMagic{ 0 };
-	bool						m_hasExplosions{ 0 };
-	bool						m_hasIlusions{ 0 };
-	bool						m_hasTimer{ 0 };
+	bool						m_hasMage{ false }; /*MAYBE CHANGE WITH ARRAY?*/
+	bool						m_hasMagic{ false };
+	bool						m_hasExplosions{ false };
+	bool						m_hasIlusions{ false };
+	bool						m_hasTimer{ false };
 
 public:
 	bool						getIs4x4()				const;
@@ -22,8 +22,8 @@ public:
 	bool						gethasIlusions()		const;
 	bool						gethasTimer()			const;
 
-	GameMode() = default;
-	GameMode(bool			is4x4,
+	Gamemode() = default;
+	Gamemode(bool			is4x4,
 		std::list<uint8_t>	cardList,
 		uint8_t				maxNumberOfGames,
 		bool				hasMage,
