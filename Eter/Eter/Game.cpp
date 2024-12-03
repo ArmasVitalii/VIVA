@@ -65,7 +65,7 @@ bool Game::validatePositionInGrid() const
 void Game::start()
 {
 	Game_UI* game = new Game_UI();
-	game->handleEvents();
+	game->HandleEvents();
 	game->Update();
 	game->Render();
 	/*
@@ -282,7 +282,7 @@ void Game::start()
 
 			currentPlayer = !currentPlayer;
 
-			game->handleEvents();
+			game->HandleEvents();
 			game->Update();
 			game->Render();
 
@@ -292,7 +292,7 @@ void Game::start()
 			std::cout << "Invalid position!\n";
 			m_players[currentPlayer].getCards().push_back(choice_v);
 
-			game->handleEvents();
+			game->HandleEvents();
 			game->Update();
 			game->Render();
 		}

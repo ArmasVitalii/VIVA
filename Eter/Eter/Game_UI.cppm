@@ -9,9 +9,9 @@ export class __declspec(dllexport) Game_UI
 public:
 	Game_UI();
 	~Game_UI();
-	void				initUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);
+	void				InitUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);
 	
-	void				handleEvents();
+	void				HandleEvents();
 	
 	void				Update();
 	void				Render();

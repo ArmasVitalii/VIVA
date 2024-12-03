@@ -6,7 +6,7 @@ SDL_Texture* texture;
 
 Game_UI::Game_UI()
 {
-	this->initUI("Eter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
+	this->InitUI("Eter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
 
 }
 
@@ -15,7 +15,7 @@ Game_UI::~Game_UI()
 
 }
 
-void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen) {
+void Game_UI::InitUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen) {
 
 	int flags = 0;
 
@@ -53,7 +53,7 @@ void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int hei
 	SDL_FreeSurface(temporarySurface);
 }
 
-void Game_UI::handleEvents()
+void Game_UI::HandleEvents()
 {
 	SDL_Event event;
 	SDL_PollEvent(&event);
