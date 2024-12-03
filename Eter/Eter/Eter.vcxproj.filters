@@ -1,31 +1,99 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Card.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Game_UI.cppm" />
-    <ClCompile Include="Game_UI.cpp" />
-    <ClCompile Include="GameMode.cpp">
-      <Filter>SECRET</Filter>
+    <ClCompile Include="Game_UI.cppm">
+      <Filter>Header Files\Game Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Mages.cpp" />
-    <ClCompile Include="Mage.cpp" />
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Source Files\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Mage.cpp">
+      <Filter>Source Files\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Match &amp; Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files\Game Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Mages.cpp">
+      <Filter>Source Files\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_UI.cpp">
+      <Filter>Source Files\Game Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Gamemode.cpp">
+      <Filter>Source Files\Gamemode Management</Filter>
+    </ClCompile>
+    <ClCompile Include="AllGamemodes.cpp">
+      <Filter>Source Files\Gamemode Management</Filter>
+    </ClCompile>
+    <ClCompile Include="GamemodeDistributor.cpp">
+      <Filter>Source Files\Gamemode Management</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Card.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Mage.h" />
-    <ClInclude Include="Mages.h" />
-    <ClInclude Include="GameMode.h">
-      <Filter>SECRET</Filter>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Match &amp; Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Gamemode.h">
+      <Filter>Header Files\Gamemode Management</Filter>
+    </ClInclude>
+    <ClInclude Include="AllGamemodes.h">
+      <Filter>Header Files\Gamemode Management</Filter>
+    </ClInclude>
+    <ClInclude Include="GamemodeDistributor.h">
+      <Filter>Header Files\Gamemode Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Header Files\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Mage.h">
+      <Filter>Header Files\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Mages.h">
+      <Filter>Header Files\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="SECRET">
-      <UniqueIdentifier>{8ce7f653-f699-4040-bd0f-0ff6d19c9803}</UniqueIdentifier>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{1a6eec79-b4b8-4388-b75b-d29edc79a11b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{86ff8547-e691-4a32-8fb6-45e9402c4508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{95fe8913-e17f-4da4-96e6-82709eaf0f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gamemode Management">
+      <UniqueIdentifier>{9f9a808e-e1f2-4d50-839e-726eb1fde599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game Objects">
+      <UniqueIdentifier>{a99d3b40-6168-4a19-a8a9-ae8b6e5baf86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game Utility">
+      <UniqueIdentifier>{5d298b33-4489-40c3-ae93-d70cf1e16740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Match &amp; Game">
+      <UniqueIdentifier>{d825f85c-6c50-45ca-af14-573da2d4c1f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gamemode Management">
+      <UniqueIdentifier>{5aa5e9f7-6e04-402d-931f-2fa5151ce3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Objects">
+      <UniqueIdentifier>{e0fb4a6a-cd05-4a6e-99ab-57afb4b1ebc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Utility">
+      <UniqueIdentifier>{294cd00d-b2bd-4907-9e8b-c265de572b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Match &amp; Game">
+      <UniqueIdentifier>{f7ac6b7e-9e5e-40f7-b2a3-953324e3a5b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

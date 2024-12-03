@@ -138,9 +138,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AllGamemodes.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameMode.cpp" />
+    <ClCompile Include="Gamemode.cpp" />
+    <ClCompile Include="GamemodeDistributor.cpp" />
     <ClCompile Include="Game_UI.cpp" />
     <ClCompile Include="Game_UI.cppm" />
     <ClCompile Include="Mage.cpp" />
@@ -149,9 +151,11 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllGamemodes.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameMode.h" />
+    <ClInclude Include="Gamemode.h" />
+    <ClInclude Include="GamemodeDistributor.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Mages.h" />
     <ClInclude Include="Player.h" />
