@@ -5,6 +5,7 @@
 class Mage
 {
 public:
+	Mage(const std::string& name) : m_name(name), powerUsed(false){}
 	virtual ~Mage() = default;
 	virtual void Activate(Game& game) = 0;
 	const std::string& getName() const;
