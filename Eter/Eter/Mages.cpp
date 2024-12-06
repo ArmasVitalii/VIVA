@@ -83,7 +83,7 @@ void CoverCardMage::Activate(Game& game)
 
 	Card opponentCard = game.getGameboard()[row][col].top();
 
-	if (opponentCard.getWhoPlayed() == game.getCurrentPlayer())
+	if (opponentCard.getWhoPlayed() == static_cast<bool>( game.getCurrentPlayer()))
 	{
 		std::cout << "This is your card, not an opponent's.\n";
 		return;
@@ -168,6 +168,129 @@ void MoveStackMage::Activate(Game& game)
 		}
 	}
 	std::cout << "No stack with your card found on the board.\n";
+
+	MarkUsedPower();
+}
+
+GetEterCardMage::GetEterCardMage() : Mage("Get an ETER Card Mage"){}
+
+void GetEterCardMage::Activate(Game& game)
+{
+	std::cout << "You can place an ETER card \n";
+	int row, col;
+
+	std::cout << "Enter the position where to place it: ";
+	std::cin >> row >> col;
+
+	if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+	{
+		std::cout << "Invalid position! \n";
+		return;
+	}
+
+	if (!game.getGameboard()[row][col].empty())
+	{
+		std::cout << "This position is occupied! You cannot place an ETER card. \n";
+		return;
+	}
+
+	Card ETERcard(1, false);
+
+	game.getGameboard()[row][col].push(ETERcard);
+	MarkUsedPower();
+}
+
+MoveCardMage::MoveCardMage() : Mage("Move Stack of Cards Mage(the oppponent's is on top)") {}
+
+void MoveCardMage::Activate(Game& game)
+{
+	int row, col;
+	std::cout << "Where do you want to place the stack of cards? /n";
+	std::cin >> row >> col;
+
+	if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+	{
+		std::cout << "Invalid positions! \n";
+		return;
+	}
+
+	if (!game.getGameboard()[row][col].empty())
+	{
+		std::cout << "The position is occupied! Choose an empty space \n ";
+		return;
+	}
+
+	for (int i = 0; i < game.getGameboard().size(); i++)
+	{
+		for (int j = 0; j < game.getGameboard()[i].size(); j++)
+		{
+			if (!game.getGameboard()[i][j].empty())
+			{
+				Card topCard = game.getGameboard()[i][j].top();
+				if (!topCard.getWhoPlayed())
+				{
+					std::stack<Card> opponentStack = game.getGameboard()[i][j];
+
+					game.getGameboard()[i][j] = std::stack<Card>();
+					game.getGameboard()[row][col] = opponentStack;
+
+					MarkUsedPower();
+					return;
+				}
+			}
+		}
+	}
+}
+
+MoveRowMage::MoveRowMage() : Mage("Move a Row Mage") {}
+
+void MoveRowMage::Activate(Game& game)
+{
+	int row, targetRow;
+	std::cout << "Enter the row you want to move: ";
+	std::cin >> row;
+	std::cout << "Enter the row where you want to move the chosen row: ";
+	std::cin >> targetRow;
+
+	if (row < 0 || row >= game.getGameboard().size() || targetRow < 0 || targetRow >= game.getGameboard().size())
+	{
+		std::cout << "Invalid rows! \n";
+		return;
+	}
+
+	if (row == targetRow)
+	{
+		std::cout << "The rows cannot be the same! \n";
+		return;
+	}
+
+	int occupiedPos = 0;
+	for (const auto& col : game.getGameboard()[row])
+	{
+		if (!col.empty())
+			occupiedPos++;
+	}
+
+	if (occupiedPos < 3)
+	{
+		std::cout << "The source row must have at least 3 occupied positions.\n";
+		return;
+	}
+
+	for (const auto& col : game.getGameboard()[targetRow])
+	{
+		if (!col.empty())
+		{
+			std::cout << "The target row is not occupied! Please choose another row.\n";
+			return;
+		}
+	}
+
+	for (int col = 0; col < game.getGameboard()[row].size(); col++)
+	{
+		game.getGameboard()[targetRow][col] = game.getGameboard()[row][col];
+		game.getGameboard()[row][col] = std::stack<Card>(); //change?
+	}
 
 	MarkUsedPower();
 }
