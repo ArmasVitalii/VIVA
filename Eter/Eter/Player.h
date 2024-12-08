@@ -27,6 +27,13 @@ public:
 
 	void						printPlayableCards() const;
 
+	void                        ControlledExplosion();
+	void                        Destruction(Player& opponent);
+	void                        Flames(Player& opponent, int playedCard);
+	void                        Lava(int number);
+	void                        FromAshes(int cardValue);
+	void                        Sparks(Player& opponent, int cardValue);
+	void                        Blizzard(Player& opponent);
 
 };
 
