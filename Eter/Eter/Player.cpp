@@ -49,3 +49,33 @@ void Player::printPlayableCards() const
 	}
 	std::cout << "\n";
 }
+
+void Player::ControlledExplosion()
+{
+	//need for EPLOSION CARD
+}
+
+void Player::Destruction(Player& opponent)
+{
+	std::list<int>& opponentCards = opponent.getCards();
+	int lastCardValue = opponentCards.back();
+	opponentCards.pop_back();
+	std::cout << "Distroyed opponent's last card :" << lastCardValue << "\n";
+}
+
+void Player::Flames(Player& opponent, int playedCard)
+{
+	//need for ILLUSIONS
+}
+
+void Player::Lava(int number)
+{
+	//...
+}
+
+void Player::FromAshes(int cardValue)
+{
+	//...
+}
+
+

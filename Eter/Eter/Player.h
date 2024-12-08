@@ -24,9 +24,9 @@ public:
 	std::vector<int>			getColumnVector();
 	std::vector<int>			getRowVector();
 
-
+	
 	void						printPlayableCards() const;
-
+	//LIST OF POWERS
 	void                        ControlledExplosion();
 	void                        Destruction(Player& opponent);
 	void                        Flames(Player& opponent, int playedCard);
