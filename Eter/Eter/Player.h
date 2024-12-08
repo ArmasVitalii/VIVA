@@ -34,6 +34,13 @@ public:
 	void                        FromAshes(int cardValue);
 	void                        Sparks(Player& opponent, int cardValue);
 	void                        Blizzard(Player& opponent);
+	void                        Storm();
+	void                        Hurricane(int row);
+	void                        Gale(int visibileCard);
+	void                        Mirage();
+	void                        StormSurge();
+	void                        Tide();
+	void                        Fog();
 
 };
 
