@@ -41,6 +41,16 @@ public:
 	void                        StormSurge();
 	void                        Tide();
 	void                        Fog();
+	void                        Wave();
+	void                        WaterVortex();
+	void                        Tsunami(int row);
+	void                        Cascade(int row);
+	void                        Support(int cardValue);
+	void                        Earthquake();
+	void                        Crack(int cardValue);
+	void                        Borders();
+	void                        Avalanche();
+	void                        Boulder();
 
 };
 
