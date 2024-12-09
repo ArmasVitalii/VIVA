@@ -115,4 +115,31 @@ void Player::Blizzard(Player& opponent)
 	}
 }
 
+void Player::Storm()
+{
+	//return all covered cards on the board to the players' hands
+	for (auto& value : m_playerCards)
+	{
+		//logic for returning covered cards to the player
+		std::cout << "Card returned to the player's hand!" << std::endl;
+	}
+}
+
+void Player::Hurricane(int row)
+{
+	std::cout << "Hurricane has shifted row " << row << "!" << std::endl;
+	//logic for shifting a complete row on the board 
+}
+
+void Player::Gale(int visibileCard)
+{
+	std::cout << "Card" << visibileCard << " has been moved to an adjacent position!" << std::endl;
+	//move the card to an adjacent position with a smaller value
+}
+
+void Player::Mirage()
+{
+	//logic to replace the illusion
+}
+
 
