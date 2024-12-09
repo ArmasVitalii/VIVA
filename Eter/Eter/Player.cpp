@@ -53,6 +53,7 @@ void Player::printPlayableCards() const
 void Player::ControlledExplosion()
 {
 	//need for EPLOSION CARD
+	std::cout << "Controlled Explosion activated!" << std::endl;
 }
 
 void Player::Destruction(Player& opponent)
@@ -65,12 +66,27 @@ void Player::Destruction(Player& opponent)
 
 void Player::Flames(Player& opponent, int playedCard)
 {
+	std::cout << "The opponent's illusionhas been flipped!" << std::endl;
 	//need for ILLUSIONS
+	//addCard(playedCard);
 }
 
 void Player::Lava(int number)
 {
 	//...
+	std::cout << "Lava activated! Cards with the number " << number << " are returned to their owners!" << std::endl;
+	//return all cards with the specified number to the respective players
+	for (auto it = m_playerCards.begin(); it != m_playerCards.end();)
+	{
+		if (*it == number)
+		{
+			it = m_playerCards.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 void Player::FromAshes(int cardValue)
