@@ -124,7 +124,6 @@ void Game::start()
 			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].push({ choice_v,currentPlayer });
 			m_numberOfCardsAdded++;
 
-
 			firstMove = false;
 
 			//TOBE OBSEVED
@@ -152,7 +151,6 @@ void Game::start()
 
 		std::cout << "\nCurrently Playing As PLAYER " << currentPlayer + 1;
 		m_players[currentPlayer].printPlayableCards();
-
 
 		std::cout << "Enter (x,y) value: ";
 		std::cin >> choice_i >> choice_j >> choice_v; // READ POSITION AND VALUE
@@ -294,7 +292,6 @@ void Game::start()
 			game->Update();
 			game->Render();
 		}
-
 	}  while (game->Running());
 
 	game->Clean();
@@ -373,7 +370,6 @@ int Game::verifyLockCase(bool playerNumber)
 	for (const auto& x : vec_cols)std::cout << x << " ";
 	std::cout << "\n";
 
-	
 	int conditions = 0;
 	bool allRowsFilled = std::all_of(vec_rows.begin(), vec_rows.end(), [](int x) { return x > 0; });
 	bool allColsFilled = std::all_of(vec_cols.begin(), vec_cols.end(), [](int x) { return x > 0; });
@@ -433,7 +429,6 @@ bool Game::winCondition(bool currentPlayer)
 
 	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
 	if (vec_rows[0] == 0 && vec_cols[0] == 0) return false;
-
 
 	bool condition1 = true;
 	for (int i = 0; i < 3; i++)
