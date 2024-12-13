@@ -170,7 +170,6 @@ void Game::start()
 			break;
 		}
 
-
 		if (validPositions.find({ choice_i, choice_j }) != validPositions.end())
 		{
 			// VALIDATE STACK RULE
@@ -180,6 +179,7 @@ void Game::start()
 				m_players[currentPlayer].getCards().push_back(choice_v);
 				continue;
 			}
+
 			m_numberOfCardsAdded++;
 
 			if (lockCase < 3)
@@ -285,18 +285,15 @@ void Game::start()
 			game->HandleEvents();
 			game->Update();
 			game->Render();
-
 		}
 		else
 		{
 			std::cout << "Invalid position!\n";
 			m_players[currentPlayer].getCards().push_back(choice_v);
-
 			game->HandleEvents();
 			game->Update();
 			game->Render();
 		}
-
 
 	}  while (game->Running());
 
