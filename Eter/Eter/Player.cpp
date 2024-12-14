@@ -52,7 +52,7 @@ void Player::printPlayableCards() const
 
 void Player::ControlledExplosion()
 {
-	//need for EPLOSION CARD
+	//need for EXPLOSION CARD
 	std::cout << "Controlled Explosion activated!" << std::endl;
 }
 
@@ -73,20 +73,28 @@ void Player::Flames(Player& opponent, int playedCard)
 
 void Player::Lava(int number)
 {
-	//...
-	std::cout << "Lava activated! Cards with the number " << number << " are returned to their owners!" << std::endl;
 	//return all cards with the specified number to the respective players
-	for (auto it = m_playerCards.begin(); it != m_playerCards.end();)
+	int countCards = std::count(m_playerCards.begin(), m_playerCards.end(), number);
+
+	if (countCards >= 2)
 	{
-		if (*it == number)
+		for (auto it = m_playerCards.begin(); it != m_playerCards.end();)
 		{
-			it = m_playerCards.erase(it);
+			if (*it == number)
+			{
+				it = m_playerCards.erase(it);
+			}
+			else
+			{
+				++it;
+			}
 		}
-		else
-		{
-			++it;
-		}
+		std::cout << "Lava activated! Cards with the number " << number << " are returned to their owners!" << std::endl;
+
 	}
+	else
+		std::cout << "Cannot use Lava Power! Not enough cards with the chosen number: " << number;
+	
 }
 
 void Player::FromAshes(int cardValue)
@@ -128,11 +136,13 @@ void Player::Storm()
 void Player::Hurricane(int row)
 {
 	std::cout << "Hurricane has shifted row " << row << "!" << std::endl;
+
 	//logic for shifting a complete row on the board 
 }
 
 void Player::Gale(int visibileCard)
 {
+	
 	std::cout << "Card" << visibileCard << " has been moved to an adjacent position!" << std::endl;
 	//move the card to an adjacent position with a smaller value
 }
