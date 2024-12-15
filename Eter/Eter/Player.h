@@ -3,6 +3,7 @@
 #include <iostream>
 #include <list>
 #include "Card.h"
+#include "Game.h"
 
 
 class Player
@@ -38,7 +39,7 @@ public:
 	void                        Hurricane(int row);
 	void                        Gale(int visibileCard);
 	void                        Mirage();
-	void                        StormSurge();
+	void                        StormSurge(Game& game);
 	void                        Tide();
 	void                        Fog();
 	void                        Wave();

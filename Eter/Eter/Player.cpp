@@ -152,4 +152,26 @@ void Player::Mirage()
 	//logic to replace the illusion
 }
 
+void Player::StormSurge(Game& game) 
+{
+	//eliminate any stack of cards that has 2/more cards
+	int row, col;
+	std::cout << "Choose stack to eliminate (row and col): ";
+	std::cin >> row >> col;
+
+	if (row < 0 || row >= game.getGameboard().size() || col < 0 || col >= game.getGameboard()[row].size())
+	{
+		std::cout << "Invalid position of stack";
+		return;
+	}
+
+	if (game.getGameboard()[row][col].size() >= 2)
+	{
+		game.getGameboard()[row][col].pop();
+		std::cout << "Storm power activated. Stack at the positions: (" << row << ", " << col << ") was eliminated\n";
+	}
+	else
+		std::cout << "The stack must have at least 2 cards!";
+}
+
 
