@@ -174,4 +174,37 @@ void Player::StormSurge(Game& game)
 		std::cout << "The stack must have at least 2 cards!";
 }
 
+void Player::Tide(Game &game)
+{
+	auto Gameboard = game.getGameboard();
+	int row1, col1;
+	int row2, col2;
+	std::cout << "The coordinates of the first stack of cards (row, col): ";
+	std::cin >> row1 >> col1;
+
+	std::cout << "The coordinates of the second stack of cards which you want to swap: ";
+	std::cin >> row2 >> col2;
+
+	if (row1 < 0 || row1 >= Gameboard.size() || col1 < 0 || row1 >= Gameboard[row1].size() ||
+		row2 < 0 || row2 >= Gameboard.size() || col2 < 0 || col2 >= Gameboard[row2].size())
+	{
+		std::cout << "Invalid coordinates! You cannot swap stacks.";
+		return;
+	}
+
+	std::swap(Gameboard[row1][col1], Gameboard[row2][col2]);
+	std::cout << "Tide power activated!";
+
+}
+
+void Player::Fog()
+{
+	//need for illusions!
+}
+
+void Player::WaterVortex()
+{
+	//...
+}
+
 
