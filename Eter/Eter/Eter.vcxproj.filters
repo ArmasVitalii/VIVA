@@ -34,6 +34,10 @@
     <ClCompile Include="GamemodeDistributor.cpp">
       <Filter>Source Files\Gamemode Management</Filter>
     </ClCompile>
+    <ClCompile Include="AbstractMage.cpp">
+      <Filter>Source Files\Mage Management</Filter>
+    </ClCompile>
+    <ClCompile Include="EarthMage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -60,6 +64,10 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files\Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractMage.h">
+      <Filter>Header Files\Mage Management</Filter>
+    </ClInclude>
+    <ClInclude Include="EarthMage.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resource Files">
@@ -94,6 +102,12 @@
     </Filter>
     <Filter Include="Source Files\Match &amp; Game">
       <UniqueIdentifier>{f7ac6b7e-9e5e-40f7-b2a3-953324e3a5b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Mage Management">
+      <UniqueIdentifier>{e31a43b6-0a34-4fef-bad0-3f6d339e03cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mage Management">
+      <UniqueIdentifier>{5d1cbe18-d59d-417e-bc1b-e30b1f0152db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
