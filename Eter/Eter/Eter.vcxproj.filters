@@ -37,7 +37,12 @@
     <ClCompile Include="AbstractMage.cpp">
       <Filter>Source Files\Mage Management</Filter>
     </ClCompile>
-    <ClCompile Include="EarthMage.cpp" />
+    <ClCompile Include="EarthMage.cpp">
+      <Filter>Source Files\Mage Management</Filter>
+    </ClCompile>
+    <ClCompile Include="FireMage.cpp">
+      <Filter>Source Files\Mage Management</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -67,7 +72,12 @@
     <ClInclude Include="AbstractMage.h">
       <Filter>Header Files\Mage Management</Filter>
     </ClInclude>
-    <ClInclude Include="EarthMage.h" />
+    <ClInclude Include="EarthMage.h">
+      <Filter>Header Files\Mage Management</Filter>
+    </ClInclude>
+    <ClInclude Include="FireMage.h">
+      <Filter>Header Files\Mage Management</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resource Files">

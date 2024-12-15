@@ -142,6 +142,7 @@
     <ClCompile Include="AllGamemodes.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="EarthMage.cpp" />
+    <ClCompile Include="FireMage.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gamemode.cpp" />
     <ClCompile Include="GamemodeDistributor.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="AllGamemodes.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="EarthMage.h" />
+    <ClInclude Include="FireMage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gamemode.h" />
     <ClInclude Include="GamemodeDistributor.h" />
