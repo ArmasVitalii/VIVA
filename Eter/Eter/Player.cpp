@@ -228,6 +228,26 @@ void Player::Cascade(int row)
 	//logic for the cards to "fall" to one side of the row
 }
 
+void Player::Support(int cardValue) 
+{
+	std::cout << "Card " << cardValue << " value increased by 1!" << std::endl;
+	//logic for increasing the card value
+}
+
+void Player::Earthquake()
+{
+	std::cout << "All cards with value 1 have been removed from the board!" << std::endl;
+    //logic to remove all cards with value 1
+}
+
+void Player::Crack(int  cardValue)
+{
+	std::cout << "Card " << cardValue << " value decreased by 1!" << std::endl;
+	//logic to decrease the card value
+}
+
+
+
 
 
 
