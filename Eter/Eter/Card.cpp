@@ -2,6 +2,8 @@
 
 Card::Card(int value, bool whoPlayer) :m_value{value}, m_whoPlayed{whoPlayer} {}
 
+Card::Card(int value) : m_value(value), m_whoPlayed(false){}
+
 bool Card::operator==(const Card& other) const
 {
 	return (m_value == other.m_value) && (m_whoPlayed == other.m_whoPlayed);

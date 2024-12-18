@@ -68,7 +68,7 @@ void Player::Flames(Player& opponent, int playedCard)
 {
 	std::cout << "The opponent's illusionhas been flipped!" << std::endl;
 	//need for ILLUSIONS
-	//addCard(playedCard);
+	addCard(playedCard); 
 }
 
 void Player::Lava(int number)
@@ -100,15 +100,15 @@ void Player::Lava(int number)
 void Player::FromAshes(int cardValue)
 {
 	//...
-	//addCard(Card(cardValue));  //need a constructor for Card
+	addCard(Card(cardValue));  //need a constructor for Card
 	std::cout << "Card " << cardValue << " has been played from the ashes!" << std::endl;
 }
 
 void Player::Sparks(Player& opponent, int cardValue)
 {
 	std::cout << "The opponent's covered card has been moved to another position!" << std::endl;
-	//opponent.removeCard(Card(cardValue)); //need a constructor for Card
-	//addCard(Card(cardValue)); // need a constructor for Card
+	opponent.removeCard(Card(cardValue));  //need a constructor for Card
+	addCard(Card(cardValue));  // need a constructor for Card
 }
 
 void Player::Blizzard(Player& opponent)
@@ -118,7 +118,7 @@ void Player::Blizzard(Player& opponent)
 	{
 		int cardValue = opponent.m_playerCards.back();
 		opponent.m_playerCards.pop_back();
-		//addCard(Card(cardValue)); //need a constructor for Card
+		addCard(Card(cardValue));  //need a constructor for Card
 		std::cout << " A card has been returned to the opponent's hand!" << std::endl;
 	}
 }
@@ -246,8 +246,23 @@ void Player::Crack(int  cardValue)
 	//logic to decrease the card value
 }
 
+void Player::Borders() 
+{
+	std::cout << "A neutral card has been placed on the board!" << std::endl;
+	//logic to place a neutral card and interact with the board
+}
 
+void Player::Avalanche()
+{
+	std::cout << "Two adjacent stacks have been shifted!" << std::endl;
+	//logic to shift two adjacent stacks
+}
 
+void Player::Boulder()
+{
+	std::cout << "An illusion has been covered with a card!" << std::endl;
+	//logic for covering the illusion
+}
 
 
 
