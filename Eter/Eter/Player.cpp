@@ -149,6 +149,7 @@ void Player::Gale(int visibileCard)
 
 void Player::Mirage()
 {
+	std::cout << "The illusion has been replaced with another one!" << std::endl;
 	//logic to replace the illusion
 }
 
@@ -199,12 +200,34 @@ void Player::Tide(Game &game)
 
 void Player::Fog()
 {
+	std::cout << "Another illusion has been played!" << std::endl;
 	//need for illusions!
+}
+
+void Player::Wave()
+{
+	std::cout << "A stack has moved to an adjacent position and card has been played!" << std::endl;
+	//logic to move the stack and play a card in the new position
 }
 
 void Player::WaterVortex()
 {
+	std::cout << "Two cards have been moved into an empty space on the same row!" << std::endl;
 	//...
 }
+
+void Player::Tsunami(int row)
+{
+	std::cout << "Tsunami has restricted the opponent from placing cards on row " << row << "!" << std::endl;
+	//logic to restrict the opponent's move
+}
+
+void Player::Cascade(int row)
+{
+	std::cout << "Cards have fallen towards the edge of the row!" << std::endl;
+	//logic for the cards to "fall" to one side of the row
+}
+
+
 
 

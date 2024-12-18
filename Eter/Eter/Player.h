@@ -40,7 +40,7 @@ public:
 	void                        Gale(int visibileCard);
 	void                        Mirage();
 	void                        StormSurge(Game& game);
-	void                        Tide();
+	void                        Tide(Game& game);
 	void                        Fog();
 	void                        Wave();
 	void                        WaterVortex();
