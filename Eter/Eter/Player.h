@@ -34,7 +34,7 @@ public:
 	void                        Lava(int number);
 	void                        FromAshes(int cardValue);
 	void                        Sparks(Player& opponent, int cardValue);
-	void                        Blizzard(Player& opponent);
+	void                        Blizzard(Player& opponent, int cardValue);
 	void                        Storm();
 	void                        Hurricane(int row);
 	void                        Gale(int visibileCard);

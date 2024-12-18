@@ -100,26 +100,37 @@ void Player::Lava(int number)
 void Player::FromAshes(int cardValue)
 {
 	//...
+	Card newCard(cardValue);
 	addCard(Card(cardValue));  //need a constructor for Card
 	std::cout << "Card " << cardValue << " has been played from the ashes!" << std::endl;
 }
 
 void Player::Sparks(Player& opponent, int cardValue)
 {
-	std::cout << "The opponent's covered card has been moved to another position!" << std::endl;
-	opponent.removeCard(Card(cardValue));  //need a constructor for Card
-	addCard(Card(cardValue));  // need a constructor for Card
+	Card moveCard(cardValue);
+	if (opponent.removeCard(moveCard)) 
+	{
+		addCard(moveCard);
+		std::cout << "The opponent's covered card ("<<cardValue<<") has been moved to your deck!" << std::endl;
+	}
+	else
+	{
+		std::cout << "The specified card (" << cardValue << ") could not be found in the opponent's deck!" << std::endl;
+	}
 }
 
-void Player::Blizzard(Player& opponent)
+void Player::Blizzard(Player& opponent, int cardValue)
 {
 	//move the last visibile card from the opponent to their hand
-	if (!opponent.m_playerCards.empty())
+	Card visibileCard(cardValue); 
+	if (opponent.removeCard(visibileCard))
 	{
-		int cardValue = opponent.m_playerCards.back();
-		opponent.m_playerCards.pop_back();
-		addCard(Card(cardValue));  //need a constructor for Card
-		std::cout << " A card has been returned to the opponent's hand!" << std::endl;
+		opponent.addCard(visibileCard);
+		std::cout << "The visibile card (" << cardValue << ") has been returned to the opponent's hand!" << std::endl;
+	}
+	else
+	{
+		std::cout << "The specified card (" << cardValue << ") is not visibile or does not exist in the opponent's deck!" << std::endl;
 	}
 }
 
