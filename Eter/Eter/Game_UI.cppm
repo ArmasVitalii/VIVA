@@ -1,11 +1,14 @@
 export module Game_UI;
 
+
 import <iostream>;
 import <SDL.h>;
 import <SDL_image.h>;
 
+
 export class __declspec(dllexport) Game_UI
 {
+
 public:
 	Game_UI();
 	~Game_UI();
@@ -18,10 +21,12 @@ public:
 	void				Clean();
 
 	bool				Running();
+
 private:
 
 	bool				m_isRunning;
 	SDL_Window*			m_window;
 	SDL_Renderer*		m_renderer;
 };
+
 
