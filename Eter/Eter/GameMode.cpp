@@ -52,3 +52,4 @@ bool Gamemode::gethasTimer() const
 {
 	return m_hasTimer;
 }
+

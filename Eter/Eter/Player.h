@@ -5,8 +5,6 @@
 #include "Card.h"
 class Game;
 
-
-
 class Player
 {
 private:
@@ -55,4 +53,5 @@ public:
 	void                        Boulder();
 
 };
+
 

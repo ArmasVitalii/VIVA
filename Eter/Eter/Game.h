@@ -19,7 +19,6 @@ struct pairHash
 	}
 };
 
-
 class Game
 {
 private:
@@ -52,6 +51,7 @@ public:
 	int                         getCurrentPlayer() const;
 	gameboard& getGameboard();
 };
+
 
 
 

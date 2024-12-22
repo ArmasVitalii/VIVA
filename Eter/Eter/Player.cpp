@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "Game.h"
 
-
 Player::Player(bool playerNumber /*,const std::list<Card>& playerCards*/) : m_playerNumber{ playerNumber }
 {
 }
@@ -276,6 +275,7 @@ void Player::Boulder()
 	std::cout << "An illusion has been covered with a card!" << std::endl;
 	//logic for covering the illusion
 }
+
 
 
 
