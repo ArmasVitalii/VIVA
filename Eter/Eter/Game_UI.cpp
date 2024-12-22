@@ -12,10 +12,12 @@ Game_UI::Game_UI()
 
 }
 
+
 Game_UI::~Game_UI()
 {
 
 }
+
 
 void Game_UI::InitUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen) {
 
@@ -57,8 +59,10 @@ void Game_UI::InitUI(const char* title, int x_pos, int y_pos, int width, int hei
 
 void Game_UI::HandleEvents()
 {
+
 	SDL_Event event;
 	SDL_PollEvent(&event);
+	
 	switch (event.type) {
 	case SDL_QUIT:
 		m_isRunning = false;
@@ -66,6 +70,7 @@ void Game_UI::HandleEvents()
 	default:
 		break;
 	}
+
 	std::cout << "Hi!";
 }
 
