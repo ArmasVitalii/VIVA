@@ -2,7 +2,9 @@
 #include <SDL_Image.h>
 module Game_UI;
 
+
 SDL_Texture* texture;
+
 
 Game_UI::Game_UI()
 {
@@ -69,6 +71,7 @@ void Game_UI::HandleEvents()
 
 void Game_UI::Update()
 {
+
 }
 
 void Game_UI::Render()
@@ -86,5 +89,6 @@ void Game_UI::Clean()
 	SDL_Quit();
 	std::cout << "Game cleaned";
 }
+
 
 bool Game_UI::Running() { return m_isRunning; };
