@@ -1,57 +1,53 @@
 #pragma once
-#include <vector>
-#include <unordered_set>
-#include <stack>
-#include "Card.h"
+#include <array>
 #include "Player.h"
-#include <iostream>
-#include <algorithm>
-import Game_UI;
-
-using gameboard = std::vector<std::vector<std::stack<Card>>>;
-struct pairHash
-{
-	std::size_t operator()(const std::pair<int, int>& p) const
-	{
-		std::size_t h1 = std::hash<int>{}(p.first);
-		std::size_t h2 = std::hash<int>{}(p.second);
-		return h1 ^ (h2 << 1);
-	}
-};
+#include "Bridge.h"
+#include "Board.h"
 
 class Game
 {
 private:
-	bool						m_is4x4 = 0;//TODO: MODIFY THE GAMEBOARD DIMENSION BASED ON 5 + 2* IS4X4
-	int							m_gamePlay;
-	int							m_NumberOfGames;
+    const	PlayerEnum k_baseFirstPlayer{ PlayerEnum::Player1 };
+    struct	Input
+    {
+        std::pair<size_t, size_t> position;
+        uint8_t value;
+        void readInput();
+    };
 
-	gameboard					m_gameBoard{ 5, std::vector<std::stack<Card>>{5,std::stack<Card>({Card(-1,0)})} };
-	std::vector<Player>			m_players{ {0/*Player1*/},{1/*Player2*/} };	//MAYBE ARRAY?
-	std::pair<int, int>			m_gridMiddle{ 2,2 };
-	int							m_numberOfCardsAdded = 0;
-	bool                        currentPlayer;
 
-private:
-	//gameboard&					getGameboard();
-	const Player&				getPlayer1() const;							//CONST COULD BE A PROBLEM FOR WHEN WE UPDATE THE "POKET"
-	const Player&				getPlayer2() const;
-	std::pair<int, int>			getGridMiddle();
-	void						printGameboard();
+    Input					                            m_input;
 
-	bool						validatePositionInGrid() const;			//VERIFY IF THE GRIDMIDDLE IS IN GRID AND IF ALL INSETED ELEMENTS ARE INSIDE THE GRID
-	int							verifyLockCase(bool player);			//VERIFY LOCK CASE
-	bool						winCondition(bool currentPlayer);
+    Bridge& m_bridge;
+    Board                                               m_board;
+    std::array<Player, 2>& m_players;
+
+    PlayerEnum				                            m_currentPlayer{ k_baseFirstPlayer };
+
+    const std::shared_ptr<AbstractMage>& getMage(PlayerEnum currentPlayer) const;
+    const std::vector<std::shared_ptr<AbstractMagic>>   getMagicPowers(PlayerEnum currentPlayer) const;
+
+    bool                                                verifySum(PlayerEnum currentPlayer) const;
+    bool                                                verifyNullPresence(PlayerEnum currentPlayer) const;
+    bool                                                verifyRowOrColumnWin(PlayerEnum currentPlayer) const;
+    bool                                                verifyDiagonalWin(PlayerEnum currentPlayer) const;
+
+    bool                                                checkWinCase1(PlayerEnum currentPlayer) const;
+    bool                                                checkWinCase2(PlayerEnum currentPlayer) const;
+    bool                                                checkWinCase3(PlayerEnum currentPlayer) const;
+    bool                                                checkIfWin(PlayerEnum currentPlayer) const;
+
+    void                                                printLogic() const;
+    Player& getCurrentPlayer();
+    void                                                switchPlayer();
+
+    std::string_view                                    getPlayerChoice() const;
+    void                                                handleChoice(std::string_view choice);
+
+    PlayerEnum                                          placeCard();
 
 public:
-	void						start(); //WILL RETURN A BOOL DEPICTING WHO WON
+    explicit Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players);
 
-	void						removeOpponentCard(int row, int col); //FOR FIREMASTERS (1st power)
-	void						removeRow(int row); //FOR FIREMASTERS (2nd power)
-	int                         getCurrentPlayer() const;
-	gameboard& getGameboard();
+    PlayerEnum playGame();
 };
-
-
-
-
