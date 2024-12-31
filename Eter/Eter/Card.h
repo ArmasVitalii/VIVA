@@ -1,15 +1,17 @@
 #pragma once
+#include "PlayerEnum.h"
+#include <stdint.h>
 class Card
 {
 private:
-	//TOBE: CONTINUED
-	int					m_value;
-	bool				m_whoPlayed;
+	uint8_t		m_cardValue;
+	PlayerEnum	m_playerID;
+
 public:
-	Card(int value, bool whoPlayer);
-	Card(int value);
-	//Card(type, value, whoPlayed); -> maybe enums for values and type of cards?
-	bool				operator==(const Card& other) const;
-	const int&			getValue() const;
-	const bool&			getWhoPlayed() const;
+	Card(uint8_t value, PlayerEnum playerID);
+	bool operator==(const Card& card) const;
+
+	uint8_t		getValue() const;
+	PlayerEnum	getPlayerID() const;
 };
+
