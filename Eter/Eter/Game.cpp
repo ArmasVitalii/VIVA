@@ -1,467 +1,336 @@
 #include "Game.h"
+#include <numeric>
+#include <algorithm>
 
-gameboard& Game::getGameboard()
+Game::Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players)
+	:m_bridge{ bridge },
+	m_board{ board },
+	m_players{ players }
 {
-	return m_gameBoard;
 }
 
-const Player& Game::getPlayer1() const
+void Game::Input::readInput()
 {
-	return m_players[0];
+	int value;
+	std::cout << "\nEnter xPos yPos Value for insert: ";
+	std::cin >> this->position.first >> this->position.second >> value;
+	this->value = static_cast<uint8_t>(value);
 }
 
-const Player& Game::getPlayer2() const
+void Game::printLogic() const
 {
-	return m_players[1];
-}
+	std::cout << "\n> Currently playing as Player " << static_cast<int>(m_currentPlayer) + 1;
+	m_board.printGameboard();
+	std::cout << "\n> Valid positions for insert: ";
+	m_board.printValidPositions();
+	std::cout << "\n> Current cards held by player: ";
+	m_players[static_cast<size_t>(m_currentPlayer)].printPlayerCards();
 
-std::pair<int, int> Game::getGridMiddle()
-{
-	return m_gridMiddle;
-}
-
-void Game::printGameboard()
-{
-	for (int i = 0; i < m_gameBoard.size(); ++i)
+	auto mage = getMage(m_currentPlayer);
+	if (mage != nullptr)
 	{
-		for (int j = 0; j < m_gameBoard.size(); ++j)
+		std::cout << "\n> Mage: \n";
+		mage.get()->getDescription();
+	}
+
+	auto magicPowers = getMagicPowers(m_currentPlayer);
+	if (!magicPowers.empty())
+	{
+		std::cout << "\n> Magic Powers: \n";
+		for (const auto& magicPower : magicPowers)
 		{
-			const Card& topCard = m_gameBoard[i][j].top();
-			if (m_gameBoard[i][j].top().getValue() == -1)
-			{
-				std::cout << "( , ) ";
-			}
-			else
-			{
-				std::cout << "(" << topCard.getValue() << "," << topCard.getWhoPlayed() + 1 << ") ";
-			}
-		}
-		std::cout << std::endl;
-	}
-}
-
-bool Game::validatePositionInGrid() const
-{
-	int counter = 0;
-	bool containsGridMiddle = false;
-	for (int i = m_gridMiddle.first - 1; i <= m_gridMiddle.first + 1; i++)
-	{
-		for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++)
-		{
-			if (i >= 0 && i < m_gameBoard.size() && j >= 0 && j < m_gameBoard[i].size())
-			{
-				if (m_gameBoard[i][j].top().getValue() != -1)
-					counter++;
-				if (i == m_gridMiddle.first && j == m_gridMiddle.second)
-					containsGridMiddle = true;
-			}
-		}
-	}
-
-	return containsGridMiddle && counter == m_numberOfCardsAdded - 1;
-}
-
-void Game::start()
-{
-	Game_UI* game = new Game_UI();
-	game->HandleEvents();
-	game->Update();
-	game->Render();
-	/*
-	while (game is running)
-	{
-		handle any user input
-		update all object eg. position etc
-		render changes to the display
-	}
-	*/
-
-	//ADD THIS AS PARAMETER { 1,1,2,2,3,3,4 }
-	m_players[0].getCards() = { 1,1,2,2,3,3,4 };
-	m_players[1].getCards() = { 1,1,2,2,3,3,4 };
-
-	std::unordered_set < std::pair<int, int>, pairHash> validPositions;
-	std::vector<std::pair<int, int>> valid = { {1,0},{0,1},{1,1},{0,0},{-1,0},{0,-1},{-1,-1},{1,-1},{-1,1} };
-	for (const auto& x : valid)
-	{
-		validPositions.insert(std::make_pair(m_gridMiddle.first + x.first, m_gridMiddle.second + x.second));
-	}
-
-	bool firstMove = true, forInsert = true, currentPlayer = 0;
-	int lockCase = -1;
-
-	do
-	{
-		int choice_v, choice_i, choice_j;
-
-		if (firstMove)//LOGIC FOR THE FIRST MOVE
-		{
-			std::cout << "Currently Playing As PLAYER " << currentPlayer + 1;
-			m_players[currentPlayer].printPlayableCards();
-			std::cout << "Enter 1st choice: ";
-			std::cin >> choice_v;
-
-			if (!m_players[currentPlayer].removeCard({ choice_v,currentPlayer }))
-			{
-				std::cout << "Value not available.\n";
-				continue;
-			}
-
-			//DELETE THIS AFTER GUI
-			if (choice_v <= 0 || choice_v > 5)
-			{
-				std::cout << "Value too high!\n";
-				continue;
-			}
-
-			//MAYBE MAKE THIS INTO A FUNCTION?
-			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].pop();
-			m_gameBoard[m_gridMiddle.first][m_gridMiddle.second].push({ choice_v,currentPlayer });
-			m_numberOfCardsAdded++;
-
-			firstMove = false;
-
-			//TOBE OBSEVED
-			lockCase = verifyLockCase(currentPlayer);
-
-			printGameboard();
-			std::cout << '\n';
-
-			//TOBE OBSEVED
-			for (const auto& x : validPositions)
-			{
-				printf("(%d,%d), ", x.first, x.second);
-			}
+			magicPower.get()->getDescription();
 			std::cout << "\n";
-
-			currentPlayer = !currentPlayer;
 		}
-
-		//WIN CASE 2
-		if (m_numberOfCardsAdded == 9)
-		{
-			std::cout << "Game Won by PLAYER " << !currentPlayer + 1 << "! THE LAST SQUARE WAS FILLED\n";
-			break;
-		}
-
-		std::cout << "\nCurrently Playing As PLAYER " << currentPlayer + 1;
-		m_players[currentPlayer].printPlayableCards();
-
-		std::cout << "Enter (x,y) value: ";
-		std::cin >> choice_i >> choice_j >> choice_v; // READ POSITION AND VALUE
-
-		if (!m_players[currentPlayer].removeCard({ choice_v,currentPlayer }))
-		{
-			std::cout << "Value not available.\n";
-			continue;
-		}
-
-		//WIN CASE 3
-		if (m_players[currentPlayer].getCards().empty())
-		{
-			std::cout << "\nGame Won by PLAYER " << !currentPlayer + 1 << "! Reasone: No more cards!";
-			break;
-		}
-
-		if (validPositions.find({ choice_i, choice_j }) != validPositions.end())
-		{
-			// VALIDATE STACK RULE
-			if (choice_v <= m_gameBoard[choice_i][choice_j].top().getValue())
-			{
-				std::cout << "Incorrect value for stacking!\n";
-				m_players[currentPlayer].getCards().push_back(choice_v);
-				continue;
-			}
-
-			m_numberOfCardsAdded++;
-
-			if (lockCase < 3)
-			{
-				if (lockCase != 0)
-				{
-					switch (lockCase)//TODO: DELETE OPTIONS FROM VALIDATION LIST
-					{
-					case 2:
-						if (choice_i < m_gridMiddle.first - 1 || choice_i > m_gridMiddle.first + 1)
-						{// ENSURE VALID COLUMN
-							m_numberOfCardsAdded--;
-							std::cout << "Invalid position! Not in a valid COLUMN\n";
-							m_players[currentPlayer].getCards().push_back(choice_v);
-							continue;
-						}
-						break;//BREAK SWITCH
-					case 1:
-						if (choice_j < m_gridMiddle.second - 1 || choice_j > m_gridMiddle.second + 1)
-						{ //ENSURE VALID ROW
-							m_numberOfCardsAdded--;
-							std::cout << "Invalid position! Not in a valid ROW\n";
-							m_players[currentPlayer].getCards().push_back(choice_v);
-							continue;
-						}
-						break;
-					}
-
-					//VERIFY IF I CAN MOVE THE GRID
-					m_gridMiddle.first += (choice_i - m_gridMiddle.first) / 2; // NEW GRID CENTER X
-					m_gridMiddle.second += (choice_j - m_gridMiddle.second) / 2; // NEW GRID CENTER Y
-					if (!validatePositionInGrid())
-					{
-						m_gridMiddle.first -= (choice_i - m_gridMiddle.first) / 2;
-						m_gridMiddle.second -= (choice_j - m_gridMiddle.second) / 2;
-						m_players[currentPlayer].getCards().push_back(choice_v);
-						m_numberOfCardsAdded--;
-						std::cout << "Invalid insert position => GRID\n";
-						continue;
-					}
-					//END VALIDATION 
-				}//std::cout << "\n" << m_gridMiddle.first << " " << m_gridMiddle.second << "\n";//DISPLAY GRID MIDDLE FOR DEBUG
-			}
-			// IF IT IS NULL
-			if (m_gameBoard[choice_i][choice_j].top().getValue() == -1)
-			{
-				m_gameBoard[choice_i][choice_j].pop();
-			}
-			else m_numberOfCardsAdded--;
-
-			m_gameBoard[choice_i][choice_j].push(Card(choice_v, currentPlayer));
-
-			if (forInsert && winCondition(currentPlayer))
-			{
-				std::cout << "\nGame Won by PLAYER " << currentPlayer + 1 << "\n";
-				printGameboard();
-				break;
-			}
-
-			printGameboard();
-
-			if (forInsert)
-			{
-				if (choice_i - 1 >= 0) validPositions.insert({ choice_i - 1, choice_j });
-				if (choice_i + 1 <= 5) validPositions.insert({ choice_i + 1, choice_j });
-				if (choice_j - 1 >= 0) validPositions.insert({ choice_i, choice_j - 1 });
-				if (choice_j + 1 <= 5) validPositions.insert({ choice_i, choice_j + 1 });
-				if (choice_i - 1 >= 0 && choice_j - 1 >= 0) validPositions.insert({ choice_i - 1, choice_j - 1 });
-				if (choice_i + 1 <= 5 && choice_j + 1 <= 5) validPositions.insert({ choice_i + 1, choice_j + 1 });
-				if (choice_i - 1 >= 0 && choice_j + 1 <= 5) validPositions.insert({ choice_i - 1, choice_j + 1 });
-				if (choice_i + 1 <= 5 && choice_j - 1 >= 0) validPositions.insert({ choice_i + 1, choice_j - 1 });
-			}
-
-			lockCase = verifyLockCase(currentPlayer);
-			if (lockCase >= 3 && forInsert)
-			{
-				std::cout << "THE GAME BOARD HAS BEEN SET!\n";
-				validPositions.clear();
-				forInsert = false;
-				for (int i = m_gridMiddle.first - 1; i <= m_gridMiddle.first + 1; i++)
-				{
-					for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++) {
-						validPositions.insert({ i,j });
-					}
-				}
-			}
-
-			if (!forInsert && winCondition(currentPlayer))
-			{
-				std::cout << "\n Game Won by PLAYER " << currentPlayer + 1 << "\n";
-				break;
-			}
-
-			std::cout << "\n";
-			for (const auto& x : validPositions)
-			{
-				printf("(%d, %d), ", x.first, x.second);
-			}
-			std::cout << "\n";
-
-			currentPlayer = !currentPlayer;
-
-			game->HandleEvents();
-			game->Update();
-			game->Render();
-		}
-		else
-		{
-			std::cout << "Invalid position!\n";
-			m_players[currentPlayer].getCards().push_back(choice_v);
-			game->HandleEvents();
-			game->Update();
-			game->Render();
-		}
-	}  while (game->Running());
-
-	game->Clean();
-}
-
-void Game::removeOpponentCard(int row, int col)
-{
-	if (!m_gameBoard[row][col].empty())
-	{
-		m_gameBoard[row][col].pop();
-		std::cout << "Card removed on the position: " << row << " " << col << "\n";
 	}
 }
 
-void Game::removeRow(int row)
+Player& Game::getCurrentPlayer()
 {
-	for (int col = 0;col < m_gameBoard[row].size();col++)
-	{
-		while (!m_gameBoard[row][col].empty())
-		{
-			m_gameBoard[row][col].pop();
-		}
-	}
-	std::cout << "Row " << row << " removed. \n";
+	return m_players[static_cast<size_t>(m_currentPlayer)];
 }
 
-int Game::getCurrentPlayer() const
+bool Game::checkWinCase1(PlayerEnum currentPlayer) const
 {
-	return currentPlayer;
+	if (verifySum(currentPlayer) && verifyNullPresence(currentPlayer))
+	{
+		if (verifyRowOrColumnWin(currentPlayer) || verifyDiagonalWin(currentPlayer))
+		{
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
-int Game::verifyLockCase(bool playerNumber)
+bool Game::checkWinCase2(PlayerEnum currentPlayer) const
 {
-	//TODO: DONT KEEP THE MATRIX SAVED, JUST TRANSFER THE COORDONATES OF THE LAST INSERION INTO THE "POKET" OF THE PLAYER IT PLACED
-	//REFER TO M_COLUMNVECTOR AND M_ROWVECTOR
-	//DO THE SAME FOR WINCONDITON
-
-
-	std::vector<std::vector<bool>> g(3, std::vector<bool>(3)); // Will not need this if we normalize coordinates
-	int count = 0, options_checked = 0;
-
-	// Populate the real grid
-	for (int i = m_gridMiddle.first - 1; i <= m_gridMiddle.first + 1; i++)
-	{
-		for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++)
-		{
-			if (i >= 0 && i < m_gameBoard.size() && j >= 0 && j < m_gameBoard[i].size() && !m_gameBoard[i][j].empty())
-			{
-				g[i - (m_gridMiddle.first - 1)][j - (m_gridMiddle.second - 1)] = (m_gameBoard[i][j].top().getValue() != -1) ? 1 : 0;
-			}
-		}
-	}
-
-	std::vector<int> vec_rows(3, 0);
-	for (int j = 0; j < 3; j++)
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			vec_rows[j] += (int)g[i][j];
-		}
-	}
-
-	std::vector<int> vec_cols(3, 0);
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			vec_cols[i] += (int)g[i][j];
-		}
-	}
-
-	std::cout << "\nvec linii: ";
-	for (const auto& x : vec_rows)std::cout << x << " ";
-
-	std::cout << "vec coloane: ";
-	for (const auto& x : vec_cols)std::cout << x << " ";
-	std::cout << "\n";
-
-	int conditions = 0;
-	bool allRowsFilled = std::all_of(vec_rows.begin(), vec_rows.end(), [](int x) { return x > 0; });
-	bool allColsFilled = std::all_of(vec_cols.begin(), vec_cols.end(), [](int x) { return x > 0; });
-
-	if (allRowsFilled) conditions += 1;
-	if (allColsFilled) conditions += 2;
-	if (allRowsFilled && allColsFilled) conditions += 3;
-
-	return conditions;
+	return m_board.checkWinCase2(currentPlayer);
 }
 
-bool Game::winCondition(bool currentPlayer)
+bool Game::checkWinCase3(PlayerEnum currentPlayer) const
 {
-	std::vector<std::vector<bool>> g(3, std::vector<bool>(3));
-	// -> Will not need this if we normalize coordinates
+	return m_players[static_cast<size_t>(m_currentPlayer)].hasUsedAllCards();
+}
 
-	int count = 0, options_checked = 0;
-
-	//Populating the real grid
-	for (int i = m_gridMiddle.first - 1;i <= m_gridMiddle.first + 1;i++)
+bool Game::checkIfWin(PlayerEnum currentPlayer) const
+{
+	if (!m_board.isFirstMove())
 	{
-		for (int j = m_gridMiddle.second - 1; j <= m_gridMiddle.second + 1; j++)
-		{
-			if (i >= 0 && i < m_gameBoard.size() && j >= 0 && j < m_gameBoard[i].size() && !m_gameBoard[i][j].empty())
-			{
-				g[i - (m_gridMiddle.first - 1)][j - (m_gridMiddle.second - 1)] =
-					(m_gameBoard[i][j].top().getValue() != -1 && m_gameBoard[i][j].top().getWhoPlayed() == currentPlayer) ? 1 : 0;
-			}
-		}
+		if (checkWinCase1(currentPlayer))
+			return true;
+
+		if (checkWinCase2(currentPlayer) || checkWinCase3(currentPlayer))
+			return true;
+
+
+		//win case 4 somehow
+		return false;
 	}
-
-	std::vector<int> vec_rows(3, 0);
-	for (int j = 0;j < 3;j++)
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			vec_rows[j] += (int)g[i][j];
-		}
-	}
-
-	std::vector<int> vec_cols(3, 0);
-	for (int i = 0;i < 3;i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			vec_cols[i] += (int)g[i][j];
-		}
-	}
-	
-	int sum = 0;
-	for (const auto& x : vec_rows) sum += x;
-	if (sum < 3) return false;
-
-	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
-	std::sort(vec_rows.begin(), vec_rows.end());
-	std::sort(vec_cols.begin(), vec_cols.end());
-
-	//NOT A FINAL SOLUTION - JUST FOR TEST PURPOSES ONLY
-	if (vec_rows[0] == 0 && vec_cols[0] == 0) return false;
-
-	bool condition1 = true;
-	for (int i = 0; i < 3; i++)
-	{
-		if (vec_rows[i] != vec_cols[i])
-		{
-			condition1 = false;
-			break;
-		}
-	}
-
-	if (condition1) return true;
-
-
-	bool lineWin = false;
-	bool columnWin = false;
-
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (vec_rows[i] > 0 && vec_rows[i] == 3)
-		{
-			lineWin = true;
-			break;
-		}
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (vec_cols[i] > 0 && vec_cols[i] == 3)
-		{
-			columnWin = true;
-			break;
-		}
-	}
-
-	if (lineWin || columnWin) return true;
 
 	return false;
 }
 
+const std::shared_ptr<AbstractMage>& Game::getMage(PlayerEnum currentPlayer) const
+{
+	if (!m_players[static_cast<size_t>(currentPlayer)].hasUsedMage())
+	{
+		size_t playerIndex = (currentPlayer == PlayerEnum::Player1) ? 0 : 1;
+
+		const Gamemode& gamemode = m_players[playerIndex].getGamemode();
+
+		return gamemode.getMages().at(playerIndex);
+	}
+
+	return nullptr;
+}
+
+const std::vector<std::shared_ptr<AbstractMagic>> Game::getMagicPowers(PlayerEnum currentPlayer) const
+{
+	std::vector<std::shared_ptr<AbstractMagic>> unusedMagicPowers;
+	if (!m_players[static_cast<size_t>(currentPlayer)].hasUsedMagic())
+	{
+		size_t playerIndex = (currentPlayer == PlayerEnum::Player1) ? 0 : 1;
+
+		const Gamemode& gamemode = m_players[playerIndex].getGamemode();
+
+		for (const auto& magicPower : gamemode.getMagicPowers())
+		{
+			if (!magicPower->hasBeenUsed())
+			{
+				unusedMagicPowers.push_back(magicPower);
+			}
+		}
+
+		return unusedMagicPowers;
+	}
+
+	return unusedMagicPowers;
+}
+
+bool Game::verifySum(PlayerEnum currentPlayer) const
+{
+	auto& gamemode = m_players[static_cast<size_t>(m_currentPlayer)].getGamemode();
+	uint8_t columnSum = std::accumulate(m_bridge.getColumnPocket().begin(), m_bridge.getColumnPocket().end(), 0,
+		[currentPlayer](uint8_t sum, const std::pair<uint8_t, uint8_t>& pocket) {
+			return sum + (currentPlayer == PlayerEnum::Player1 ? pocket.first : pocket.second);
+		});
+
+	return columnSum >= 3 + gamemode.getIs4x4();
+}
+
+bool Game::verifyNullPresence(PlayerEnum currentPlayer) const
+{
+	bool columnHasNoZeros = !std::any_of(m_bridge.getColumnPocket().begin(), m_bridge.getColumnPocket().end(),
+		[currentPlayer](const std::pair<uint8_t, uint8_t>& pocket) {
+			return (currentPlayer == PlayerEnum::Player1 ? pocket.first : pocket.second) == 0;
+		});
+
+	bool rowHasNoZeros = !std::any_of(m_bridge.getRowPocket().begin(), m_bridge.getRowPocket().end(),
+		[currentPlayer](const std::pair<uint8_t, uint8_t>& pocket) {
+			return (currentPlayer == PlayerEnum::Player1 ? pocket.first : pocket.second) == 0;
+		});
+
+	return columnHasNoZeros || rowHasNoZeros;
+}
+
+bool Game::verifyRowOrColumnWin(PlayerEnum currentPlayer) const
+{
+	auto& gamemode = m_players[static_cast<size_t>(m_currentPlayer)].getGamemode();
+	uint8_t targetValue = 3 + gamemode.getIs4x4();
+
+	bool columnWin = std::any_of(m_bridge.getColumnPocket().begin(), m_bridge.getColumnPocket().end(),
+		[targetValue, currentPlayer](const std::pair<uint8_t, uint8_t>& pocket) {
+			return (currentPlayer == PlayerEnum::Player1 ? pocket.first : pocket.second) == targetValue;
+		});
+
+	bool rowWin = std::any_of(m_bridge.getRowPocket().begin(), m_bridge.getRowPocket().end(),
+		[targetValue, currentPlayer](const std::pair<uint8_t, uint8_t>& pocket) {
+			return (currentPlayer == PlayerEnum::Player1 ? pocket.first : pocket.second) == targetValue;
+		});
+
+	return columnWin || rowWin;
+}
+
+bool Game::verifyDiagonalWin(PlayerEnum currentPlayer) const
+{
+	return std::equal(m_bridge.getColumnPocket().begin(), m_bridge.getColumnPocket().end(), m_bridge.getRowPocket().begin(),
+		[currentPlayer](const std::pair<uint8_t, uint8_t>& col, const std::pair<uint8_t, uint8_t>& row) {
+			return (currentPlayer == PlayerEnum::Player1 ? col.first : col.second) == (currentPlayer == PlayerEnum::Player1 ? row.first : row.second);
+		});
+}
+
+void Game::switchPlayer()
+{
+	m_currentPlayer = (m_currentPlayer == PlayerEnum::Player1 ? PlayerEnum::Player2 : PlayerEnum::Player1);
+	//std::cout << "\nSwitch player to Player " << static_cast<int>(m_currentPlayer) + 1;
+}
+
+std::string_view Game::getPlayerChoice() const
+{
+	auto& player = m_players[static_cast<size_t>(m_currentPlayer)];
+	auto& gamemode = player.getGamemode();
+
+	auto hasUsedMage = player.hasUsedMage();
+	auto hasUsedMagic = player.hasUsedMagic();
+
+	std::cout << "\n> Possible available listed below. Please type what you choose:\n";
+	std::cout << " > Card\n";
+
+	if (!gamemode.getMages().empty())
+	{
+		std::cout << " > Mage\n";
+	}
+	if (!gamemode.getMagicPowers().empty())
+	{
+		std::cout << " > Magic\n";
+	}
+	if (gamemode.getHasIlusions())
+	{
+		std::cout << " > Illusion\n";
+	}
+	if (gamemode.getHasExplosions())
+	{
+		std::cout << " > Explosion\n";
+	}
+	std::cout << " > Save\n";
+
+	static std::string choice;
+	std::cout << "Your choice: ";
+	std::cin >> choice;
+	std::cout << '\n';
+
+
+	std::transform(choice.begin(), choice.end(), choice.begin(), ::tolower);
+
+	if (choice == "card" ||
+		(choice == "mage" && !gamemode.getMages().empty() && !hasUsedMage) ||
+		(choice == "magic" && !gamemode.getMagicPowers().empty() && !hasUsedMagic) ||
+		(choice == "illusion" && gamemode.getHasIlusions()) ||
+		(choice == "explosion" && gamemode.getHasExplosions()) ||
+		choice == "save")
+	{
+		return choice;
+	}
+	else
+	{
+		std::cout << "Invalid choice. Please try again.\n";
+		return getPlayerChoice();
+	}
+}
+
+void Game::handleChoice(std::string_view choice)
+{
+	if (choice == "card")
+	{
+		placeCard();
+	}
+	else if (choice == "mage")
+	{
+		//mage();
+	}
+	else if (choice == "magic")
+	{
+		//magic();
+	}
+	else if (choice == "ilusion")
+	{
+		//illusion();
+	}
+	else if (choice == "explosion")
+	{
+		//explosion();
+	}
+	else if (choice == "save")
+	{
+		std::cout << "Game progress saved.\n";
+		//save progress
+		getPlayerChoice();
+	}
+}
+
+PlayerEnum Game::placeCard()
+{
+	m_input.readInput();
+
+	//first ring of verification
+	if (!m_board.validateInsertPosition(m_input.position))
+	{
+		std::cout << "wrong!\n";
+		return placeCard(); /*restart loop*/
+	}
+	if (!m_board.validateValue(m_input.value))
+	{
+		std::cout << "value wrong!\n";
+		return placeCard(); /*restart loop*/
+	}
+	if (!getCurrentPlayer().removeCard(m_input.value))
+	{
+		std::cout << "value available wrong!\n"; /*if card exists also delete it*/
+		return placeCard(); /*restart loop*/
+	}
+	if (!m_board.validateStackRule(m_input.position, m_input.value))
+	{
+		std::cout << "value stack wrong!\n";
+		return placeCard(); /*restart loop*/
+	}
+
+	//second ring of verification
+	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
+	{
+		std::cout << "grid wrong\n";
+		return placeCard();
+	}
+
+	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
+
+	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
+	{
+		m_board.addPositionToValid(m_input.position);
+		m_board.setLockcase();
+	}
+
+	m_bridge.printPockets();
+
+	std::cout << "\n==============================================================\n";
+}
+
+PlayerEnum Game::playGame()
+{
+	while (true)
+	{
+		printLogic();
+		handleChoice(getPlayerChoice());
+
+
+		//instead of one function, let them be and handle them here
+		if (checkIfWin(m_currentPlayer))
+		{
+			std::cout << "won";
+			break;
+		}
+
+		switchPlayer();
+	}
+	return m_currentPlayer;
+}
