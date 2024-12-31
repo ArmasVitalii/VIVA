@@ -1,20 +1,21 @@
 #include "Card.h"
 
-Card::Card(int value, bool whoPlayer) :m_value{value}, m_whoPlayed{whoPlayer} {}
-
-Card::Card(int value) : m_value(value), m_whoPlayed(false){}
+Card::Card(uint8_t value, PlayerEnum playerID)
+	:m_cardValue{ value }, m_playerID{ playerID }
+{
+}
 
 bool Card::operator==(const Card& other) const
 {
-	return (m_value == other.m_value) && (m_whoPlayed == other.m_whoPlayed);
+	return (m_cardValue == other.m_cardValue) && (m_playerID == other.m_playerID);
 }
 
-const int& Card::getValue() const
+uint8_t Card::getValue() const
 {
-	return m_value;
+	return m_cardValue;
 }
 
-const bool& Card::getWhoPlayed() const
+PlayerEnum Card::getPlayerID() const
 {
-	return m_whoPlayed;
+	return m_playerID;
 }
