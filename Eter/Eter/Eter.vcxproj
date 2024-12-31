@@ -143,8 +143,10 @@
     <ClCompile Include="AirMage.cpp" />
     <ClCompile Include="Avalanche.cpp" />
     <ClCompile Include="Blizzard.cpp" />
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Borders.cpp" />
     <ClCompile Include="Boulder.cpp" />
+    <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Cascade.cpp" />
     <ClCompile Include="ControlledExplosion.cpp" />
@@ -172,6 +174,7 @@
     <ClCompile Include="Mages.cpp" />
     <ClCompile Include="MagicDistributor.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Match.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mirage.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -190,10 +193,14 @@
     <ClInclude Include="AbstractMage.h" />
     <ClInclude Include="AbstractMagic.h" />
     <ClInclude Include="AirMage.h" />
+    <ClInclude Include="AllMages.h" />
+    <ClInclude Include="AllMagicPowers.h" />
     <ClInclude Include="Avalanche.h" />
     <ClInclude Include="Blizzard.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Borders.h" />
     <ClInclude Include="Boulder.h" />
+    <ClInclude Include="Bridge.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="Cascade.h" />
     <ClInclude Include="ControlledExplosion.h" />
@@ -218,9 +225,11 @@
     <ClInclude Include="MageDistributor.h" />
     <ClInclude Include="Mages.h" />
     <ClInclude Include="MagicDistributor.h" />
+    <ClInclude Include="Match.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mirage.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerEnum.h" />
     <ClInclude Include="Sparks.h" />
     <ClInclude Include="Storm.h" />
     <ClInclude Include="StormSurge.h" />
