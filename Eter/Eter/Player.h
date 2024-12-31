@@ -1,57 +1,36 @@
 #pragma once
-#include <vector>
-#include <iostream>
 #include <list>
-#include "Card.h"
-class Game;
+#include <stdint.h>
+#include "Gamemode.h"
+#include "Bridge.h"
 
 class Player
 {
 private:
-	bool						m_playerNumber;
-	std::list<int>				m_playerCards;				//RETHINK FOR LIST OF CARDS
-	std::vector<int>			m_columnVector{ 0,0,0 };
-	std::vector<int>			m_rowVector{ 0,0,0 };  //RETHINK/ FIND WAY FOR 4X4, MAYBE SET FUNCTION
+    std::reference_wrapper<const Gamemode>  m_gamemode;
+    std::reference_wrapper<const Bridge>    m_bridge;
+
+    std::list<uint8_t>                      m_cards;
+    uint8_t                                 m_numberOfGamesWon;
+
+    bool                                    mtest_hasUsedMage;
+    bool                                    mtest_hasUsedMagicPower;
 
 public:
-	Player(bool playerNumber);		//, const std::list<Card>& playerCards = {});
+    explicit Player(const std::reference_wrapper<const Gamemode>& gamemode, const std::reference_wrapper<const Bridge>& bridge);
 
-	std::list<int>&				getCards();
-	void						addCard(const Card& card);
-	bool						removeCard(const Card& card);//MAYBE WITH NUMBERS, NOT CARDS
+    void                                    initialisePlayerCards();
+    void                                    printPlayerCards() const;
+    uint8_t& getNumberOfGamesWon();
+    void                                    incrementGamesWon();
 
-	bool& getPlayerNumber();
-	std::vector<int>			getColumnVector();
-	std::vector<int>			getRowVector();
+    void                                    addCard(uint8_t card);
+    bool                                    removeCard(uint8_t cardValue);
 
-	
-	void						printPlayableCards() const;
-	//LIST OF POWERS
-	void                        ControlledExplosion();
-	void                        Destruction(Player& opponent);
-	void                        Flames(Player& opponent, int playedCard);
-	void                        Lava(int number);
-	void                        FromAshes(int cardValue);
-	void                        Sparks(Player& opponent, int cardValue);
-	void                        Blizzard(Player& opponent, int cardValue);
-	void                        Storm();
-	void                        Hurricane(int row);
-	void                        Gale(int visibileCard);
-	void                        Mirage();
-	void                        StormSurge(Game& game);
-	void                        Tide(Game& game);
-	void                        Fog();
-	void                        Wave();
-	void                        WaterVortex();
-	void                        Tsunami(int row);
-	void                        Cascade(int row);
-	void                        Support(int cardValue);
-	void                        Earthquake();
-	void                        Crack(int cardValue);
-	void                        Borders();
-	void                        Avalanche();
-	void                        Boulder();
+
+    bool                                    hasUsedAllCards() const;
+    bool                                    hasUsedMage() const;
+    bool                                    hasUsedMagic() const;
+    const Gamemode& getGamemode() const;
 
 };
-
-
