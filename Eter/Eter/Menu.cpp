@@ -13,7 +13,7 @@ Gamemode Menu::showMenu()
 {
     std::string selectedMode;
 
-    std::cout << "Choose a gamemode (Training, Mage, Magic, MageAndMagic): ";
+    std::cout << "\nChoose a gamemode (Training, Mage, Magic, MageAndMagic): ";
     std::cin >> selectedMode;
 
     Gamemode selectedGamemode = GamemodeDistributor::generateGamemode(selectedMode,
@@ -28,6 +28,11 @@ Gamemode Menu::showMenu()
 
 void Menu::handleMatch()
 {
+    Game_UI* game = new Game_UI();
+    game->HandleEvents();
+    game->Update();
+    game->Render();
+
     Match eterMatch(showMenu());
     eterMatch.test_start();
 }

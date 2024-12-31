@@ -6,6 +6,7 @@
 #include "GamemodeDistributor.h"
 #include "Gamemode.h"
 
+import Game_UI;
 
 class Menu
 {
