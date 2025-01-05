@@ -44,7 +44,7 @@ private:
     std::string_view                                    getPlayerChoice() const;
     void                                                handleChoice(std::string_view choice);
 
-    PlayerEnum                                          placeCard();
+    void                                                placeCard();
 
 public:
     explicit Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players);

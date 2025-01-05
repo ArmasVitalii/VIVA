@@ -36,5 +36,5 @@ public:
     uint8_t                                         getRowPocket(size_t position, PlayerEnum player);
 
     void                                            resetBridge();
-    void printPockets() const;
+    void                                            printPockets() const;
 };

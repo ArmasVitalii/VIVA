@@ -269,7 +269,7 @@ void Game::handleChoice(std::string_view choice)
 	}
 }
 
-PlayerEnum Game::placeCard()
+void Game::placeCard()
 {
 	m_input.readInput();
 
@@ -310,7 +310,6 @@ PlayerEnum Game::placeCard()
 		m_board.setLockcase();
 	}
 
-	m_bridge.printPockets();
 
 	std::cout << "\n==============================================================\n";
 }
