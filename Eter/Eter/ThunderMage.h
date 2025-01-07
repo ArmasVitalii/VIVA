@@ -7,5 +7,5 @@ class ThunderMage : public AbstractMage
 public:
     ThunderMage();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) const override;
 };

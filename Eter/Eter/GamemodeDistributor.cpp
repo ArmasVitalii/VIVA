@@ -16,7 +16,7 @@ GamemodeDistributor::AllGamemodes GamemodeDistributor::stringToEnum(std::string_
 Gamemode GamemodeDistributor::generateGamemode(AllGamemodes gamemodeType, bool hasIllusions, bool hasExplosions)
 {
     /*is4x4   cardList   noOfGames  mages  magicPower  hasIlusions  hasExplosion  hasTimer*/
-    constexpr uint8_t ETER = 5;
+    constexpr uint8_t ETER = 6;
     switch (gamemodeType)
     {
     case AllGamemodes::Training:
