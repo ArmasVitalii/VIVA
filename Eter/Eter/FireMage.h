@@ -7,5 +7,5 @@ class FireMage : public AbstractMage
 public:
     FireMage();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) const override;
 };
