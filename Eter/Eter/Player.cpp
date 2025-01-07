@@ -79,3 +79,14 @@ const Gamemode& Player::getGamemode() const
 {
     return m_gamemode;
 }
+
+void Player::markMageUsed()
+{
+    mtest_hasUsedMage = true;
+}
+
+void Player::resetPlayer()
+{
+    m_cards = m_gamemode.get().getCardList();
+    mtest_hasUsedMagicPower = false;
+}

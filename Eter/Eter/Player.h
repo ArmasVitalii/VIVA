@@ -21,7 +21,7 @@ public:
 
     void                                    initialisePlayerCards();
     void                                    printPlayerCards() const;
-    uint8_t& getNumberOfGamesWon();
+    uint8_t&                                getNumberOfGamesWon();
     void                                    incrementGamesWon();
 
     void                                    addCard(uint8_t card);
@@ -31,6 +31,9 @@ public:
     bool                                    hasUsedAllCards() const;
     bool                                    hasUsedMage() const;
     bool                                    hasUsedMagic() const;
-    const Gamemode& getGamemode() const;
+    const Gamemode&                         getGamemode() const;
 
+
+    void                                    markMageUsed();
+    void                                    resetPlayer();
 };
