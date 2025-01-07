@@ -149,7 +149,7 @@
       <Filter>Source Files\temp aux</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files\temp aux</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -277,6 +277,7 @@ void Game::placeCard()
 	if (m_input.value == ETER)
 	{
 		handleEterCard(m_input.position);
+		return;
 	}
 
 	//first ring of verification
@@ -335,7 +336,7 @@ void Game::useMage()
 
 void Game::handleEterCard(const std::pair<size_t, size_t>& position)
 {
-	const uint8_t ETER{ 6 };
+	const uint8_t ETER{ 6u };
 
 	if (!getCurrentPlayer().removeCard(ETER))
 	{
@@ -343,18 +344,20 @@ void Game::handleEterCard(const std::pair<size_t, size_t>& position)
 		return placeCard(); /*restart loop*/
 	}
 
-	size_t row, col;
-	std::cout << "\nEnter xPos yPos Value for Eter card insert: ";
-	std::cin >> row >> col;
-
-	if (!m_board.validateInsertPosition({ row,col }))
+	if (!m_board.validateInsertPosition(position))
 	{
 		std::cout << "wrong!\n";
 		return handleChoice(getPlayerChoice()); /*restart loop*/
 	}
 
-	if (m_board.getBoard()[row][col].has_value() || !m_board.getBoard()[row][col]->empty())
-	{
+	if (position.first < 0 || position.first >= m_board.getBoard().size() ||
+		position.second < 0 || position.second >= m_board.getBoard()[position.first].size()) {
+		std::cout << "\nPosition is out of bounds!";
+		return handleChoice(getPlayerChoice());
+	}
+
+	auto& cell = m_board.getBoard()[position.first][position.second];
+	if (cell && !cell->empty()) {
 		std::cout << "\nEter card must be placed on an empty slot!";
 		return handleChoice(getPlayerChoice());
 	}
