@@ -12,6 +12,11 @@ Board::Board(const std::reference_wrapper<const Gamemode>& gamemode, std::refere
     m_validPositions.insert({ k_baseGridMiddleCoordonate + gamemode.get().getIs4x4(), k_baseGridMiddleCoordonate + gamemode.get().getIs4x4() });
 }
 
+Board::Gamematrix& Board::getBoard()
+{
+    return m_board;
+}
+
 std::size_t Board::Hash::operator()(const std::pair<int, int>& p) const
 {
     std::size_t h1 = std::hash<int>{}(p.first);
@@ -148,6 +153,14 @@ void Board::addPositionToValid(const std::pair<size_t, size_t>& position)
     }
 }
 
+void Board::removePositionFromValid(const std::pair<size_t, size_t>& position)
+{
+    if (m_validPositions.find(position) != m_validPositions.end())
+    {
+        m_validPositions.erase(position);
+    }
+}
+
 const std::pair<size_t, size_t> Board::normalise(const std::pair<size_t, size_t>& position) const
 {
     return std::pair<size_t, size_t>(position.first - (static_cast<size_t>(m_gridMiddle.first - 1)),
@@ -178,6 +191,59 @@ void Board::insertCard(Card&& card, const std::pair<size_t, size_t>& position)
 
     m_board[position.first][position.second]->push(std::move(card));
 }
+
+void Board::removeCard(const std::pair<size_t, size_t>& position)
+{
+    auto normalisedCoords = normalise(position);
+    auto& bridge = m_bridge.get();
+
+    if (!m_board[position.first][position.second].has_value())
+    {
+        std::cout << "\nPosition is empty!";
+        return;
+    }
+
+    auto& currentTopCard = m_board[position.first][position.second]->top();
+    bridge.decrementColumnPocket(normalisedCoords.first, currentTopCard.getPlayerID());
+    bridge.decrementRowPocket(normalisedCoords.second, currentTopCard.getPlayerID());
+
+    m_board[position.first][position.second]->pop();
+
+    if (m_board[position.first][position.second]->empty())
+    {
+        m_board[position.first][position.second].reset();
+        m_noOfSpacesFilled--;
+    }
+    else
+    {
+        auto& newTopCard = m_board[position.first][position.second]->top();
+        bridge.incrementColumnPocket(normalisedCoords.first, newTopCard.getPlayerID());
+        bridge.incrementRowPocket(normalisedCoords.second, newTopCard.getPlayerID());
+    }
+}
+
+bool Board::isOwnCardCoveredByEnemy(const std::pair<size_t, size_t>& position)
+{
+    if (!m_board[position.first][position.second].has_value())
+    {
+        return false;
+    }
+
+    auto& stack = m_board[position.first][position.second].value();
+
+    if (stack.size() == 1)
+    {
+        return false;
+    }
+
+    auto currentTopCard = stack.top();
+    stack.pop();
+    auto isCoveredByEnemy = stack.top().getPlayerID() != currentTopCard.getPlayerID();
+    stack.push(currentTopCard);
+
+    return isCoveredByEnemy;
+}
+
 
 bool Board::validatePositionInGrid(const std::pair<float, float>& newGridMiddle)
 {
@@ -256,7 +322,7 @@ bool Board::validateInsertPosition(const std::pair<size_t, size_t>& position) co
 
 bool Board::validateValue(uint8_t value) const
 {
-    return value > 0 && value <= 5;
+    return value > 0 && value <= 6;
 }
 
 bool Board::validateStackRule(const std::pair<size_t, size_t>& position, uint8_t value)
@@ -445,4 +511,35 @@ bool Board::isFirstMove() const
 bool Board::checkWinCase2(PlayerEnum currentPlayer) const
 {
     return m_noOfSpacesFilled == 9 + 7 * m_gamemode.get().getIs4x4();
+}
+
+bool Board::containsOwnCard(const std::pair<size_t, size_t>& position, PlayerEnum currentPlayer) const
+{
+    if (!m_board[position.first][position.second].has_value() || m_board[position.first][position.second]->empty())
+    {
+        return false;
+    }
+
+    return m_board[position.first][position.second]->top().getPlayerID() == currentPlayer;
+}
+
+const std::pair<uint8_t, uint8_t>& Board::getGridMiddle() const
+{
+    return m_gridMiddle;
+}
+
+bool Board::getis4x4() const
+{
+    return m_gamemode.get().getIs4x4();
+}
+
+void Board::resetBoard()
+{
+    for (auto position : m_validPositions)
+    {
+        m_board[position.first][position.second].reset();
+    }
+    m_bridge.get().resetBridge();
+    m_validPositions.clear();
+    m_validPositions.insert({ k_baseGridMiddleCoordonate + m_gamemode.get().getIs4x4(), k_baseGridMiddleCoordonate + m_gamemode.get().getIs4x4() });
 }

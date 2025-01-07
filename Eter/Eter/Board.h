@@ -44,13 +44,17 @@ private:
 
 public:
 	explicit Board(const std::reference_wrapper<const Gamemode>& gamemode, std::reference_wrapper<Bridge> bridge);
+	Gamematrix&										getBoard();
 
 	void											printGameboard() const;
 	void											printValidPositions() const;
 
 	void											addPositionToValid(const std::pair<size_t, size_t>& position);
+	void											removePositionFromValid(const std::pair<size_t, size_t>& position);
 	const std::pair<size_t, size_t>					normalise(const std::pair<size_t, size_t>& position) const;
 	void											insertCard(Card&& card, const std::pair<size_t, size_t>& position);
+	void											removeCard(const std::pair<size_t, size_t>& position);
+	bool											isOwnCardCoveredByEnemy(const std::pair<size_t, size_t>& position);
 
 	bool											validatePositionInGrid(const std::pair<float, float>& newGridMiddle);
 	bool											tryGridShiftForInsertPosition(const std::pair<size_t, size_t>& position);
@@ -66,5 +70,11 @@ public:
 	bool											isFirstMove() const;
 
 	bool											checkWinCase2(PlayerEnum currentPlayer) const;
+
+	bool											containsOwnCard(const std::pair<size_t, size_t>& position, PlayerEnum currentPlayer) const;
+	const std::pair<uint8_t, uint8_t>&				getGridMiddle() const;
+	bool											getis4x4() const;
+
+	void											resetBoard();
 };
 
