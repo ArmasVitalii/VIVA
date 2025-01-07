@@ -7,5 +7,5 @@ class LightMage : public AbstractMage
 public:
     LightMage();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) const override;
 };

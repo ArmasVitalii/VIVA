@@ -10,7 +10,7 @@ void ThunderMage::getDescription() const
     std::cout << m_description << std::endl;
 }
 
-void ThunderMage::usePower() const
+bool ThunderMage::usePower(Game& game) const
 {
     std::cout << "ThunderMage uses power to move a row to another edge!" << std::endl;
 }
