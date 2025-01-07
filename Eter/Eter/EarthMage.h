@@ -7,5 +7,5 @@ class EarthMage : public AbstractMage
 public:
     EarthMage();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) const override;
 };
