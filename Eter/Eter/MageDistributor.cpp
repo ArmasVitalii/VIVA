@@ -10,7 +10,6 @@ std::vector<std::shared_ptr<AbstractMage>> MageDistributor::generateMages()
     mages.push_back(std::make_shared<AirMage>());
     mages.push_back(std::make_shared<DarkMage>());
     mages.push_back(std::make_shared<LightMage>());
-    mages.push_back(std::make_shared<ThunderMage>());
 
     std::random_device rd;
     std::mt19937 g(rd());

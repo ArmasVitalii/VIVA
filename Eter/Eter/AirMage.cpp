@@ -1,4 +1,5 @@
 #include "AirMage.h"
+#include "Game.h"
 
 AirMage::AirMage()
 {
@@ -10,7 +11,31 @@ void AirMage::getDescription() const
     std::cout << m_description << std::endl;
 }
 
-void AirMage::usePower() const
+bool AirMage::usePower(Game& game) const
 {
     std::cout << "AirMage uses power to create a pit!" << std::endl;
+
+    size_t row, col;
+    std::cout << "\nEnter the row and column where you want to create a pit: ";
+    std::cin >> row >> col;
+
+    if (!game.accessBoard().validateInsertPosition({ row,col }))
+    {
+        std::cout << "\nInvalid Position!";
+        return false;
+    }
+
+    if (!game.accessGameboardAPI()[row][col].has_value() || !game.accessGameboardAPI()[row][col]->empty())
+    {
+        std::cout << "\nThis space is not empty! Please choose an empty space to create a pit.\n";
+        return false;
+    }
+
+    const uint8_t pitValue{ 10u };
+
+    game.accessBoard().insertCard(Card(pitValue, game.getCurrentPlayerEnum()), { row,col });
+    game.accessBoard().removePositionFromValid({ row,col });
+
+    game.getCurrentPlayer().markMageUsed();
+    return true;
 }
