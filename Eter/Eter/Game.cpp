@@ -213,7 +213,7 @@ std::string_view Game::getPlayerChoice() const
 	{
 		std::cout << " > Explosion\n";
 	}
-	std::cout << " > Save\n";
+	std::cout << " > Reset\n";
 
 	static std::string choice;
 	std::cout << "Your choice: ";
@@ -228,7 +228,7 @@ std::string_view Game::getPlayerChoice() const
 		(choice == "magic" && !gamemode.getMagicPowers().empty() && !hasUsedMagic) ||
 		(choice == "illusion" && gamemode.getHasIlusions()) ||
 		(choice == "explosion" && gamemode.getHasExplosions()) ||
-		choice == "save")
+		choice == "reset")
 	{
 		return choice;
 	}
@@ -247,7 +247,7 @@ void Game::handleChoice(std::string_view choice)
 	}
 	else if (choice == "mage")
 	{
-		//mage();
+		useMage();
 	}
 	else if (choice == "magic")
 	{
@@ -261,17 +261,23 @@ void Game::handleChoice(std::string_view choice)
 	{
 		//explosion();
 	}
-	else if (choice == "save")
+	else if (choice == "reset")
 	{
-		std::cout << "Game progress saved.\n";
-		//save progress
-		getPlayerChoice();
+		std::cout << "Game reset.\n";
+		resetGame();
 	}
 }
 
 void Game::placeCard()
 {
+	const uint8_t ETER{ 6 };
 	m_input.readInput();
+
+	//handle eter card placement
+	if (m_input.value == ETER)
+	{
+		handleEterCard(m_input.position);
+	}
 
 	//first ring of verification
 	if (!m_board.validateInsertPosition(m_input.position))
@@ -310,8 +316,71 @@ void Game::placeCard()
 		m_board.setLockcase();
 	}
 
+	std::cout << "\n==============================================================\n";
+}
+
+void Game::useMage()
+{
+	if (!m_players[static_cast<size_t>(m_currentPlayer)].hasUsedMage())
+	{
+		m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMages()[static_cast<size_t>(m_currentPlayer)]->usePower(*this);
+		std::cout << "\n==============================================================\n";
+	}
+	else
+	{
+		std::cout << "here";
+		return;
+	}
+}
+
+void Game::handleEterCard(const std::pair<size_t, size_t>& position)
+{
+	const uint8_t ETER{ 6 };
+
+	if (!getCurrentPlayer().removeCard(ETER))
+	{
+		std::cout << "value available wrong!\n"; /*if card exists also delete it*/
+		return placeCard(); /*restart loop*/
+	}
+
+	size_t row, col;
+	std::cout << "\nEnter xPos yPos Value for Eter card insert: ";
+	std::cin >> row >> col;
+
+	if (!m_board.validateInsertPosition({ row,col }))
+	{
+		std::cout << "wrong!\n";
+		return handleChoice(getPlayerChoice()); /*restart loop*/
+	}
+
+	if (m_board.getBoard()[row][col].has_value() || !m_board.getBoard()[row][col]->empty())
+	{
+		std::cout << "\nEter card must be placed on an empty slot!";
+		return handleChoice(getPlayerChoice());
+	}
+
+	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
+	{
+		std::cout << "grid wrong\n";
+		return handleChoice(getPlayerChoice());
+	}
+
+	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
+
+	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
+	{
+		m_board.addPositionToValid(m_input.position);
+		m_board.setLockcase();
+	}
 
 	std::cout << "\n==============================================================\n";
+}
+
+void Game::resetGame()
+{
+	m_board.resetBoard();
+	m_players[static_cast<size_t>(PlayerEnum::Player1)].resetPlayer();
+	m_players[static_cast<size_t>(PlayerEnum::Player2)].resetPlayer();
 }
 
 PlayerEnum Game::playGame()
@@ -325,11 +394,27 @@ PlayerEnum Game::playGame()
 		//instead of one function, let them be and handle them here
 		if (checkIfWin(m_currentPlayer))
 		{
-			std::cout << "won";
+			auto winner = (m_currentPlayer == PlayerEnum::Player1 ? "\nWon Player 1" : "\nWon Player 2");
+			std::cout << winner;
 			break;
 		}
 
 		switchPlayer();
 	}
+	return m_currentPlayer;
+}
+
+Game::Gamematrix& Game::accessGameboardAPI()
+{
+	return m_board.getBoard();
+}
+
+Board& Game::accessBoard()
+{
+	return m_board;
+}
+
+PlayerEnum Game::getCurrentPlayerEnum()
+{
 	return m_currentPlayer;
 }

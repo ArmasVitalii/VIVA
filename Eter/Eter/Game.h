@@ -7,6 +7,9 @@
 class Game
 {
 private:
+    using Cell = std::optional<std::stack<Card>>;
+    using Gamematrix = std::vector<std::vector<Cell>>;
+
     const	PlayerEnum k_baseFirstPlayer{ PlayerEnum::Player1 };
     struct	Input
     {
@@ -38,16 +41,24 @@ private:
     bool                                                checkIfWin(PlayerEnum currentPlayer) const;
 
     void                                                printLogic() const;
-    Player& getCurrentPlayer();
     void                                                switchPlayer();
 
     std::string_view                                    getPlayerChoice() const;
     void                                                handleChoice(std::string_view choice);
 
     void                                                placeCard();
+    void                                                useMage();
+    void                                                handleEterCard(const std::pair<size_t, size_t>& position);
+    void                                                resetGame();
 
 public:
     explicit Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players);
 
-    PlayerEnum playGame();
+    PlayerEnum                                          playGame();
+
+
+    Gamematrix& accessGameboardAPI();
+    Board& accessBoard();
+    PlayerEnum                                          getCurrentPlayerEnum();
+    Player& getCurrentPlayer();
 };
