@@ -7,5 +7,5 @@ class WaterMage : public AbstractMage
 public:
     WaterMage();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) const override;
 };
