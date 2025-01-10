@@ -18,8 +18,12 @@ private:
     uint8_t                                 m_matchNumber{ 1 };
 
     std::reference_wrapper<const Gamemode>  getGamemode() const;
+    bool                                    matchWon(PlayerEnum winner);
+    void                                    reset();
+    PlayerEnum                              startGame();
 
 public:
     explicit Match(Gamemode gamemode);
-    void test_start();
+
+    void                                    startMatch();
 };
