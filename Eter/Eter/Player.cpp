@@ -6,8 +6,9 @@ Player::Player(const std::reference_wrapper<const Gamemode>& gamemode, const std
     :m_gamemode{ gamemode },
     m_bridge{ bridge },
     m_numberOfGamesWon{ 0 },
-    mtest_hasUsedMage{ gamemode.get().getMages().empty() },
-    mtest_hasUsedMagicPower{ gamemode.get().getMagicPowers().empty() }
+    m_hasUsedMage{ gamemode.get().getMages().empty() },
+    m_hasUsedMagicPower{ gamemode.get().getMagicPowers().empty() },
+    m_hasUsedIllusion{ false }
 {
     initialisePlayerCards();
 }
@@ -67,12 +68,12 @@ bool Player::hasUsedAllCards() const
 
 bool Player::hasUsedMage() const
 {
-    return mtest_hasUsedMage == true;
+    return m_hasUsedMage == true;
 }
 
 bool Player::hasUsedMagic() const
 {
-    return mtest_hasUsedMagicPower == true;
+    return m_hasUsedMagicPower == true;
 }
 
 const Gamemode& Player::getGamemode() const
@@ -80,13 +81,29 @@ const Gamemode& Player::getGamemode() const
     return m_gamemode;
 }
 
+bool Player::hasUsedIllusion() const
+{
+    return m_hasUsedIllusion;
+}
+
+void Player::markIllusionUsed()
+{
+    m_hasUsedIllusion = true;
+}
+
 void Player::markMageUsed()
 {
-    mtest_hasUsedMage = true;
+    m_hasUsedMage = true;
 }
 
 void Player::resetPlayer()
 {
     m_cards = m_gamemode.get().getCardList();
-    mtest_hasUsedMagicPower = false;
+    m_hasUsedMagicPower = false;
+    m_hasUsedIllusion = false;
+}
+
+void Player::resetMagic()
+{
+    m_hasUsedMagicPower = false;
 }

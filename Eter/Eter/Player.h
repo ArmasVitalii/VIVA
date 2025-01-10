@@ -13,9 +13,9 @@ private:
     std::list<uint8_t>                      m_cards;
     uint8_t                                 m_numberOfGamesWon;
 
-    bool                                    mtest_hasUsedMage;
-    bool                                    mtest_hasUsedMagicPower;
-
+    bool                                    m_hasUsedMage;
+    bool                                    m_hasUsedMagicPower;
+    bool                                    m_hasUsedIllusion;
 public:
     explicit Player(const std::reference_wrapper<const Gamemode>& gamemode, const std::reference_wrapper<const Bridge>& bridge);
 
@@ -31,9 +31,11 @@ public:
     bool                                    hasUsedAllCards() const;
     bool                                    hasUsedMage() const;
     bool                                    hasUsedMagic() const;
-    const Gamemode&                         getGamemode() const;
+    const Gamemode& getGamemode() const;
 
-
+    bool                                    hasUsedIllusion() const;
+    void                                    markIllusionUsed();
     void                                    markMageUsed();
     void                                    resetPlayer();
+    void                                    resetMagic();
 };
