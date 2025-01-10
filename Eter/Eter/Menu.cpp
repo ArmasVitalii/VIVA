@@ -34,5 +34,5 @@ void Menu::handleMatch()
     game->Render();
 
     Match eterMatch(showMenu());
-    eterMatch.test_start();
+    eterMatch.startMatch();
 }
