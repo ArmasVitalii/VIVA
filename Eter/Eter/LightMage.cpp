@@ -26,7 +26,7 @@ bool LightMage::usePower(Game& game) const
         return false;
     }
 
-    if (game.accessBoard().getBoard()[row][col].has_value() || !game.accessBoard().getBoard()[row][col]->empty())
+    if (!game.accessGameboardAPI()[row][col].has_value())//fara valoare
     {
         std::cout << "\nEter card must be placed on an empty slot!";
         return false;

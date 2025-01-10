@@ -25,7 +25,7 @@ bool IceMage::usePower(Game& game) const
         return false;
     }
 
-    if (!game.accessGameboardAPI()[rowStack][colStack].has_value() || game.accessGameboardAPI()[rowStack][colStack]->empty())
+    if (!game.accessGameboardAPI()[rowStack][colStack].has_value())//fara valoare
     {
         std::cout << "\nThis space is empty! Please choose a non-empty space to move.\n";
         return false;
@@ -48,7 +48,7 @@ bool IceMage::usePower(Game& game) const
         return false;
     }
 
-    if (game.accessGameboardAPI()[rowEmpty][colEmpty].has_value() && !game.accessGameboardAPI()[rowEmpty][colEmpty]->empty())
+    if (game.accessGameboardAPI()[rowEmpty][colEmpty].has_value())//cu valoare
     {
         std::cout << "\nThis position is not empty! Please choose an empty space.\n";
         return false;

@@ -37,9 +37,6 @@
     <ClCompile Include="LightMage.cpp">
       <Filter>Source Files\Mage Management\Mages</Filter>
     </ClCompile>
-    <ClCompile Include="ThunderMage.cpp">
-      <Filter>Source Files\Mage Management\Mages</Filter>
-    </ClCompile>
     <ClCompile Include="WaterMage.cpp">
       <Filter>Source Files\Mage Management\Mages</Filter>
     </ClCompile>
@@ -187,9 +184,6 @@
       <Filter>Header Files\Mage Management\Mages</Filter>
     </ClInclude>
     <ClInclude Include="LightMage.h">
-      <Filter>Header Files\Mage Management\Mages</Filter>
-    </ClInclude>
-    <ClInclude Include="ThunderMage.h">
       <Filter>Header Files\Mage Management\Mages</Filter>
     </ClInclude>
     <ClInclude Include="WaterMage.h">

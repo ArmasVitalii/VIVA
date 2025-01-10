@@ -347,11 +347,13 @@ void Game::handleEterCard(const std::pair<size_t,size_t>& position)
 		return placeCard();
 	}
 	
-	if (m_board.getBoard()[position.first][position.second].has_value() || !m_board.getBoard()[position.first][position.second]->empty())
+	//nu are value aici
+	if (m_board.getBoard()[position.first][position.second].has_value())/*nu are valoare*/
 	{
 		std::cout << "\nEter card must be placed on an empty slot!";
 		return handleChoice(getPlayerChoice());
 	}
+
 
 	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
 	{
@@ -503,7 +505,7 @@ void Game::placeCard()
 	//handle eter card placement
 	if (m_input.value == ETER)
 	{
-		handleEterCard(m_input.position);
+		return handleEterCard(m_input.position);
 	}
 
 	//first ring of verification

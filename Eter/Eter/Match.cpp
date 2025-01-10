@@ -45,7 +45,7 @@ bool Match::matchWon(PlayerEnum winner)
 {
     if ((float)m_players[static_cast<size_t>(winner)].getNumberOfGamesWon() / m_gamemode.getMaxNumberOfGames() > 0.5)
     {
-        std::cout << "\n\n\Match Won By Player " << static_cast<int>(winner) + 1 << "\n\n\n";
+        std::cout << "\n\n\nMatch Won By Player " << static_cast<int>(winner) + 1 << "\n\n\n";
         return true;
     }
     return false;

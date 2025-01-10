@@ -182,7 +182,6 @@
     <ClCompile Include="Storm.cpp" />
     <ClCompile Include="StormSurge.cpp" />
     <ClCompile Include="Support.cpp" />
-    <ClCompile Include="ThunderMage.cpp" />
     <ClCompile Include="Tide.cpp" />
     <ClCompile Include="Tsunami.cpp" />
     <ClCompile Include="WaterMage.cpp" />
@@ -234,7 +233,6 @@
     <ClInclude Include="Storm.h" />
     <ClInclude Include="StormSurge.h" />
     <ClInclude Include="Support.h" />
-    <ClInclude Include="ThunderMage.h" />
     <ClInclude Include="Tide.h" />
     <ClInclude Include="Tsunami.h" />
     <ClInclude Include="WaterMage.h" />

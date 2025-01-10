@@ -25,11 +25,13 @@ bool DarkMage::usePower(Game& game) const
         return false;
     }
 
-    if (!game.accessGameboardAPI()[rowStack][colStack].has_value() || game.accessGameboardAPI()[rowStack][colStack]->empty())
-    {
+    auto& cell = game.accessGameboardAPI()[rowStack][colStack];
+
+    if (!cell.has_value() || cell->empty()) {
         std::cout << "\nThis space is empty! Please choose a non-empty space to move.\n";
         return false;
     }
+
 
     if (game.accessGameboardAPI()[rowStack][colStack]->top().getPlayerID() != game.getCurrentPlayerEnum())
     {
@@ -47,7 +49,7 @@ bool DarkMage::usePower(Game& game) const
         return false;
     }
 
-    if (game.accessGameboardAPI()[rowEmpty][colEmpty].has_value() && !game.accessGameboardAPI()[rowEmpty][colEmpty]->empty())
+    if (game.accessGameboardAPI()[rowEmpty][colEmpty].has_value())
     {
         std::cout << "\nThis position is not empty! Please choose an empty space.\n";
         return false;

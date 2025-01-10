@@ -8,4 +8,3 @@
 #include "DarkMage.h"
 #include "LightMage.h"
 #include "IceMage.h"
-#include "ThunderMage.h"

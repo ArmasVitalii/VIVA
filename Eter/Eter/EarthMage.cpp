@@ -25,7 +25,7 @@ bool EarthMage::usePower(Game& game) const
         return false;
     }
 
-    if (!game.accessGameboardAPI()[row][col].has_value() || game.accessGameboardAPI()[row][col]->empty())
+    if (!game.accessGameboardAPI()[row][col].has_value())//fara valoare
     {
         std::cout << "\nThis space is empty! Please choose an non-empty space to remove a card.\n";
         return false;

@@ -21,7 +21,6 @@ private:
     bool                                    matchWon(PlayerEnum winner);
     void                                    reset();
     PlayerEnum                              startGame();
-
 public:
     explicit Match(Gamemode gamemode);
 

@@ -25,7 +25,7 @@ bool AirMage::usePower(Game& game) const
         return false;
     }
 
-    if (!game.accessGameboardAPI()[row][col].has_value() || !game.accessGameboardAPI()[row][col]->empty())
+    if (game.accessGameboardAPI()[row][col].has_value())//cu valoare
     {
         std::cout << "\nThis space is not empty! Please choose an empty space to create a pit.\n";
         return false;
