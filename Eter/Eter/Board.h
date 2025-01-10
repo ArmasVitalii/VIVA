@@ -61,7 +61,7 @@ public:
 
 	bool											validateInsertPosition(const std::pair<size_t, size_t>& position) const;
 	bool											validateValue(uint8_t value) const;
-	bool											validateStackRule(const std::pair<size_t, size_t>& position, uint8_t value);
+	bool											validateStackRule(const std::pair<size_t, size_t>& position, uint8_t value) const;
 
 	LockCaseEnum									getMinLockcaseValue() const;
 	LockCaseEnum									getLockcase() const;
@@ -74,6 +74,7 @@ public:
 	bool											containsOwnCard(const std::pair<size_t, size_t>& position, PlayerEnum currentPlayer) const;
 	const std::pair<uint8_t, uint8_t>&				getGridMiddle() const;
 	bool											getis4x4() const;
+	uint8_t											getValueAt(const std::pair<size_t, size_t>& position) const;
 
 	void											resetBoard();
 };

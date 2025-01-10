@@ -112,7 +112,26 @@ void Board::printGameboard() const
                 if (cell.has_value() && !cell->empty())
                 {
                     const Card& card = cell->top();
-                    std::cout << std::format("({},{}) ", card.getValue(), static_cast<int>(card.getPlayerID()) + 1);
+                    std::string value_display;
+
+                    if (card.isIllusion())
+                    {
+                        value_display = "?";
+                    }
+                    else if (card.getValue() == 6)
+                    {
+                        value_display = "E";
+                    }
+                    else if (card.getValue() == 10)
+                    {
+                        value_display = "X";
+                    }
+                    else
+                    {
+                        value_display = std::to_string(card.getValue());
+                    }
+
+                    std::cout << std::format("({},{}) ", value_display, static_cast<int>(card.getPlayerID()) + 1);
                 }
                 else
                 {
@@ -127,6 +146,7 @@ void Board::printGameboard() const
         std::cout << std::endl;
     }
 }
+
 
 void Board::printValidPositions() const
 {
@@ -325,7 +345,7 @@ bool Board::validateValue(uint8_t value) const
     return value > 0 && value <= 6;
 }
 
-bool Board::validateStackRule(const std::pair<size_t, size_t>& position, uint8_t value)
+bool Board::validateStackRule(const std::pair<size_t, size_t>& position, uint8_t value) const
 {
     if (m_board[position.first][position.second].has_value())
     {
@@ -531,6 +551,13 @@ const std::pair<uint8_t, uint8_t>& Board::getGridMiddle() const
 bool Board::getis4x4() const
 {
     return m_gamemode.get().getIs4x4();
+}
+
+uint8_t Board::getValueAt(const std::pair<size_t, size_t>& position) const
+{
+    if (m_board[position.first][position.second].has_value())
+        return m_board[position.first][position.second]->top().getRealValue();
+    return 0;
 }
 
 void Board::resetBoard()
