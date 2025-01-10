@@ -31,7 +31,7 @@ public:
     bool                                    hasUsedAllCards() const;
     bool                                    hasUsedMage() const;
     bool                                    hasUsedMagic() const;
-    const Gamemode& getGamemode() const;
+    const Gamemode&                         getGamemode() const;
 
     bool                                    hasUsedIllusion() const;
     void                                    markIllusionUsed();

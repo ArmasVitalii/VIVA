@@ -2,10 +2,11 @@
 #include <numeric>
 #include <algorithm>
 
+
 Game::Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players)
-	:m_bridge{ bridge },
-	m_board{ board },
-	m_players{ players }
+	:m_bridge{bridge},
+	m_board{board},
+	m_players{players}
 {
 }
 
@@ -15,6 +16,35 @@ void Game::Input::readInput()
 	std::cout << "\nEnter xPos yPos Value for insert: ";
 	std::cin >> this->position.first >> this->position.second >> value;
 	this->value = static_cast<uint8_t>(value);
+}
+
+bool Game::validateIllusionCover(const std::pair<size_t, size_t>& position, uint8_t value)
+{
+	auto& illusionCard = m_board.getBoard()[position.first][position.second]->top();
+
+	illusionCard.discoverIllusion();
+
+	if (value <= illusionCard.getValue())
+	{
+		std::cout << "\nIllusion cannot be covered!";
+		return false;
+	}
+
+	return true;
+}
+
+bool Game::getResponse() const
+{
+	char input;
+	std::cin >> input;
+
+	return (std::tolower(input) == 'y');
+}
+
+void Game::simulateLastMove()
+{
+	switchPlayer();
+	placeCard();
 }
 
 void Game::printLogic() const
@@ -71,6 +101,25 @@ bool Game::checkWinCase2(PlayerEnum currentPlayer) const
 bool Game::checkWinCase3(PlayerEnum currentPlayer) const
 {
 	return m_players[static_cast<size_t>(m_currentPlayer)].hasUsedAllCards();
+}
+
+PlayerEnum Game::checkWinCase4() const
+{
+	uint8_t sum{ 0u };
+	static const uint8_t baseValue{ 5u };//this will make it so that pit's are ignored and eter card has value 1
+	auto gm{ m_board.getGridMiddle() };
+	auto is4x4{ m_players[0].getGamemode().getIs4x4() };
+
+	for (size_t i = gm.first - 0.5 * is4x4; i <= gm.first + 0.5 * is4x4; i++)
+	{
+		for (size_t j = gm.second - 0.5 * is4x4; j <= gm.second + 0.5 * is4x4; j++)
+		{
+			sum += m_board.getValueAt({ i,j });
+		}
+	}
+
+
+	return sum%baseValue > 0u ? PlayerEnum::Player1 : PlayerEnum::Player2;
 }
 
 bool Game::checkIfWin(PlayerEnum currentPlayer) const
@@ -205,7 +254,7 @@ std::string_view Game::getPlayerChoice() const
 	{
 		std::cout << " > Magic\n";
 	}
-	if (gamemode.getHasIlusions())
+	if (gamemode.getHasIlusions() && !player.hasUsedIllusion())
 	{
 		std::cout << " > Illusion\n";
 	}
@@ -226,7 +275,7 @@ std::string_view Game::getPlayerChoice() const
 	if (choice == "card" ||
 		(choice == "mage" && !gamemode.getMages().empty() && !hasUsedMage) ||
 		(choice == "magic" && !gamemode.getMagicPowers().empty() && !hasUsedMagic) ||
-		(choice == "illusion" && gamemode.getHasIlusions()) ||
+		(choice == "illusion" && gamemode.getHasIlusions()) && !player.hasUsedIllusion()|| 
 		(choice == "explosion" && gamemode.getHasExplosions()) ||
 		choice == "reset")
 	{
@@ -253,9 +302,9 @@ void Game::handleChoice(std::string_view choice)
 	{
 		//magic();
 	}
-	else if (choice == "ilusion")
+	else if (choice == "illusion")
 	{
-		//illusion();
+		placeIllusion();
 	}
 	else if (choice == "explosion")
 	{
@@ -266,58 +315,6 @@ void Game::handleChoice(std::string_view choice)
 		std::cout << "Game reset.\n";
 		resetGame();
 	}
-}
-
-void Game::placeCard()
-{
-	const uint8_t ETER{ 6 };
-	m_input.readInput();
-
-	//handle eter card placement
-	if (m_input.value == ETER)
-	{
-		handleEterCard(m_input.position);
-		return;
-	}
-
-	//first ring of verification
-	if (!m_board.validateInsertPosition(m_input.position))
-	{
-		std::cout << "wrong!\n";
-		return placeCard(); /*restart loop*/
-	}
-	if (!m_board.validateValue(m_input.value))
-	{
-		std::cout << "value wrong!\n";
-		return placeCard(); /*restart loop*/
-	}
-	if (!getCurrentPlayer().removeCard(m_input.value))
-	{
-		std::cout << "value available wrong!\n"; /*if card exists also delete it*/
-		return placeCard(); /*restart loop*/
-	}
-	if (!m_board.validateStackRule(m_input.position, m_input.value))
-	{
-		std::cout << "value stack wrong!\n";
-		return placeCard(); /*restart loop*/
-	}
-
-	//second ring of verification
-	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
-	{
-		std::cout << "grid wrong\n";
-		return placeCard();
-	}
-
-	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
-
-	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
-	{
-		m_board.addPositionToValid(m_input.position);
-		m_board.setLockcase();
-	}
-
-	std::cout << "\n==============================================================\n";
 }
 
 void Game::useMage()
@@ -334,9 +331,9 @@ void Game::useMage()
 	}
 }
 
-void Game::handleEterCard(const std::pair<size_t, size_t>& position)
+void Game::handleEterCard(const std::pair<size_t,size_t>& position)
 {
-	const uint8_t ETER{ 6u };
+	const uint8_t ETER{ 6 };
 
 	if (!getCurrentPlayer().removeCard(ETER))
 	{
@@ -344,20 +341,14 @@ void Game::handleEterCard(const std::pair<size_t, size_t>& position)
 		return placeCard(); /*restart loop*/
 	}
 
-	if (!m_board.validateInsertPosition(position))
+	if (!m_board.validateInsertPosition({position.first,position.second}))
 	{
 		std::cout << "wrong!\n";
-		return handleChoice(getPlayerChoice()); /*restart loop*/
+		return placeCard();
 	}
-
-	if (position.first < 0 || position.first >= m_board.getBoard().size() ||
-		position.second < 0 || position.second >= m_board.getBoard()[position.first].size()) {
-		std::cout << "\nPosition is out of bounds!";
-		return handleChoice(getPlayerChoice());
-	}
-
-	auto& cell = m_board.getBoard()[position.first][position.second];
-	if (cell && !cell->empty()) {
+	
+	if (m_board.getBoard()[position.first][position.second].has_value() || !m_board.getBoard()[position.first][position.second]->empty())
+	{
 		std::cout << "\nEter card must be placed on an empty slot!";
 		return handleChoice(getPlayerChoice());
 	}
@@ -365,7 +356,7 @@ void Game::handleEterCard(const std::pair<size_t, size_t>& position)
 	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
 	{
 		std::cout << "grid wrong\n";
-		return handleChoice(getPlayerChoice());
+		return placeCard();
 	}
 
 	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
@@ -392,15 +383,27 @@ PlayerEnum Game::playGame()
 	{
 		printLogic();
 		handleChoice(getPlayerChoice());
+		
 
-
-		//instead of one function, let them be and handle them here
-		if (checkIfWin(m_currentPlayer))
+		if (checkWinCase1(m_currentPlayer))
 		{
 			auto winner = (m_currentPlayer == PlayerEnum::Player1 ? "\nWon Player 1" : "\nWon Player 2");
 			std::cout << winner;
 			break;
+		}else if (checkWinCase2(m_currentPlayer) || checkWinCase3(m_currentPlayer))
+		{
+			auto winner = (m_currentPlayer == PlayerEnum::Player1 ? "Player 1" : "Player 2");
+			auto loser = (m_currentPlayer == PlayerEnum::Player1 ? "Player 2" : "Player 1");
+
+			std::cout << winner << " won. " << loser << " can still place one last card. Do you want to? y/n ";
+			std::cout << '\n';
+			if (getResponse())
+			{
+				simulateLastMove();
+			}
+			return checkWinCase4();
 		}
+
 
 		switchPlayer();
 	}
@@ -420,4 +423,142 @@ Board& Game::accessBoard()
 PlayerEnum Game::getCurrentPlayerEnum()
 {
 	return m_currentPlayer;
+}
+
+void Game::placeIllusion()
+{
+	const uint8_t ETER{ 6 };
+	m_input.readInput();
+
+	if (m_input.value == ETER)
+	{
+		std::cout << "\nCannot make Eter card an Illusion!";
+		switchPlayer();
+		return;
+	}
+
+	auto& cellx = m_board.getBoard()[m_input.position.first][m_input.position.second];
+	if (cellx.has_value() && !cellx->empty() && cellx->top().isIllusion())
+	{
+		std::cout << "\nCannot place illusion on another illusion!";
+		switchPlayer();
+		return;
+	}
+
+	if (!m_board.validateInsertPosition(m_input.position))
+	{
+		std::cout << "wrong!\n";
+		return handleChoice(getPlayerChoice()); /*restart loop*/
+	}
+	if (!m_board.validateValue(m_input.value))
+	{
+		std::cout << "value wrong!\n";
+		return handleChoice(getPlayerChoice()); /*restart loop*/
+	}
+
+	if (m_input.position.first < 0 || m_input.position.first >= m_board.getBoard().size() ||
+		m_input.position.second < 0 || m_input.position.second >= m_board.getBoard()[m_input.position.first].size()) {
+		std::cout << "\nInvalid position!";
+		return handleChoice(getPlayerChoice());
+	}
+
+	const auto& cell = m_board.getBoard()[m_input.position.first][m_input.position.second];
+	if (cell.has_value() && !cell->empty()) {
+		std::cout << "\nIllusion card must be placed on an empty slot!";
+		return handleChoice(getPlayerChoice());
+	}
+
+	if (!getCurrentPlayer().removeCard(m_input.value))
+	{
+		std::cout << "value available wrong!\n"; /*if card exists also delete it*/
+		return placeCard(); /*restart loop*/
+	}
+
+
+	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
+	{
+		std::cout << "grid wrong\n";
+		return handleChoice(getPlayerChoice());
+	}
+
+
+
+	m_board.insertCard(Card{ m_input.value,m_currentPlayer,true }, m_input.position);
+
+	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
+	{
+		m_board.addPositionToValid(m_input.position);
+		m_board.setLockcase();
+	}
+
+	getCurrentPlayer().markIllusionUsed();
+	std::cout << "\n==============================================================\n";
+}
+
+void Game::placeCard()
+{
+	const uint8_t ETER{ 6 };
+	m_input.readInput();
+
+	//handle eter card placement
+	if (m_input.value == ETER)
+	{
+		handleEterCard(m_input.position);
+	}
+
+	//first ring of verification
+	if (!m_board.validateInsertPosition(m_input.position))
+	{
+		std::cout << "wrong!\n";
+		return placeCard(); /*restart loop*/
+	}
+	if (!m_board.validateValue(m_input.value))
+	{
+		std::cout << "value wrong!\n";
+		return placeCard(); /*restart loop*/
+	}
+
+
+	auto& cell = m_board.getBoard()[m_input.position.first][m_input.position.second];
+	if (cell.has_value() && !cell->empty() && cell->top().isIllusion())
+	{
+		if (!validateIllusionCover(m_input.position, m_input.value))
+		{
+			getCurrentPlayer().removeCard(m_input.value);
+			std::cout << "\nCould not place over Illusion!";
+			std::cout << "\n==============================================================\n";
+			return;
+		}
+	}
+	else
+	{
+		if (!m_board.validateStackRule(m_input.position, m_input.value)) {
+			std::cout << "Value stack wrong!\n";
+			return placeCard(); // Restart loop
+		}
+	}
+
+
+	if (!getCurrentPlayer().removeCard(m_input.value))
+	{
+		std::cout << "value available wrong!\n"; /*if card exists also delete it*/
+		return placeCard(); /*restart loop*/
+	}
+
+	//second ring of verification
+	if (!m_board.isFirstMove() && !m_board.tryGridShiftForInsertPosition(m_input.position))
+	{
+		std::cout << "grid wrong\n";
+		return placeCard();
+	}
+
+	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
+
+	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
+	{
+		m_board.addPositionToValid(m_input.position);
+		m_board.setLockcase();
+	}
+
+	std::cout << "\n==============================================================\n";
 }

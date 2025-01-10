@@ -18,7 +18,6 @@ private:
         void readInput();
     };
 
-
     Input					                            m_input;
 
     Bridge& m_bridge;
@@ -38,6 +37,7 @@ private:
     bool                                                checkWinCase1(PlayerEnum currentPlayer) const;
     bool                                                checkWinCase2(PlayerEnum currentPlayer) const;
     bool                                                checkWinCase3(PlayerEnum currentPlayer) const;
+    PlayerEnum                                          checkWinCase4() const;
     bool                                                checkIfWin(PlayerEnum currentPlayer) const;
 
     void                                                printLogic() const;
@@ -47,18 +47,23 @@ private:
     void                                                handleChoice(std::string_view choice);
 
     void                                                placeCard();
+    void                                                placeIllusion();
     void                                                useMage();
     void                                                handleEterCard(const std::pair<size_t, size_t>& position);
     void                                                resetGame();
 
+
+    bool                                                validateIllusionCover(const std::pair<size_t, size_t>& position, uint8_t value);
+    bool                                                getResponse() const;
+    void                                                simulateLastMove();
 public:
     explicit Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players);
 
     PlayerEnum                                          playGame();
 
 
-    Gamematrix& accessGameboardAPI();
-    Board& accessBoard();
+    Gamematrix&                                         accessGameboardAPI();
+    Board&                                              accessBoard();
     PlayerEnum                                          getCurrentPlayerEnum();
-    Player& getCurrentPlayer();
+    Player&                                             getCurrentPlayer();
 };
