@@ -1,6 +1,8 @@
 #include "Game.h"
 #include <numeric>
 #include <algorithm>
+#include <random>
+#include <functional>
 
 
 Game::Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players)
@@ -240,7 +242,7 @@ std::string_view Game::getPlayerChoice() const
 	{
 		std::cout << " > Illusion\n";
 	}
-	if (gamemode.getHasExplosions())
+	if (gamemode.getHasExplosions() && player.canUseExplosion())
 	{
 		std::cout << " > Explosion\n";
 	}
@@ -258,7 +260,7 @@ std::string_view Game::getPlayerChoice() const
 		(choice == "mage" && !gamemode.getMages().empty() && !hasUsedMage) ||
 		(choice == "magic" && !gamemode.getMagicPowers().empty() && !hasUsedMagic) ||
 		(choice == "illusion" && gamemode.getHasIlusions()) && !player.hasUsedIllusion()|| 
-		(choice == "explosion" && gamemode.getHasExplosions()) ||
+		(choice == "explosion" && gamemode.getHasExplosions() && player.canUseExplosion()) ||
 		choice == "reset")
 	{
 		return choice;
@@ -290,7 +292,7 @@ void Game::handleChoice(std::string_view choice)
 	}
 	else if (choice == "explosion")
 	{
-		//explosion();
+		useExplosion();
 	}
 	else if (choice == "reset")
 	{
@@ -303,7 +305,7 @@ void Game::returnToPlayer()
 {
 	size_t posX, posY;
 	std::cout << "Return to player the card on position: ";
-	std::cin >> posX, posY;
+	std::cin >> posX>> posY;
 	std::cout << "\n";
 
 	if (!m_board.validateInsertPosition({posX,posY}))
@@ -327,7 +329,64 @@ void Game::returnToPlayer()
 void Game::placeRandomPit()
 {
 	auto gMiddle = m_board.getGridMiddle();
-	
+	auto is4x4 = m_players[0].getGamemode().getIs4x4();
+
+	int minRow = gMiddle.first - 1 - 0.5 * is4x4;
+	int maxRow = gMiddle.first + 1 + 0.5 * is4x4;
+	int minCol = gMiddle.second - 1 - 0.5 * is4x4;
+	int maxCol = gMiddle.second + 1 + 0.5 * is4x4;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> rowDist(minRow, maxRow);
+	std::uniform_int_distribution<> colDist(minCol, maxCol);
+
+	int randomRow = rowDist(gen);
+	int randomCol = colDist(gen);
+
+
+	while (m_board.getBoard()[randomRow][randomCol].has_value())
+	{
+		m_board.removeCard({ randomRow,randomCol });
+	}
+
+
+	static const uint8_t pitValue{ 5 };
+	m_board.insertCard({ pitValue,m_currentPlayer }, { randomRow,randomCol });
+}
+
+void Game::removeCard()
+{
+	size_t posX, posY;
+	std::cout << "Remove the card on position: ";
+	std::cin >> posX >> posY;
+	std::cout << "\n";
+
+	if (!m_board.validateInsertPosition({ posX,posY }))
+	{
+		std::cout << "Possition not available!";
+		return returnToPlayer();
+	}
+
+	if (!m_board.getBoard()[posX][posY].has_value())/*nu are valoare*/
+	{
+		std::cout << "\nEmpty cell!\n";
+		return returnToPlayer();
+	}
+
+	m_board.removeCard({ posX,posY });
+}
+
+bool Game::verifyExplosionCriteria() const
+{
+	if (m_players[0].getGamemode().getHasExplosions())
+	{
+		if (m_bridge.verifyRowExplosionCriteria() || m_bridge.verifyColumnExplosionCriteria())
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void Game::useMage()
@@ -375,6 +434,12 @@ void Game::handleEterCard(const std::pair<size_t,size_t>& position)
 	}
 
 	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
+
+	if (m_areExplosionsEnabled && verifyExplosionCriteria())
+	{
+		m_players[static_cast<size_t>(m_currentPlayer)].enableExplosion();
+		m_areExplosionsEnabled = false;
+	}
 
 	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
 	{
@@ -497,8 +562,12 @@ void Game::placeIllusion()
 	}
 
 
-
 	m_board.insertCard(Card{ m_input.value,m_currentPlayer,true }, m_input.position);
+
+	if (verifyExplosionCriteria())
+	{
+		m_players[static_cast<size_t>(m_currentPlayer)].enableExplosion();
+	}
 
 	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
 	{
@@ -508,6 +577,31 @@ void Game::placeIllusion()
 
 	getCurrentPlayer().markIllusionUsed();
 	std::cout << "\n==============================================================\n";
+}
+
+void Game::useExplosion()
+{
+	auto is4x4 = m_players[0].getGamemode().getIs4x4();
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> timesDist(is4x4 ? 3 : 2, is4x4 ? 6 : 4);
+	int timesToCall = timesDist(gen);
+
+	std::discrete_distribution<> functionDist({ 10, 10, 1 });
+
+	std::function<void()> functions[] = 
+	{
+		[&]() { returnToPlayer(); },
+		[&]() { removeCard(); },
+		[&]() { placeRandomPit(); }
+	};
+
+	for (int i = 0; i < timesToCall; ++i)
+	{
+		int chosenFunction = functionDist(gen);
+		functions[chosenFunction]();
+	}
 }
 
 void Game::placeCard()
@@ -568,6 +662,12 @@ void Game::placeCard()
 	}
 
 	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
+
+	if (m_areExplosionsEnabled && verifyExplosionCriteria())
+	{
+		m_players[static_cast<size_t>(m_currentPlayer)].enableExplosion();
+		m_areExplosionsEnabled = false;
+	}
 
 	if (m_board.getLockcase() < m_board.getMinLockcaseValue())
 	{

@@ -14,8 +14,8 @@ private:
 public:
     explicit Bridge(const std::reference_wrapper<const Gamemode>& gamemode);
 
-    const std::deque<std::pair<uint8_t, uint8_t>>& getColumnPocket() const;
-    const std::deque<std::pair<uint8_t, uint8_t>>& getRowPocket() const;
+    const std::deque<std::pair<uint8_t, uint8_t>>&  getColumnPocket() const;
+    const std::deque<std::pair<uint8_t, uint8_t>>&  getRowPocket() const;
 
     void                                            popColumnBack();
     void                                            popRowBack();
@@ -37,4 +37,7 @@ public:
 
     void                                            resetBridge();
     void                                            printPockets() const;
+
+    bool                                            verifyColumnExplosionCriteria() const;
+    bool                                            verifyRowExplosionCriteria() const;
 };

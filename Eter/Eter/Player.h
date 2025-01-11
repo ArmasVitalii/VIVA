@@ -16,6 +16,7 @@ private:
     bool                                    m_hasUsedMage;
     bool                                    m_hasUsedMagicPower;
     bool                                    m_hasUsedIllusion;
+    bool                                    m_canUseExplosions;
 public:
     explicit Player(const std::reference_wrapper<const Gamemode>& gamemode, const std::reference_wrapper<const Bridge>& bridge);
 
@@ -38,4 +39,6 @@ public:
     void                                    markMageUsed();
     void                                    resetPlayer();
     void                                    resetMagic();
+    void                                    enableExplosion();
+    bool                                    canUseExplosion() const;
 };

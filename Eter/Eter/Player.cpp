@@ -8,7 +8,8 @@ Player::Player(const std::reference_wrapper<const Gamemode>& gamemode, const std
     m_numberOfGamesWon{ 0 },
     m_hasUsedMage{ gamemode.get().getMages().empty() },
     m_hasUsedMagicPower{ gamemode.get().getMagicPowers().empty() },
-    m_hasUsedIllusion{ false }
+    m_hasUsedIllusion{ false },
+    m_canUseExplosions{false}
 {
     initialisePlayerCards();
 }
@@ -106,4 +107,14 @@ void Player::resetPlayer()
 void Player::resetMagic()
 {
     m_hasUsedMagicPower = false;
+}
+
+void Player::enableExplosion()
+{
+    m_canUseExplosions = true;
+}
+
+bool Player::canUseExplosion() const
+{
+    return m_canUseExplosions;
 }

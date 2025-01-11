@@ -25,6 +25,7 @@ private:
     std::array<Player, 2>& m_players;
 
     PlayerEnum				                            m_currentPlayer{ k_baseFirstPlayer };
+    bool                                                m_areExplosionsEnabled{ m_players[0].getGamemode().getHasExplosions() };
 
     const std::shared_ptr<AbstractMage>&                getMage(PlayerEnum currentPlayer) const;
     const std::vector<std::shared_ptr<AbstractMagic>>   getMagicPowers(PlayerEnum currentPlayer) const;
@@ -47,10 +48,13 @@ private:
 
     void                                                returnToPlayer();
     void                                                placeRandomPit();
+    void                                                removeCard();
 
+    bool                                                verifyExplosionCriteria() const;
 
     void                                                placeCard();
     void                                                placeIllusion();
+    void                                                useExplosion();
     void                                                useMage();
     void                                                handleEterCard(const std::pair<size_t, size_t>& position);
     void                                                resetGame();

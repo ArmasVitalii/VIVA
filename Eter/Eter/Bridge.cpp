@@ -174,3 +174,51 @@ void Bridge::printPockets() const
     }
     std::cout << std::endl;
 }
+
+bool Bridge::verifyColumnExplosionCriteria() const
+{
+    bool is4x4 = m_gamemode.get().getIs4x4();
+    int requiredSum = is4x4 ? 4 : 3;
+
+    int count = 0;
+
+    for (const auto& pair : m_columnPocket)
+    {
+        std::cout << "\n\n\nColumn pair: " << pair.first + pair.second << '\n';
+        if (pair.first + pair.second == requiredSum)
+        {
+            count++;
+            if (count >= 2)
+            {
+                return true;
+            }
+        }
+    }
+    std::cout << "\n\n\n\nColumn: " << count << "\n";
+
+    return false;
+}
+
+bool Bridge::verifyRowExplosionCriteria() const
+{
+    bool is4x4 = m_gamemode.get().getIs4x4();
+    int requiredSum = is4x4 ? 4 : 3;
+
+    int count = 0;
+
+    for (const auto& pair : m_rowPocket)
+    {
+        if (pair.first + pair.second == requiredSum)
+        {
+            std::cout << "\n\n\nRow pair: " << pair.first + pair.second << '\n';
+            count++;
+            if (count >= 2)
+            {
+                return true;
+            }
+        }
+    }
+    std::cout << "\n\n\n\nRow: " << count << "\n";
+
+    return false;
+}
