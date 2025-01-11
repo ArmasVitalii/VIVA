@@ -38,8 +38,9 @@ bool FireMage::usePower(Game& game) const
         int noOfPositions = 0;
 
 
-        int minRow = static_cast<int>(gb.getGridMiddle().second) - 1 - 0.5 * gb.getis4x4();
-        int maxRow = static_cast<int>(gb.getGridMiddle().second) + 1 + 0.5 * gb.getis4x4();
+        int minRow = gb.getGridMiddle().second - 1 - 0.5 * gb.getis4x4();
+        int maxRow = gb.getGridMiddle().second + 1 + 0.5 * gb.getis4x4();
+        std::cout << "From " << minRow << " to " << maxRow << "\n";
         
         for (int j = minRow; j <= maxRow; ++j)
         {
@@ -57,12 +58,9 @@ bool FireMage::usePower(Game& game) const
             for (int j = minRow; j <= maxRow; ++j)
             {
                 auto& stack = game.accessGameboardAPI()[row][j];
-                if (stack.has_value())  
+                while (stack.has_value())
                 {
-                    while (!stack->empty())
-                    {
-                        game.accessBoard().removeCard({ row, j });
-                    }
+                    game.accessBoard().removeCard({ row,j });
                 }
             }
             game.getCurrentPlayer().markMageUsed();
@@ -84,8 +82,8 @@ bool FireMage::usePower(Game& game) const
         int noOfPositions = 0;
 
         
-        int minCol = gb.getGridMiddle().first - 1 - static_cast<int>(0.5 * gb.getis4x4());
-        int maxCol = gb.getGridMiddle().first + 1 + static_cast<int>(0.5 * gb.getis4x4());
+        int minCol = static_cast<int>(gb.getGridMiddle().first) - 0.5 * gb.getis4x4();
+        int maxCol = static_cast<int>(gb.getGridMiddle().first) + 0.5 * gb.getis4x4();
 
        
         for (int i = minCol; i <= maxCol; ++i)

@@ -72,7 +72,7 @@ public:
 	bool											checkWinCase2(PlayerEnum currentPlayer) const;
 
 	bool											containsOwnCard(const std::pair<size_t, size_t>& position, PlayerEnum currentPlayer) const;
-	const std::pair<uint8_t, uint8_t>&				getGridMiddle() const;
+	const std::pair<float, float>&					getGridMiddle() const;
 	bool											getis4x4() const;
 	uint8_t											getValueAt(const std::pair<size_t, size_t>& position) const;
 

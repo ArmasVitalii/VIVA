@@ -304,6 +304,7 @@ void Game::returnToPlayer()
 	size_t posX, posY;
 	std::cout << "Return to player the card on position: ";
 	std::cin >> posX, posY;
+	std::cout << "\n";
 
 	if (!m_board.validateInsertPosition({posX,posY}))
 	{
@@ -311,11 +312,22 @@ void Game::returnToPlayer()
 		return returnToPlayer();
 	}
 
-	if (m_board.getBoard()[posX][posY].has_value())/*nu are valoare*/
+	if (!m_board.getBoard()[posX][posY].has_value())/*nu are valoare*/
 	{
-		std::cout << "\nEter card must be placed on an empty slot!";
-		return handleChoice(getPlayerChoice());
+		std::cout << "\nEmpty cell!\n";
+		return returnToPlayer();
 	}
+
+	auto& cell = m_board.getBoard()[posX][posY]->top();
+	m_players[static_cast<size_t>(cell.getPlayerID())].addCard(cell.getValue());
+	m_board.removeCard({ posX,posY });
+	std::cout << "\nCard returned to player!\n";
+}
+
+void Game::placeRandomPit()
+{
+	auto gMiddle = m_board.getGridMiddle();
+	
 }
 
 void Game::useMage()

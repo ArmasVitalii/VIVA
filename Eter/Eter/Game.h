@@ -46,6 +46,7 @@ private:
     void                                                handleChoice(std::string_view choice);
 
     void                                                returnToPlayer();
+    void                                                placeRandomPit();
 
 
     void                                                placeCard();

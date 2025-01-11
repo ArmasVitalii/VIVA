@@ -535,7 +535,7 @@ bool Board::checkWinCase2(PlayerEnum currentPlayer) const
 
 bool Board::containsOwnCard(const std::pair<size_t, size_t>& position, PlayerEnum currentPlayer) const
 {
-    if (!m_board[position.first][position.second].has_value() || m_board[position.first][position.second]->empty())
+    if (!m_board[position.first][position.second].has_value())
     {
         return false;
     }
@@ -543,7 +543,7 @@ bool Board::containsOwnCard(const std::pair<size_t, size_t>& position, PlayerEnu
     return m_board[position.first][position.second]->top().getPlayerID() == currentPlayer;
 }
 
-const std::pair<uint8_t, uint8_t>& Board::getGridMiddle() const
+const std::pair<float, float>& Board::getGridMiddle() const
 {
     return m_gridMiddle;
 }
