@@ -26,7 +26,7 @@ private:
 
     PlayerEnum				                            m_currentPlayer{ k_baseFirstPlayer };
 
-    const std::shared_ptr<AbstractMage>& getMage(PlayerEnum currentPlayer) const;
+    const std::shared_ptr<AbstractMage>&                getMage(PlayerEnum currentPlayer) const;
     const std::vector<std::shared_ptr<AbstractMagic>>   getMagicPowers(PlayerEnum currentPlayer) const;
 
     bool                                                verifySum(PlayerEnum currentPlayer) const;
@@ -38,13 +38,15 @@ private:
     bool                                                checkWinCase2(PlayerEnum currentPlayer) const;
     bool                                                checkWinCase3(PlayerEnum currentPlayer) const;
     PlayerEnum                                          checkWinCase4() const;
-    bool                                                checkIfWin(PlayerEnum currentPlayer) const;
 
     void                                                printLogic() const;
     void                                                switchPlayer();
 
     std::string_view                                    getPlayerChoice() const;
     void                                                handleChoice(std::string_view choice);
+
+    void                                                returnToPlayer();
+
 
     void                                                placeCard();
     void                                                placeIllusion();

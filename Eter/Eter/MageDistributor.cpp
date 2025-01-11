@@ -3,7 +3,6 @@
 std::vector<std::shared_ptr<AbstractMage>> MageDistributor::generateMages()
 {
     std::vector<std::shared_ptr<AbstractMage>> mages;
-    mages.push_back(std::make_shared<FireMage>());
     mages.push_back(std::make_shared<IceMage>());
     mages.push_back(std::make_shared<EarthMage>());
     mages.push_back(std::make_shared<WaterMage>());

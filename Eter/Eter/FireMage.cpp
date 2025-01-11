@@ -38,9 +38,8 @@ bool FireMage::usePower(Game& game) const
         int noOfPositions = 0;
 
 
-        int minRow = gb.getGridMiddle().second - 1 - static_cast<int>(0.5 * gb.getis4x4());
-        int maxRow = gb.getGridMiddle().second + 1 + static_cast<int>(0.5 * gb.getis4x4());
-
+        int minRow = static_cast<int>(gb.getGridMiddle().second) - 1 - 0.5 * gb.getis4x4();
+        int maxRow = static_cast<int>(gb.getGridMiddle().second) + 1 + 0.5 * gb.getis4x4();
         
         for (int j = minRow; j <= maxRow; ++j)
         {

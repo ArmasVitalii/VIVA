@@ -33,5 +33,16 @@ void Card::discoverIllusion()
 
 uint8_t Card::getRealValue() const
 {
-	return (m_isIllusion || m_hasBeenDiscovered) ? 1u : m_cardValue;
+	uint8_t value;
+
+	if (m_isIllusion || m_hasBeenDiscovered)
+	{
+		value = 1u;
+	}
+	else
+	{
+		value = m_cardValue;
+	}
+
+	return (m_playerID == PlayerEnum::Player1) ? value : -value;
 }

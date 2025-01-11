@@ -54,6 +54,7 @@ bool IceMage::usePower(Game& game) const
         return false;
     }
 
+    
     game.accessGameboardAPI()[rowEmpty][colEmpty] = std::move(game.accessGameboardAPI()[rowStack][colStack]);
     game.accessGameboardAPI()[rowStack][colStack].reset();
 

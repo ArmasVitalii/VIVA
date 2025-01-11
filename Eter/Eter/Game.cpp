@@ -110,9 +110,9 @@ PlayerEnum Game::checkWinCase4() const
 	auto gm{ m_board.getGridMiddle() };
 	auto is4x4{ m_players[0].getGamemode().getIs4x4() };
 
-	for (size_t i = gm.first - 0.5 * is4x4; i <= gm.first + 0.5 * is4x4; i++)
+	for (size_t i = gm.first - 1 - 0.5*is4x4 * is4x4; i <= gm.first + 1 + 0.5*is4x4 * is4x4; i++)
 	{
-		for (size_t j = gm.second - 0.5 * is4x4; j <= gm.second + 0.5 * is4x4; j++)
+		for (size_t j = gm.second - 1 - 0.5 *is4x4; j <= gm.second + 1 + 0.5* is4x4; j++)
 		{
 			sum += m_board.getValueAt({ i,j });
 		}
@@ -120,24 +120,6 @@ PlayerEnum Game::checkWinCase4() const
 
 
 	return sum%baseValue > 0u ? PlayerEnum::Player1 : PlayerEnum::Player2;
-}
-
-bool Game::checkIfWin(PlayerEnum currentPlayer) const
-{
-	if (!m_board.isFirstMove())
-	{
-		if (checkWinCase1(currentPlayer))
-			return true;
-
-		if (checkWinCase2(currentPlayer) || checkWinCase3(currentPlayer))
-			return true;
-
-
-		//win case 4 somehow
-		return false;
-	}
-
-	return false;
 }
 
 const std::shared_ptr<AbstractMage>& Game::getMage(PlayerEnum currentPlayer) const
@@ -317,6 +299,25 @@ void Game::handleChoice(std::string_view choice)
 	}
 }
 
+void Game::returnToPlayer()
+{
+	size_t posX, posY;
+	std::cout << "Return to player the card on position: ";
+	std::cin >> posX, posY;
+
+	if (!m_board.validateInsertPosition({posX,posY}))
+	{
+		std::cout << "Possition not available!";
+		return returnToPlayer();
+	}
+
+	if (m_board.getBoard()[posX][posY].has_value())/*nu are valoare*/
+	{
+		std::cout << "\nEter card must be placed on an empty slot!";
+		return handleChoice(getPlayerChoice());
+	}
+}
+
 void Game::useMage()
 {
 	if (!m_players[static_cast<size_t>(m_currentPlayer)].hasUsedMage())
@@ -346,9 +347,9 @@ void Game::handleEterCard(const std::pair<size_t,size_t>& position)
 		std::cout << "wrong!\n";
 		return placeCard();
 	}
-	
-	//nu are value aici
-	if (m_board.getBoard()[position.first][position.second].has_value())/*nu are valoare*/
+
+
+	if (m_board.getBoard()[position.first][position.second].has_value())
 	{
 		std::cout << "\nEter card must be placed on an empty slot!";
 		return handleChoice(getPlayerChoice());
@@ -473,7 +474,7 @@ void Game::placeIllusion()
 	if (!getCurrentPlayer().removeCard(m_input.value))
 	{
 		std::cout << "value available wrong!\n"; /*if card exists also delete it*/
-		return placeCard(); /*restart loop*/
+		return handleChoice(getPlayerChoice());
 	}
 
 
