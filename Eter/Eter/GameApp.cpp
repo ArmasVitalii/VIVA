@@ -91,13 +91,38 @@ bool GameApp::init()
     return true;
 }
 
-void GameApp::run()
+void GameApp::run() //Main loop runner
 {
+    Uint32 lastTick = getTick();
+    while (running)
+    {
+        Uint32 currentTick = getTick();
+        Uint32 deltaTime = currentTick - lastTick;
+        lastTick = currentTick;
 
+        handleEvents();
+        update(deltaTime);
+        render();
+
+        // Frame capping
+        Uint32 frameTime = getTick() - currentTick;
+        if (frameTime < FRAME_DELAY) {
+            SDL_Delay(FRAME_DELAY - frameTime);
+        }
+    }
 }
 
-void GameApp::clean()
+void GameApp::clean() //Clean up
 {
+    SDL_DestroyTexture(splashTexture);
+    SDL_DestroyTexture(mainMenuBg);
+    SDL_DestroyTexture(settingsBg);
+    SDL_DestroyTexture(gameBoardBg);
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    IMG_Quit();
+    SDL_Quit();
 }
 
 void GameApp::initButtons() //Buttons Initialization (positions can be adjusted)
@@ -139,4 +164,25 @@ void GameApp::initButtons() //Buttons Initialization (positions can be adjusted)
     settingsBackButton.rect = { 200, 530, buttonWidth, buttonHeight };
     settingsBackButton.text = "Back";
     settingsBackButton.hovered = false;
+}
+
+void GameApp::initCards()
+{
+    // Let’s place 5 cards at the bottom
+    int cardWidth = 60;
+    int cardHeight = 90;
+    int startX = 300;
+    int gap = 20;
+    for (int i = 0; i < 5; ++i)
+    {
+        Card card;
+        card.rect = { startX + i * (cardWidth + gap), SCREEN_HEIGHT - 120, cardWidth, cardHeight };
+        card.beingDragged = false;
+        card.offsetX = 0;
+        card.offsetY = 0;
+        cards.push_back(card);
+    }
+
+    // Board position
+    boardPos = { (SCREEN_WIDTH - 400) / 2, (SCREEN_HEIGHT - 400) / 2 };
 }
