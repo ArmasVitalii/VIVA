@@ -161,6 +161,7 @@
     <ClCompile Include="FromAshes.cpp" />
     <ClCompile Include="Gale.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Gamemode.cpp" />
     <ClCompile Include="GamemodeDistributor.cpp" />
     <ClCompile Include="Game_UI.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="FromAshes.h" />
     <ClInclude Include="Gale.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameApp.h" />
     <ClInclude Include="Gamemode.h" />
     <ClInclude Include="GamemodeDistributor.h" />
     <ClInclude Include="Hurricane.h" />
