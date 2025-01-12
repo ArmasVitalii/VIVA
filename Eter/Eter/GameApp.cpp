@@ -91,4 +91,52 @@ bool GameApp::init()
     return true;
 }
 
+void GameApp::run()
+{
 
+}
+
+void GameApp::clean()
+{
+}
+
+void GameApp::initButtons() //Buttons Initialization (positions can be adjusted)
+{
+    // Bottom-middle alignment for 3 buttons
+    int buttonWidth = 400;
+    int buttonHeight = 100;
+    int gap = 10;
+
+    // Compute x-coord so that the button is centered horizontally
+    int xPos = (SCREEN_WIDTH - buttonWidth) / 2;
+    int yPos = SCREEN_HEIGHT - 350; // some offset from bottom
+
+    playButton.rect = { xPos, yPos, buttonWidth, buttonHeight };
+    playButton.text = "Play";
+    playButton.hovered = false;
+
+    settingsButton.rect = { xPos, yPos + (buttonHeight + gap), buttonWidth, buttonHeight };
+    settingsButton.text = "Settings";
+    settingsButton.hovered = false;
+
+    quitButton.rect = { xPos, yPos + 2 * (buttonHeight + gap), buttonWidth, buttonHeight };
+    quitButton.text = "Quit";
+    quitButton.hovered = false;
+
+    // For Settings Menu
+    settingsButton1.rect = { 200, 200, buttonWidth, buttonHeight };
+    settingsButton1.text = "Option A";
+    settingsButton1.hovered = false;
+
+    settingsButton2.rect = { 200, 310, buttonWidth, buttonHeight };
+    settingsButton2.text = "Option B";
+    settingsButton2.hovered = false;
+
+    settingsButton3.rect = { 200, 420, buttonWidth, buttonHeight };
+    settingsButton3.text = "Option C";
+    settingsButton3.hovered = false;
+
+    settingsBackButton.rect = { 200, 530, buttonWidth, buttonHeight };
+    settingsBackButton.text = "Back";
+    settingsBackButton.hovered = false;
+}
