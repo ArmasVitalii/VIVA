@@ -21,3 +21,33 @@ struct Card {
 	bool beingDragged;
 	int offsetX, offsetY;
 };
+
+//Game Application Class
+class GameApp {
+public:
+	GameApp();
+	bool init();
+	void run();
+	void clean();
+
+private:
+	//SDL Components
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+
+	//Textures and Splash
+	SDL_Texture* splashTexture;
+	SDL_Texture* mainMenuBg;
+	SDL_Texture* settingsBg;
+	SDL_Texture* gameBoardBg;
+
+	//Splash/Fade Logic
+	int splashAlpha;
+	Uint32 splashTimer;
+	int fadeDuration;
+	bool fadeIn;
+
+	//Main Menu and Settings
+	Button playButton, settingsButton, quitButton;
+	Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
+};
