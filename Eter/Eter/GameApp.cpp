@@ -187,6 +187,12 @@ void GameApp::initCards()
     boardPos = { (SCREEN_WIDTH - 400) / 2, (SCREEN_HEIGHT - 400) / 2 };
 }
 
+bool GameApp::isMouseOverButton(int mouseX, int mouseY, const Button& btn)
+{
+    return (mouseX >= btn.rect.x && mouseX <= btn.rect.x + btn.rect.w &&
+        mouseY >= btn.rect.y && mouseY <= btn.rect.y + btn.rect.h);
+}
+
 Uint32 GameApp::getTick()
 {
     return SDL_GetTicks();
@@ -291,6 +297,32 @@ void GameApp::update(Uint32 deltaTime) // UPDATE LOGIC (PER STATE)
     }
 }
 
+void GameApp::render()
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    switch (currentState) {
+    case SPLASH:
+        renderSplash();
+        break;
+    case MAIN_MENU:
+        renderMainMenu();
+        break;
+    case SETTINGS:
+        renderSettingsMenu();
+        break;
+    case PLAY:
+        renderGameBoard();
+        break;
+    case QUIT:
+        // Possibly render a goodbye screen or nothing
+        break;
+    }
+
+    SDL_RenderPresent(renderer);
+}
+
 void GameApp::updateSplash(Uint32 deltaTime)
 {
     splashTimer += deltaTime;
@@ -323,6 +355,36 @@ void GameApp::updateSplash(Uint32 deltaTime)
     SDL_SetTextureAlphaMod(splashTexture, splashAlpha);
 }
 
+void GameApp::renderSplash()
+{
+    // Fill background black
+    SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    SDL_RenderCopy(renderer, splashTexture, nullptr, &dst);
+}
+
+void GameApp::renderMainMenu()
+{
+    // Draw main menu background
+    SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    SDL_RenderCopy(renderer, mainMenuBg, nullptr, &dst);
+
+    // Render placeholders for buttons.  
+    // In a real app, you might draw actual button textures or text.
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    auto drawBtn = [&](const Button& b) {
+        SDL_SetRenderDrawColor(renderer,
+            b.hovered ? 200 : 255,
+            b.hovered ? 200 : 255,
+            b.hovered ? 0 : 255,
+            255);
+        SDL_RenderFillRect(renderer, &b.rect);
+        };
+
+    drawBtn(playButton);
+    drawBtn(settingsButton);
+    drawBtn(quitButton);
+}
+
 void GameApp::updateMainMenu()
 {
     // Could do button hover detection, animations, etc.
@@ -333,6 +395,28 @@ void GameApp::updateMainMenu()
     quitButton.hovered = isMouseOverButton(mx, my, quitButton);
 }
 
+void GameApp::renderSettingsMenu()
+{
+    SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    SDL_RenderCopy(renderer, settingsBg, nullptr, &dst);
+
+    // Same button rendering approach
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    auto drawBtn = [&](const Button& b) {
+        SDL_SetRenderDrawColor(renderer,
+            b.hovered ? 200 : 255,
+            b.hovered ? 200 : 255,
+            b.hovered ? 0 : 255,
+            255);
+        SDL_RenderFillRect(renderer, &b.rect);
+        };
+
+    drawBtn(settingsButton1);
+    drawBtn(settingsButton2);
+    drawBtn(settingsButton3);
+    drawBtn(settingsBackButton);
+}
+
 void GameApp::updateSettingsMenu()
 {
     int mx, my;
@@ -341,6 +425,30 @@ void GameApp::updateSettingsMenu()
     settingsButton2.hovered = isMouseOverButton(mx, my, settingsButton2);
     settingsButton3.hovered = isMouseOverButton(mx, my, settingsButton3);
     settingsBackButton.hovered = isMouseOverButton(mx, my, settingsBackButton);
+}
+
+void GameApp::renderGameBoard()
+{
+    // Draw game board background
+    SDL_Rect boardDst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    SDL_RenderCopy(renderer, gameBoardBg, nullptr, &boardDst);
+
+    // Render the 5 cards
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    for (auto& card : cards) {
+        SDL_RenderFillRect(renderer, &card.rect);
+    }
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    auto drawBtn = [&](const Button& b) {
+        SDL_SetRenderDrawColor(renderer,
+            b.hovered ? 200 : 255,
+            b.hovered ? 200 : 255,
+            b.hovered ? 0 : 255,
+            255);
+        SDL_RenderFillRect(renderer, &b.rect);
+        };
+
+    drawBtn(settingsBackButton);
 }
 
 void GameApp::updateGameBoard(Uint32 deltaTime)

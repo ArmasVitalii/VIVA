@@ -70,7 +70,7 @@ private:
 	void updateSplash(Uint32 deltaTime);
 	void renderSplash();
 	void renderMainMenu();
-	void updateMainMenu();
+	void updateMainMenu(); 
 	void renderSettingsMenu();
 	void updateSettingsMenu();
 	void renderGameBoard();
