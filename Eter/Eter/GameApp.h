@@ -50,4 +50,33 @@ private:
 	//Main Menu and Settings
 	Button playButton, settingsButton, quitButton;
 	Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
+
+	//Game Board
+	std::vector<Card> cards;
+	SDL_Point boardPos;
+
+	enum GameState {
+		SPLASH, MAIN_MENU, SETTINGS, PLAY, QUIT
+	};
+	GameState currentState;
+	bool running;
+
+	//Private Helper Functions
+	Uint32 getTick();
+	void handleEvents();
+	void update(Uint32 deltaTime);
+	void render();
+
+	void updateSplash(Uint32 deltaTime);
+	void renderSplash();
+	void renderMainMenu();
+	void updateMainMenu();
+	void renderSettingsMenu();
+	void updateSettingsMenu();
+	void renderGameBoard();
+	void updateGameBoard(Uint32 deltaTime);
+
+	void initButtons();
+	void initCards();
+	bool isMouseOverButton(int mouseX, int mouseY, const Button& btn);
 };
