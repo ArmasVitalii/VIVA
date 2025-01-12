@@ -268,4 +268,95 @@ void GameApp::handleEvents()
     }
 }
 
+void GameApp::update(Uint32 deltaTime) // UPDATE LOGIC (PER STATE)
+{
+    switch (currentState) 
+    {
+    case SPLASH:
+        updateSplash(deltaTime);
+        break;
+    case MAIN_MENU:
+        updateMainMenu();
+        break;
+    case SETTINGS:
+        updateSettingsMenu();
+        break;
+    case PLAY:
+        updateGameBoard(deltaTime);
+        break;
+    case QUIT:
+        // We handle QUIT in event or do immediate break
+        running = false;
+        break;
+    }
+}
+
+void GameApp::updateSplash(Uint32 deltaTime)
+{
+    splashTimer += deltaTime;
+    // Half the fadeDuration is fade in, second half is fade out
+    if (fadeIn) 
+    {
+        // fade in
+        float ratio = (float)splashTimer / (fadeDuration / 2);
+        splashAlpha = (int)(255.0f * ratio);
+        if (splashAlpha >= 255)
+        {
+            splashAlpha = 255;
+            fadeIn = false;
+            // reset timer so we can fade out
+            splashTimer = 0;
+        }
+    }
+    else 
+    {
+        // fade out
+        float ratio = (float)splashTimer / (fadeDuration / 2);
+        splashAlpha = 255 - (int)(255.0f * ratio);
+        if (splashAlpha <= 0) 
+        {
+            splashAlpha = 0;
+            // Go to main menu
+            currentState = MAIN_MENU;
+        }
+    }
+    SDL_SetTextureAlphaMod(splashTexture, splashAlpha);
+}
+
+void GameApp::updateMainMenu()
+{
+    // Could do button hover detection, animations, etc.
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+    playButton.hovered = isMouseOverButton(mx, my, playButton);
+    settingsButton.hovered = isMouseOverButton(mx, my, settingsButton);
+    quitButton.hovered = isMouseOverButton(mx, my, quitButton);
+}
+
+void GameApp::updateSettingsMenu()
+{
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+    settingsButton1.hovered = isMouseOverButton(mx, my, settingsButton1);
+    settingsButton2.hovered = isMouseOverButton(mx, my, settingsButton2);
+    settingsButton3.hovered = isMouseOverButton(mx, my, settingsButton3);
+    settingsBackButton.hovered = isMouseOverButton(mx, my, settingsBackButton);
+}
+
+void GameApp::updateGameBoard(Uint32 deltaTime)
+{
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+    settingsBackButton.hovered = isMouseOverButton(mx, my, settingsBackButton);
+
+    // Here is where you'd update game board logic, animations, etc.
+    // For now, just manage card movement in event code
+    (void)deltaTime; // unused in this basic sample
+}
+
+
+
+
+
+
 
