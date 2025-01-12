@@ -186,3 +186,86 @@ void GameApp::initCards()
     // Board position
     boardPos = { (SCREEN_WIDTH - 400) / 2, (SCREEN_HEIGHT - 400) / 2 };
 }
+
+Uint32 GameApp::getTick()
+{
+    return SDL_GetTicks();
+}
+
+void GameApp::handleEvents()
+{
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) 
+    {
+        if (e.type == SDL_QUIT) {
+            running = false;
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN)
+        {
+            int mx = e.button.x;
+            int my = e.button.y;
+
+            // Handle button clicks by state
+            if (currentState == MAIN_MENU)
+            {
+                if (isMouseOverButton(mx, my, playButton)) {
+                    currentState = PLAY;
+                }
+                else if (isMouseOverButton(mx, my, settingsButton)) {
+                    currentState = SETTINGS;
+                }
+                else if (isMouseOverButton(mx, my, quitButton)) {
+                    currentState = QUIT;
+                    running = false;
+                }
+            }
+            else if (currentState == SETTINGS)
+            {
+                if (isMouseOverButton(mx, my, settingsBackButton)) {
+                    currentState = MAIN_MENU;
+                }
+                // Additional settings button logic can go here...
+            }
+            else if (currentState == PLAY) 
+            {
+                // Check if we clicked on any card
+                for (auto& card : cards)
+                {
+                    if (mx >= card.rect.x && mx <= card.rect.x + card.rect.w &&
+                        my >= card.rect.y && my <= card.rect.y + card.rect.h) {
+                        card.beingDragged = true;
+                        card.offsetX = mx - card.rect.x;
+                        card.offsetY = my - card.rect.y;
+                    }
+                }
+                if (isMouseOverButton(mx, my, settingsBackButton)) {
+                    currentState = MAIN_MENU;
+                }
+            }
+        }
+        else if (e.type == SDL_MOUSEBUTTONUP) 
+        {
+            // Release any dragged card
+            for (auto& card : cards)
+            {
+                card.beingDragged = false;
+            }
+        }
+        else if (e.type == SDL_MOUSEMOTION && currentState == PLAY) 
+        {
+            // Move any card that’s being dragged
+            int mx = e.motion.x;
+            int my = e.motion.y;
+            for (auto& card : cards)
+            {
+                if (card.beingDragged)
+                {
+                    card.rect.x = mx - card.offsetX;
+                    card.rect.y = my - card.offsetY;
+                }
+            }
+        }
+    }
+}
+
+
