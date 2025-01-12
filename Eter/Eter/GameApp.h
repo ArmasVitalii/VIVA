@@ -17,9 +17,9 @@ struct Button {
 };
 
 struct Card {
-	SDL_Rect rect;
-	bool beingDragged;
-	int offsetX, offsetY;
+	SDL_Rect rect;			//The position and size on the screen
+	bool beingDragged;		//Are we currently dragging this card?
+	int offsetX, offsetY;	// Mouse offsets when dragging
 };
 
 //Game Application Class
@@ -36,10 +36,10 @@ private:
 	SDL_Renderer* renderer;
 
 	//Textures and Splash
-	SDL_Texture* splashTexture;
-	SDL_Texture* mainMenuBg;
-	SDL_Texture* settingsBg;
-	SDL_Texture* gameBoardBg;
+	SDL_Texture* splashTexture;		//current alpha value 0..255
+	SDL_Texture* mainMenuBg;		//how long we’ve been in the splash state (ms)
+	SDL_Texture* settingsBg;		//total fade in + fade out time in ms
+	SDL_Texture* gameBoardBg;		// whether we are in fade in or fade out
 
 	//Splash/Fade Logic
 	int splashAlpha;
@@ -52,11 +52,15 @@ private:
 	Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
 
 	//Game Board
-	std::vector<Card> cards;
-	SDL_Point boardPos;
+	std::vector<Card> cards;	//The 5 movable cards
+	SDL_Point boardPos;			// Where to draw the board
 
 	enum GameState {
-		SPLASH, MAIN_MENU, SETTINGS, PLAY, QUIT
+		SPLASH,
+		MAIN_MENU,
+		SETTINGS,
+		PLAY,
+		QUIT
 	};
 	GameState currentState;
 	bool running;
@@ -69,10 +73,13 @@ private:
 
 	void updateSplash(Uint32 deltaTime);
 	void renderSplash();
+
 	void renderMainMenu();
 	void updateMainMenu(); 
+
 	void renderSettingsMenu();
 	void updateSettingsMenu();
+
 	void renderGameBoard();
 	void updateGameBoard(Uint32 deltaTime);
 
