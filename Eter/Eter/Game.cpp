@@ -66,7 +66,7 @@ void Game::printLogic() const
 	}
 
 	auto magicPowers = getMagicPowers(m_currentPlayer);
-	if (!magicPowers.empty())
+	if (!magicPowers.empty() && !m_players[static_cast<size_t>(m_currentPlayer)].hasUsedMagic())
 	{
 		std::cout << "\n> Magic Powers: \n";
 		for (const auto& magicPower : magicPowers)
@@ -80,6 +80,17 @@ void Game::printLogic() const
 Player& Game::getCurrentPlayer()
 {
 	return m_players[static_cast<size_t>(m_currentPlayer)];
+}
+
+Player& Game::getCurrentOpponent()
+{
+	auto currentOpponent = (m_currentPlayer == PlayerEnum::Player1) ? PlayerEnum::Player2 : PlayerEnum::Player1;
+	return m_players[static_cast<size_t>(currentOpponent)];
+}
+
+Player& Game::getPlayerBasedOnEnum(PlayerEnum playerEnum)
+{
+	return m_players[static_cast<size_t>(playerEnum)];
 }
 
 bool Game::checkWinCase1(PlayerEnum currentPlayer) const
@@ -234,7 +245,7 @@ std::string_view Game::getPlayerChoice() const
 	{
 		std::cout << " > Mage\n";
 	}
-	if (!gamemode.getMagicPowers().empty())
+	if (!gamemode.getMagicPowers().empty() && !player.hasUsedMagic())
 	{
 		std::cout << " > Magic\n";
 	}
@@ -284,7 +295,7 @@ void Game::handleChoice(std::string_view choice)
 	}
 	else if (choice == "magic")
 	{
-		//magic();
+		useMagicPowers();
 	}
 	else if (choice == "illusion")
 	{
@@ -303,6 +314,11 @@ void Game::handleChoice(std::string_view choice)
 
 void Game::returnToPlayer()
 {
+	if (m_board.isBoardEmpty())
+	{
+		return;
+	}
+
 	size_t posX, posY;
 	std::cout << "Return to player the card on position: ";
 	std::cin >> posX>> posY;
@@ -328,6 +344,11 @@ void Game::returnToPlayer()
 
 void Game::placeRandomPit()
 {
+	if (!m_board.canHandlePit())
+	{
+		return;
+	}
+
 	auto gMiddle = m_board.getGridMiddle();
 	auto is4x4 = m_players[0].getGamemode().getIs4x4();
 
@@ -357,6 +378,11 @@ void Game::placeRandomPit()
 
 void Game::removeCard()
 {
+	if (m_board.isBoardEmpty())
+	{
+		return;
+	}
+
 	size_t posX, posY;
 	std::cout << "Remove the card on position: ";
 	std::cin >> posX >> posY;
@@ -398,7 +424,42 @@ void Game::useMage()
 	}
 	else
 	{
-		std::cout << "here";
+		std::cout << "here mage";
+		return;
+	}
+}
+
+void Game::useMagicPowers()
+{
+	if (!m_players[static_cast<size_t>(m_currentPlayer)].hasUsedMagic())
+	{
+		if (m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[0]->hasBeenUsed())
+		{
+			m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[1]->usePower(*this);
+			return;
+		}
+		else if (m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[1]->hasBeenUsed())
+		{
+			m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[0]->usePower(*this);
+			return;
+		}
+
+		int choice;
+		std::cout << "\nWhich power do you choose: 1 or 2: ";
+		std::cin >> choice;
+
+		if (0 >= choice || choice > 2)
+		{
+			std::cout << "\nInvalid choice!\n";
+			return;
+		}
+
+		m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[choice-1]->usePower(*this);
+		std::cout << "\n==============================================================\n";
+	}
+	else
+	{
+		std::cout << "here magic";
 		return;
 	}
 }
@@ -662,6 +723,8 @@ void Game::placeCard()
 	}
 
 	m_board.insertCard(Card{ m_input.value,m_currentPlayer }, m_input.position);
+
+	getCurrentPlayer().updateLastCardPlaced(m_input.position);
 
 	if (m_areExplosionsEnabled && verifyExplosionCriteria())
 	{

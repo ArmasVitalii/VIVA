@@ -1,4 +1,5 @@
 #include "FromAshes.h"
+#include "Game.h"
 
 FromAshes::FromAshes()
 {
@@ -10,7 +11,8 @@ void FromAshes::getDescription() const
     std::cout << m_description << std::endl;
 }
 
-void FromAshes::usePower() const
+bool FromAshes::usePower(Game& game)
 {
     std::cout << "FromAshes power activated: Choose and play one of your own removed cards immediately." << std::endl;
+    return false;
 }

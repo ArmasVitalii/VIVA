@@ -7,5 +7,5 @@ class Flames : public AbstractMagic
 public:
     Flames();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

@@ -18,5 +18,7 @@ int main(int argc, char* argv[]) {
     app.run();
     app.clean();*/
 	
+	//daca ai timp, reset valid positions
+
 	return 0;
 }

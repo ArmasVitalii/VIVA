@@ -7,5 +7,5 @@ class FromAshes : public AbstractMagic
 public:
     FromAshes();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

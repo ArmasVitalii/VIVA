@@ -52,15 +52,12 @@ private:
 
     bool                                                verifyExplosionCriteria() const;
 
-    void                                                placeCard();
-    void                                                placeIllusion();
-    void                                                useExplosion();
+    void                                                useMagicPowers();
     void                                                useMage();
     void                                                handleEterCard(const std::pair<size_t, size_t>& position);
     void                                                resetGame();
 
 
-    bool                                                validateIllusionCover(const std::pair<size_t, size_t>& position, uint8_t value);
     bool                                                getResponse() const;
     void                                                simulateLastMove();
 public:
@@ -68,9 +65,16 @@ public:
 
     PlayerEnum                                          playGame();
 
+    void                                                placeCard();
 
     Gamematrix&                                         accessGameboardAPI();
     Board&                                              accessBoard();
     PlayerEnum                                          getCurrentPlayerEnum();
     Player&                                             getCurrentPlayer();
+    Player&                                             getCurrentOpponent();
+    Player&                                             getPlayerBasedOnEnum(PlayerEnum playerEnum);
+
+    bool                                                validateIllusionCover(const std::pair<size_t, size_t>& position, uint8_t value);
+    void                                                useExplosion();
+    void                                                placeIllusion();
 };
