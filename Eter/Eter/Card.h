@@ -16,6 +16,6 @@ public:
 	PlayerEnum	getPlayerID() const;
 	bool		isIllusion() const;
 	void		discoverIllusion();
-	uint8_t		getRealValue() const;
+	int		getRealValue() const;
 };
 

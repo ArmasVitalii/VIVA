@@ -7,5 +7,5 @@ class Crack : public AbstractMagic
 public:
     Crack();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

@@ -75,6 +75,9 @@ public:
 	const std::pair<float, float>&					getGridMiddle() const;
 	bool											getis4x4() const;
 	uint8_t											getValueAt(const std::pair<size_t, size_t>& position) const;
+	Card&											getCardOnTopAt(const std::pair<size_t, size_t>& position);
+	bool											isBoardEmpty() const;
+	bool											canHandlePit() const;
 
 	void											resetBoard();
 };

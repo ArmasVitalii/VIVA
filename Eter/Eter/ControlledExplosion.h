@@ -7,5 +7,5 @@ class ControlledExplosion : public AbstractMagic
 public:
     ControlledExplosion();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

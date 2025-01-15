@@ -147,7 +147,6 @@ void Board::printGameboard() const
     }
 }
 
-
 void Board::printValidPositions() const
 {
     std::cout << "\n";
@@ -172,6 +171,7 @@ void Board::addPositionToValid(const std::pair<size_t, size_t>& position)
         }
     }
 }
+
 
 void Board::removePositionFromValid(const std::pair<size_t, size_t>& position)
 {
@@ -210,6 +210,7 @@ void Board::insertCard(Card&& card, const std::pair<size_t, size_t>& position)
     bridge.incrementRowPocket(normalisedCoords.second, card.getPlayerID());
 
     m_board[position.first][position.second]->push(std::move(card));
+    addPositionToValid(position);
 }
 
 void Board::removeCard(const std::pair<size_t, size_t>& position)
@@ -239,6 +240,16 @@ void Board::removeCard(const std::pair<size_t, size_t>& position)
         auto& newTopCard = m_board[position.first][position.second]->top();
         bridge.incrementColumnPocket(normalisedCoords.first, newTopCard.getPlayerID());
         bridge.incrementRowPocket(normalisedCoords.second, newTopCard.getPlayerID());
+    }
+
+    if (m_noOfSpacesFilled == 0)
+    {
+        m_gridMiddle = { k_baseGridMiddleCoordonate + 0.5 * m_gamemode.get().getIs4x4(),
+                         k_baseGridMiddleCoordonate + 0.5 * m_gamemode.get().getIs4x4() };
+        m_validPositions.clear();
+        m_validPositions.insert({ k_baseGridMiddleCoordonate + m_gamemode.get().getIs4x4(), k_baseGridMiddleCoordonate + m_gamemode.get().getIs4x4() });
+
+        return;
     }
 }
 
@@ -556,8 +567,25 @@ bool Board::getis4x4() const
 uint8_t Board::getValueAt(const std::pair<size_t, size_t>& position) const
 {
     if (m_board[position.first][position.second].has_value())
-        return m_board[position.first][position.second]->top().getRealValue();
-    return 0;
+        return m_board[position.first][position.second]->top().getValue();
+    return 255;
+}
+
+Card& Board::getCardOnTopAt(const std::pair<size_t, size_t>& position)
+{
+    if (m_board[position.first][position.second].has_value())
+        return m_board[position.first][position.second]->top();
+    throw "Unexpected error on getCardOnTopAt";
+}
+
+bool Board::isBoardEmpty() const
+{
+    return m_noOfSpacesFilled == 0;
+}
+
+bool Board::canHandlePit() const
+{
+    return m_validPositions.size() != 1;
 }
 
 void Board::resetBoard()

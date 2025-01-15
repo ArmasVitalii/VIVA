@@ -7,5 +7,5 @@ class Cascade : public AbstractMagic
 public:
     Cascade();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

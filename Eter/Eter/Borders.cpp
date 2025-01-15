@@ -1,4 +1,5 @@
 #include "Borders.h"
+#include "Game.h"
 
 Borders::Borders()
 {
@@ -10,7 +11,8 @@ void Borders::getDescription() const
     std::cout << m_description << std::endl;
 }
 
-void Borders::usePower() const
+bool Borders::usePower(Game& game) 
 {
     std::cout << "Borders power activated: Place a neutral card and then play a card from your hand." << std::endl;
+    return false;
 }

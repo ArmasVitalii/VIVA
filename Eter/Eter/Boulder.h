@@ -7,5 +7,5 @@ class Boulder : public AbstractMagic
 public:
     Boulder();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

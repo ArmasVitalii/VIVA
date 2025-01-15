@@ -31,17 +31,17 @@ void Card::discoverIllusion()
 	m_isIllusion = false;
 }
 
-uint8_t Card::getRealValue() const
+int Card::getRealValue() const
 {
-	uint8_t value;
+	int value;
 
 	if (m_isIllusion || m_hasBeenDiscovered)
 	{
-		value = 1u;
+		value = 1;
 	}
 	else
 	{
-		value = m_cardValue;
+		value = static_cast<int>(m_cardValue);
 	}
 
 	return (m_playerID == PlayerEnum::Player1) ? value : -value;
