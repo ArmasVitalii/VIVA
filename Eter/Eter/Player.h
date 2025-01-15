@@ -17,6 +17,8 @@ private:
     bool                                    m_hasUsedMagicPower;
     bool                                    m_hasUsedIllusion;
     bool                                    m_canUseExplosions;
+
+    std::pair<size_t, size_t>               mtest_lastPlacedCardCoords;
 public:
     explicit Player(const std::reference_wrapper<const Gamemode>& gamemode, const std::reference_wrapper<const Bridge>& bridge);
 
@@ -28,17 +30,19 @@ public:
     void                                    addCard(uint8_t card);
     bool                                    removeCard(uint8_t cardValue);
 
-
+    bool                                    hasUsedIllusion() const;
     bool                                    hasUsedAllCards() const;
     bool                                    hasUsedMage() const;
     bool                                    hasUsedMagic() const;
     const Gamemode&                         getGamemode() const;
 
-    bool                                    hasUsedIllusion() const;
     void                                    markIllusionUsed();
     void                                    markMageUsed();
+    void                                    markMagicUsed();
     void                                    resetPlayer();
     void                                    resetMagic();
     void                                    enableExplosion();
     bool                                    canUseExplosion() const;
+    const std::pair<size_t, size_t>&        getLastCardPlacedCoords() const;
+    void                                    updateLastCardPlaced(const std::pair<size_t,size_t>& position);
 };

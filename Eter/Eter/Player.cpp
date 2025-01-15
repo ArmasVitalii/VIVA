@@ -9,7 +9,8 @@ Player::Player(const std::reference_wrapper<const Gamemode>& gamemode, const std
     m_hasUsedMage{ gamemode.get().getMages().empty() },
     m_hasUsedMagicPower{ gamemode.get().getMagicPowers().empty() },
     m_hasUsedIllusion{ false },
-    m_canUseExplosions{false}
+    m_canUseExplosions{ false },
+    mtest_lastPlacedCardCoords{0,0}
 {
     initialisePlayerCards();
 }
@@ -97,6 +98,11 @@ void Player::markMageUsed()
     m_hasUsedMage = true;
 }
 
+void Player::markMagicUsed()
+{
+    m_hasUsedMagicPower = true;
+}
+
 void Player::resetPlayer()
 {
     m_cards = m_gamemode.get().getCardList();
@@ -117,4 +123,14 @@ void Player::enableExplosion()
 bool Player::canUseExplosion() const
 {
     return m_canUseExplosions;
+}
+
+const std::pair<size_t, size_t>& Player::getLastCardPlacedCoords() const
+{
+    return mtest_lastPlacedCardCoords;
+}
+
+void Player::updateLastCardPlaced(const std::pair<size_t, size_t>& position)
+{
+    mtest_lastPlacedCardCoords = position;
 }
