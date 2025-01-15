@@ -78,6 +78,7 @@ public:
 	Card&											getCardOnTopAt(const std::pair<size_t, size_t>& position);
 	bool											isBoardEmpty() const;
 	bool											canHandlePit() const;
+	void											revalidateInsertPosition();
 
 	void											resetBoard();
 };

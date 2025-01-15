@@ -420,6 +420,7 @@ void Game::useMage()
 	if (!m_players[static_cast<size_t>(m_currentPlayer)].hasUsedMage())
 	{
 		m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMages()[static_cast<size_t>(m_currentPlayer)]->usePower(*this);
+		m_board.revalidateInsertPosition();
 		std::cout << "\n==============================================================\n";
 	}
 	else
@@ -436,11 +437,13 @@ void Game::useMagicPowers()
 		if (m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[0]->hasBeenUsed())
 		{
 			m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[1]->usePower(*this);
+			m_board.revalidateInsertPosition();
 			return;
 		}
 		else if (m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[1]->hasBeenUsed())
 		{
 			m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[0]->usePower(*this);
+			m_board.revalidateInsertPosition();
 			return;
 		}
 
@@ -455,6 +458,7 @@ void Game::useMagicPowers()
 		}
 
 		m_players[static_cast<size_t>(m_currentPlayer)].getGamemode().getMagicPowers()[choice-1]->usePower(*this);
+		m_board.revalidateInsertPosition();
 		std::cout << "\n==============================================================\n";
 	}
 	else

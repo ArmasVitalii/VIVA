@@ -588,6 +588,25 @@ bool Board::canHandlePit() const
     return m_validPositions.size() != 1;
 }
 
+void Board::revalidateInsertPosition()
+{
+    m_validPositions.clear();
+    for (size_t i = m_gridMiddle.first - 1 - 0.5 * m_gamemode.get().getIs4x4(); i <= m_gridMiddle.first + 1 + 0.5 * m_gamemode.get().getIs4x4(); i++)
+    {
+        for (size_t j = m_gridMiddle.second - 1 - 0.5 * m_gamemode.get().getIs4x4(); j <= m_gridMiddle.second + 1 + 0.5 * m_gamemode.get().getIs4x4(); j++)
+        {
+            if (m_board[i][j].has_value())
+            {
+                addPositionToValid({ i,j });
+            }
+        }
+    }
+    if (m_validPositions.size() == 0)
+    {
+        m_validPositions.insert({ k_baseGridMiddleCoordonate + m_gamemode.get().getIs4x4(), k_baseGridMiddleCoordonate + m_gamemode.get().getIs4x4() });
+    }
+}
+
 void Board::resetBoard()
 {
     for (auto position : m_validPositions)

@@ -46,9 +46,6 @@
     <ClCompile Include="Wave.cpp">
       <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
-    <ClCompile Include="Tsunami.cpp">
-      <Filter>Source Files\Magic Management\MagicPowers</Filter>
-    </ClCompile>
     <ClCompile Include="Tide.cpp">
       <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
@@ -76,9 +73,6 @@
     <ClCompile Include="Gale.cpp">
       <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
-    <ClCompile Include="FromAshes.cpp">
-      <Filter>Source Files\Magic Management\MagicPowers</Filter>
-    </ClCompile>
     <ClCompile Include="Fog.cpp">
       <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
@@ -103,9 +97,6 @@
     <ClCompile Include="Boulder.cpp">
       <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
-    <ClCompile Include="Borders.cpp">
-      <Filter>Source Files\Magic Management\MagicPowers</Filter>
-    </ClCompile>
     <ClCompile Include="Blizzard.cpp">
       <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
@@ -114,9 +105,6 @@
     </ClCompile>
     <ClCompile Include="AbstractMagic.cpp">
       <Filter>Source Files\Magic Management</Filter>
-    </ClCompile>
-    <ClCompile Include="WaterVortex.cpp">
-      <Filter>Source Files\Magic Management\MagicPowers</Filter>
     </ClCompile>
     <ClCompile Include="MagicDistributor.cpp">
       <Filter>Source Files\Magic Management</Filter>
@@ -201,9 +189,6 @@
     <ClInclude Include="Blizzard.h">
       <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
-    <ClInclude Include="Borders.h">
-      <Filter>Header Files\Magic Management\MagicPowers</Filter>
-    </ClInclude>
     <ClInclude Include="Boulder.h">
       <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
@@ -226,9 +211,6 @@
       <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
     <ClInclude Include="Fog.h">
-      <Filter>Header Files\Magic Management\MagicPowers</Filter>
-    </ClInclude>
-    <ClInclude Include="FromAshes.h">
       <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
     <ClInclude Include="Gale.h">
@@ -258,17 +240,11 @@
     <ClInclude Include="Tide.h">
       <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
-    <ClInclude Include="Tsunami.h">
-      <Filter>Header Files\Magic Management\MagicPowers</Filter>
-    </ClInclude>
     <ClInclude Include="Wave.h">
       <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
     <ClInclude Include="AbstractMagic.h">
       <Filter>Header Files\Magic Management</Filter>
-    </ClInclude>
-    <ClInclude Include="WaterVortex.h">
-      <Filter>Header Files\Magic Management\MagicPowers</Filter>
     </ClInclude>
     <ClInclude Include="MagicDistributor.h">
       <Filter>Header Files\Magic Management</Filter>

@@ -144,7 +144,6 @@
     <ClCompile Include="Avalanche.cpp" />
     <ClCompile Include="Blizzard.cpp" />
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Borders.cpp" />
     <ClCompile Include="Boulder.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Card.cpp" />
@@ -158,7 +157,6 @@
     <ClCompile Include="FireMage.cpp" />
     <ClCompile Include="Flames.cpp" />
     <ClCompile Include="Fog.cpp" />
-    <ClCompile Include="FromAshes.cpp" />
     <ClCompile Include="Gale.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameApp.cpp" />
@@ -184,9 +182,7 @@
     <ClCompile Include="StormSurge.cpp" />
     <ClCompile Include="Support.cpp" />
     <ClCompile Include="Tide.cpp" />
-    <ClCompile Include="Tsunami.cpp" />
     <ClCompile Include="WaterMage.cpp" />
-    <ClCompile Include="WaterVortex.cpp" />
     <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +194,6 @@
     <ClInclude Include="Avalanche.h" />
     <ClInclude Include="Blizzard.h" />
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Borders.h" />
     <ClInclude Include="Boulder.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Card.h" />
@@ -212,7 +207,6 @@
     <ClInclude Include="FireMage.h" />
     <ClInclude Include="Flames.h" />
     <ClInclude Include="Fog.h" />
-    <ClInclude Include="FromAshes.h" />
     <ClInclude Include="Gale.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameApp.h" />
@@ -236,9 +230,7 @@
     <ClInclude Include="StormSurge.h" />
     <ClInclude Include="Support.h" />
     <ClInclude Include="Tide.h" />
-    <ClInclude Include="Tsunami.h" />
     <ClInclude Include="WaterMage.h" />
-    <ClInclude Include="WaterVortex.h" />
     <ClInclude Include="Wave.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
