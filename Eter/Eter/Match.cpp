@@ -30,7 +30,7 @@ void Match::startMatch()
             reset();
         }
 
-        std::cout << "\n\nSTARTING GAME NUMBER" << static_cast<int>(m_matchNumber) << "!\n\n";
+        std::cout << "\n\nSTARTING GAME NUMBER " << static_cast<int>(m_matchNumber) << "!\n\n";
         winner = startGame();
     } while (!matchWon(winner));
 

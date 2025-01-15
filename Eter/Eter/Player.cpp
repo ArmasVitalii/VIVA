@@ -106,8 +106,6 @@ void Player::markMagicUsed()
 void Player::resetPlayer()
 {
     m_cards = m_gamemode.get().getCardList();
-    m_hasUsedMagicPower = false;
-    m_hasUsedIllusion = false;
 }
 
 void Player::resetMagic()
@@ -134,3 +132,4 @@ void Player::updateLastCardPlaced(const std::pair<size_t, size_t>& position)
 {
     mtest_lastPlacedCardCoords = position;
 }
+

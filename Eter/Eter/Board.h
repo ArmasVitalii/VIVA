@@ -36,7 +36,7 @@ private:
 	LockCaseEnum                                    m_lockcase;
 	std::unordered_set<std::pair<int, int>, Hash>   m_validPositions;
 	uint8_t											m_noOfSpacesFilled{ 0 };
-
+	bool											m_hasExploded{ false };
 
 
 	void											interpretLockcase();

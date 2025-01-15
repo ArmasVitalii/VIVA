@@ -42,4 +42,5 @@ public:
     void                                                setHasExplosions(bool value);
 
     void                                                printSetup() const;
+    void                                                resetUsage();
 };

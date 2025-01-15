@@ -5,7 +5,7 @@
 #include <functional>
 
 
-Game::Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players)
+Game::Game(Bridge& bridge, const Board& board,const std::array<Player, 2>& players)
 	:m_bridge{bridge},
 	m_board{board},
 	m_players{players}
@@ -47,6 +47,13 @@ void Game::simulateLastMove()
 {
 	switchPlayer();
 	placeCard();
+}
+
+void Game::resetGame()
+{
+	m_players[0].initialisePlayerCards();
+	m_players[1].initialisePlayerCards();
+	m_board.resetBoard();
 }
 
 void Game::printLogic() const
@@ -515,12 +522,6 @@ void Game::handleEterCard(const std::pair<size_t,size_t>& position)
 	std::cout << "\n==============================================================\n";
 }
 
-void Game::resetGame()
-{
-	m_board.resetBoard();
-	m_players[static_cast<size_t>(PlayerEnum::Player1)].resetPlayer();
-	m_players[static_cast<size_t>(PlayerEnum::Player2)].resetPlayer();
-}
 
 PlayerEnum Game::playGame()
 {
@@ -667,6 +668,7 @@ void Game::useExplosion()
 		int chosenFunction = functionDist(gen);
 		functions[chosenFunction]();
 	}
+
 }
 
 void Game::placeCard()

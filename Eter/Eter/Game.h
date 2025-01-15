@@ -17,12 +17,13 @@ private:
         uint8_t value;
         void readInput();
     };
+ 
 
     Input					                            m_input;
 
     Bridge& m_bridge;
     Board                                               m_board;
-    std::array<Player, 2>& m_players;
+    std::array<Player, 2> m_players;
 
     PlayerEnum				                            m_currentPlayer{ k_baseFirstPlayer };
     bool                                                m_areExplosionsEnabled{ m_players[0].getGamemode().getHasExplosions() };
@@ -55,13 +56,13 @@ private:
     void                                                useMagicPowers();
     void                                                useMage();
     void                                                handleEterCard(const std::pair<size_t, size_t>& position);
-    void                                                resetGame();
-
 
     bool                                                getResponse() const;
     void                                                simulateLastMove();
+    void                                                resetGame();
+
 public:
-    explicit Game(Bridge& bridge, const Board& board, std::array<Player, 2>& players);
+    explicit Game(Bridge& bridge, const Board& board, const std::array<Player, 2>& players);
 
     PlayerEnum                                          playGame();
 

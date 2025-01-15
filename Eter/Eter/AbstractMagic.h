@@ -16,4 +16,5 @@ public:
     virtual void getDescription() const = 0;
     virtual bool usePower(Game& game) = 0;
     bool hasBeenUsed() const;
+    void resetUsage();
 };

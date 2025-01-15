@@ -107,3 +107,11 @@ void Gamemode::printSetup() const
     std::cout << "Has Timer: " << (m_hasTimer ? "Yes" : "No") << std::endl;
     std::cout << "========================\n";
 }
+
+void Gamemode::resetUsage()
+{
+    for (auto& magic : m_magicPowers)
+    {
+        magic.get()->resetUsage();
+    }
+}
