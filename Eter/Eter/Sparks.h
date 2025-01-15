@@ -7,5 +7,5 @@ class Sparks : public AbstractMagic
 public:
     Sparks();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

@@ -1,4 +1,5 @@
 #include "Tsunami.h"
+#include "Game.h"
 
 Tsunami::Tsunami()
 {
@@ -10,7 +11,8 @@ void Tsunami::getDescription() const
     std::cout << m_description << std::endl;
 }
 
-void Tsunami::usePower() const
+bool Tsunami::usePower(Game& game)
 {
     std::cout << "Tsunami power activated: The opponent cannot place cards on the chosen row during their next turn." << std::endl;
+    return false;
 }

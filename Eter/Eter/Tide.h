@@ -7,5 +7,5 @@ class Tide : public AbstractMagic
 public:
     Tide();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

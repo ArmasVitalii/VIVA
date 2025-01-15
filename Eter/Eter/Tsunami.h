@@ -7,5 +7,5 @@ class Tsunami : public AbstractMagic
 public:
     Tsunami();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };

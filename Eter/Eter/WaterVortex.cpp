@@ -1,4 +1,5 @@
 #include "WaterVortex.h"
+#include "Game.h"
 
 WaterVortex::WaterVortex()
 {
@@ -10,7 +11,8 @@ void WaterVortex::getDescription() const
     std::cout << m_description << std::endl;
 }
 
-void WaterVortex::usePower() const
+bool WaterVortex::usePower(Game& game)
 {
     std::cout << "WaterVortex power activated: Move 2 cards onto an empty space. The higher numbered card goes on top." << std::endl;
+    return false;
 }

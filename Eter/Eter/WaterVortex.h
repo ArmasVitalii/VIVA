@@ -7,5 +7,5 @@ class WaterVortex : public AbstractMagic
 public:
     WaterVortex();
     void getDescription() const override;
-    void usePower() const override;
+    bool usePower(Game& game) override;
 };
