@@ -206,7 +206,7 @@ void GameApp::initButtons()
     settingsButton2.hovered = false;
 
     settingsButton3.rect = { 200, 420, buttonWidth, buttonHeight };
-    settingsButton3.text = "Option C";
+    settingsButton3.text = "Training";
     settingsButton3.hovered = false;
 
     settingsBackButton.rect = { 200, 530, buttonWidth, buttonHeight };
@@ -285,6 +285,10 @@ void GameApp::handleEvents()
                 }
                 else if (isMouseOverButton(mx, my, settingsButton2)) {
                     selectedGameMode = GameMode::TEN_CARDS;
+                }
+                else if (isMouseOverButton(mx, my, settingsButton3)) {
+                    // This sets the game to TRAINING mode
+                    selectedGameMode = GameMode::TRAINING;
                 }
                 // etc.
             }
@@ -558,6 +562,7 @@ void GameApp::renderGameBoard()
         if (card.faceUp) {
             // white for face-up
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
         }
         else {
             // grey if hidden
@@ -599,32 +604,59 @@ void GameApp::startGame()
     // Clear old hands
     player1.hand.clear();
     player2.hand.clear();
+    if (selectedGameMode == GameMode::TRAINING) {
+        // 1) Hard-code the 7 training card values
+        std::vector<int> trainingValues = { 1,1,2,2,3,3,4 };
 
-    // Decide how many cards per player
-    int numCards = (selectedGameMode == GameMode::SEVEN_CARDS) ? 7 : 10;
+        // 2) For each player, create 7 cards with these values
+        for (int i = 0; i < 7; ++i) {
+            Cardx cardP1;
+            cardP1.value = trainingValues[i];
+            cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
+            cardP1.beingDragged = false;
+            cardP1.faceUp = true;  // player1 is active at start
+            player1.hand.push_back(cardP1);
 
-    // Create dummy cards for each player
-    for (int i = 0; i < numCards; ++i)
-    {
-        // Player 1's card
-        Cardx cardP1;
-        cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
-        cardP1.beingDragged = false;
-        cardP1.offsetX = 0;
-        cardP1.offsetY = 0;
-        cardP1.faceUp = true; // player1 is active initially
-        player1.hand.push_back(cardP1);
+            Cardx cardP2;
+            cardP2.value = trainingValues[i];
+            cardP2.rect = { 100 + i * 70, 100, 60, 90 };
+            cardP2.beingDragged = false;
+            cardP2.faceUp = false; // hidden if not active
+            player2.hand.push_back(cardP2);
+        }
 
-        // Player 2's card
-        Cardx cardP2;
-        cardP2.rect = { 100 + i * 70, 100, 60, 90 };
-        cardP2.beingDragged = false;
-        cardP2.offsetX = 0;
-        cardP2.offsetY = 0;
-        cardP2.faceUp = false; // hidden if not their turn
-        player2.hand.push_back(cardP2);
+        // 3) Force a 3×3 board (If your code uses board init constants, just ensure ROWS=3, COLS=3)
+        // Example: If you normally do something like "initBoard(ROWS, COLS)", pass 3,3 or
+        // just have your initBoard() function be specifically for 3×3 in training.
+        initBoard(); // you might set it up so it’s always 3×3 for training mode
+
     }
+    else {
+        // Decide how many cards per player
+        int numCards = (selectedGameMode == GameMode::SEVEN_CARDS) ? 7 : 10;
 
+        // Create dummy cards for each player
+        for (int i = 0; i < numCards; ++i)
+        {
+            // Player 1's card
+            Cardx cardP1;
+            cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
+            cardP1.beingDragged = false;
+            cardP1.offsetX = 0;
+            cardP1.offsetY = 0;
+            cardP1.faceUp = true; // player1 is active initially
+            player1.hand.push_back(cardP1);
+
+            // Player 2's card
+            Cardx cardP2;
+            cardP2.rect = { 100 + i * 70, 100, 60, 90 };
+            cardP2.beingDragged = false;
+            cardP2.offsetX = 0;
+            cardP2.offsetY = 0;
+            cardP2.faceUp = false; // hidden if not their turn
+            player2.hand.push_back(cardP2);
+        }
+    }
     // Active player = player1
     currentPlayerIndex = 0;
 

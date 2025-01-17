@@ -31,6 +31,7 @@ struct Cardx {
     bool beingDragged;
     int offsetX, offsetY; // For mouse dragging offsets
     bool faceUp;       // True if visible to the user, false if hidden
+    int value;
 };
 
 // Board cell to track which card is placed
@@ -58,7 +59,8 @@ struct Player_UI {
 // Possible game modes for how many cards each player gets
 enum class GameMode {
     SEVEN_CARDS,
-    TEN_CARDS
+    TEN_CARDS,
+    TRAINING
 };
 
 // States in the game
