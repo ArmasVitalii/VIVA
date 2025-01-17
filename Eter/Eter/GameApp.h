@@ -1,144 +1,152 @@
+#pragma once
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
 #include <string>
 #include <vector>
 
+// --------------------------------------------------------------------
+// CONFIG CONSTANTS
+// --------------------------------------------------------------------
 static const int SCREEN_WIDTH = 1920;
 static const int SCREEN_HEIGHT = 1080;
 static const int FPS = 60;
-static const int FRAME_DELAY = 1000 / FPS;
+static const int FRAME_DELAY = 1000 / FPS; // ~16ms per frame at 60 FPS
 
+// --------------------------------------------------------------------
+// STRUCTS AND CLASSES
+// --------------------------------------------------------------------
 
-////////////////////////////////////////////////Board Logic
+// A simple structure for a button
+struct Button {
+    SDL_Rect rect;
+    std::string text;
+    bool hovered;
+};
+
+// A card structure, stored in each player's hand
+struct Cardx {
+    SDL_Rect rect;     // Card position/size on screen
+    bool beingDragged;
+    int offsetX, offsetY; // For mouse dragging offsets
+    bool faceUp;       // True if visible to the user, false if hidden
+};
+
+// Board cell to track which card is placed
+struct BoardCell {
+    int cardOwner; // 0 or 1, or -1 if empty
+    int cardIndex; // index of card in player's hand, or -1 if empty
+};
+
 static const int BOARD_ROWS = 5;
 static const int BOARD_COLS = 5;
 
-struct BoardCell {
-	int cardOwner;  // 0 or 1 (which player), or -1 if empty
-	int cardIndex;  // index of card in the player’s hand, or -1 if empty
+// Board data
+struct Boardx {
+    BoardCell cells[BOARD_ROWS][BOARD_COLS];
+    int cellWidth;
+    int cellHeight;
+    int boardX, boardY;
 };
 
-class Board_UI {
-public:
-	BoardCell cells[BOARD_ROWS][BOARD_COLS];
-
-	// Could store coordinate system or cell size here
-	int cellWidth, cellHeight;
-	int boardX, boardY; // top-left corner of the 5×5 grid
-};
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-
-//Button and Card Structs
-struct Button {
-	SDL_Rect rect;
-	std::string text;
-	bool hovered;
-};
-
-////////////////////////////////
-enum class GameMode {
-	SEVEN_CARDS,
-	TEN_CARDS
-};
-//////////////////////////////////////
-
-struct Cardx {
-	SDL_Rect rect;			//The position and size on the screen
-	bool beingDragged;		//Are we currently dragging this card?
-	int offsetX, offsetY;	// Mouse offsets when dragging
-	bool faceUp;
-};
-
-//////////////////////////////////////////
+// Each player has a hand (vector of cards)
 struct Player_UI {
-	std::vector<Cardx> hand;  // The cards this player holds
-	// You can also store “name”, “score”, etc.
+    std::vector<Cardx> hand;
 };
-//////////////////////////////////////////
 
+// Possible game modes for how many cards each player gets
+enum class GameMode {
+    SEVEN_CARDS,
+    TEN_CARDS
+};
 
-//Game Application Class
+// States in the game
+enum GameState {
+    SPLASH,
+    MAIN_MENU,
+    SETTINGS,
+    PLAY,
+    QUIT
+};
+
+// --------------------------------------------------------------------
+// MAIN APPLICATION CLASS
+// --------------------------------------------------------------------
 class GameApp {
 public:
-	GameApp();
-	bool init();
-	void run();
-	void clean();
-	void switchTurns();
+    GameApp();
+    bool init();
+    void run();
+    void clean();
 
 private:
-	//////////////////////////////////////////
+    // SDL window/renderer
+    SDL_Window* window;
+    SDL_Renderer* renderer;
 
-	Player_UI player1;
-	Player_UI player2;
-	int currentPlayerIndex;  // 0 = player1’s turn, 1 = player2’s turn
+    // Splash / Fade logic
+    SDL_Texture* splashTexture;
+    int splashAlpha;
+    Uint32 splashTimer;
+    int fadeDuration;
+    bool fadeIn;
 
-	GameMode selectedGameMode;
+    // Textures for backgrounds
+    SDL_Texture* mainMenuBg;
+    SDL_Texture* settingsBg;
+    SDL_Texture* gameBoardBg;
 
-	Board_UI gameBoard;
+    // Buttons
+    Button playButton, settingsButton, quitButton;
+    Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
 
-	void initBoard();
-	void startGame();
-	void placeCardOnBoard(Cardx& card, int ownerID, int cardIndex);
-	//////////////////////////////////////////
+    // Board data
+    Boardx gameBoard;
 
-	//SDL Components
-	SDL_Window* window;
-	SDL_Renderer* renderer;
+    // Two players
+    Player_UI player1;
+    Player_UI player2;
+    int currentPlayerIndex;   // 0 or 1
 
-	//Textures and Splash
-	SDL_Texture* splashTexture;		//current alpha value 0..255
-	SDL_Texture* mainMenuBg;		//how long we’ve been in the splash state (ms)
-	SDL_Texture* settingsBg;		//total fade in + fade out time in ms
-	SDL_Texture* gameBoardBg;		// whether we are in fade in or fade out
+    // Selected game mode
+    GameMode selectedGameMode;
 
-	//Splash/Fade Logic
-	int splashAlpha;
-	Uint32 splashTimer;
-	int fadeDuration;
-	bool fadeIn;
+    // State management
+    GameState currentState;
+    bool running;
 
-	//Main Menu and Settings
-	Button playButton, settingsButton, quitButton;
-	Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
+    // ------------- PRIVATE METHODS -------------
+    Uint32 getTick();
 
-	//Game Board
-	std::vector<Cardx> cards;	//The 5 movable cards
-	SDL_Point boardPos;			// Where to draw the board
+    // Initialization helpers
+    void initButtons();
+    void initBoard();
 
-	enum GameState {
-		SPLASH,
-		MAIN_MENU,
-		SETTINGS,
-		PLAY,
-		QUIT
-	};
-	GameState currentState;
-	bool running;
+    // Event, update, render loops
+    void handleEvents();
+    void update(Uint32 deltaTime);
+    void render();
 
-	//Private Helper Functions
-	Uint32 getTick();
-	void handleEvents();
-	void update(Uint32 deltaTime);
-	void render();
+    // Splash
+    void updateSplash(Uint32 deltaTime);
+    void renderSplash();
 
-	void updateSplash(Uint32 deltaTime);
-	void renderSplash();
+    // Main menu
+    void updateMainMenu();
+    void renderMainMenu();
 
-	void renderMainMenu();
-	void updateMainMenu(); 
+    // Settings
+    void updateSettingsMenu();
+    void renderSettingsMenu();
 
-	void renderSettingsMenu();
-	void updateSettingsMenu();
+    // Game board (PLAY state)
+    void updateGameBoard(Uint32 deltaTime);
+    void renderGameBoard();
 
-	void renderGameBoard();
-	void updateGameBoard(Uint32 deltaTime);
-
-	void initButtons();
-	void initCards();
-	bool isMouseOverButton(int mouseX, int mouseY, const Button& btn);
+    // Actions
+    bool isMouseOverButton(int mouseX, int mouseY, const Button& btn);
+    void startGame();
+    void switchTurns();
+    void placeCardOnBoard(Cardx& card, int ownerID, int cardIndex);
 };
