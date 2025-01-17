@@ -175,7 +175,7 @@ void GameApp::initCards()
     int gap = 20;
     for (int i = 0; i < 5; ++i)
     {
-        Card card;
+        Cardx card;
         card.rect = { startX + i * (cardWidth + gap), SCREEN_HEIGHT - 120, cardWidth, cardHeight };
         card.beingDragged = false;
         card.offsetX = 0;
@@ -216,6 +216,7 @@ void GameApp::handleEvents()
             {
                 if (isMouseOverButton(mx, my, playButton)) {
                     currentState = PLAY;
+                    startGame();
                 }
                 else if (isMouseOverButton(mx, my, settingsButton)) {
                     currentState = SETTINGS;
@@ -271,6 +272,22 @@ void GameApp::handleEvents()
                 }
             }
         }
+        else if (e.type == SDL_MOUSEBUTTONUP && currentState == PLAY) {
+            // For whichever player's turn it is
+            Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
+
+            for (int i = 0; i < (int)activePlayer.hand.size(); ++i) {
+                Cardx& card = activePlayer.hand[i];
+                if (card.beingDragged) {
+                    card.beingDragged = false;
+                    // Attempt to place on board
+                    placeCardOnBoard(card, currentPlayerIndex, i);
+                    // If placed successfully, you might remove it from the player's hand, 
+                    // or mark it as “used,” etc., depending on your rules.
+                }
+            }
+        }
+
     }
 }
 
@@ -433,22 +450,68 @@ void GameApp::renderGameBoard()
     SDL_Rect boardDst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     SDL_RenderCopy(renderer, gameBoardBg, nullptr, &boardDst);
 
-    // Render the 5 cards
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    for (auto& card : cards) {
+
+    // (Optional) draw grid lines
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // white
+    for (int r = 0; r <= BOARD_ROWS; ++r) {
+        int y = gameBoard.boardY + r * gameBoard.cellHeight;
+        SDL_RenderDrawLine(renderer, gameBoard.boardX, y,
+            gameBoard.boardX + BOARD_COLS * gameBoard.cellWidth, y);
+    }
+    for (int c = 0; c <= BOARD_COLS; ++c) {
+        int x = gameBoard.boardX + c * gameBoard.cellWidth;
+        SDL_RenderDrawLine(renderer, x, gameBoard.boardY,
+            x, gameBoard.boardY + BOARD_ROWS * gameBoard.cellHeight);
+    }
+
+    Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
+    for (auto& card : activePlayer.hand) {
+        // faceUp = true => draw card face
+        // faceUp = false => draw card back or skip
+        if (card.faceUp) {
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // white
+        }
+        else {
+            // e.g., grey if hidden
+            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+        }
         SDL_RenderFillRect(renderer, &card.rect);
     }
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+
+    // 4) Optionally, show the inactive player’s hand face-down somewhere
+    Player_UI& inactivePlayer = (currentPlayerIndex == 0) ? player2 : player1;
+    for (auto& card : inactivePlayer.hand) {
+        if (card.faceUp) {
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        }
+        else {
+            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+        }
+        // If you truly want them hidden, you might skip rendering or place them off-screen
+        SDL_RenderFillRect(renderer, &card.rect);
+    }
+
+    //// Render the 5 cards
+    //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    //for (auto& card : cards) {
+    //    SDL_RenderFillRect(renderer, &card.rect);
+    //}
+    //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     auto drawBtn = [&](const Button& b) {
         SDL_SetRenderDrawColor(renderer,
+           b.hovered ? 200 : 255,
             b.hovered ? 200 : 255,
-            b.hovered ? 200 : 255,
-            b.hovered ? 0 : 255,
+           b.hovered ? 0 : 255,
             255);
         SDL_RenderFillRect(renderer, &b.rect);
-        };
+       };
 
     drawBtn(settingsBackButton);
+
+    
+
+
 }
 
 void GameApp::updateGameBoard(Uint32 deltaTime)
@@ -462,9 +525,100 @@ void GameApp::updateGameBoard(Uint32 deltaTime)
     (void)deltaTime; // unused in this basic sample
 }
 
+void GameApp::initBoard() {
+    for (int r = 0; r < BOARD_ROWS; ++r) {
+        for (int c = 0; c < BOARD_COLS; ++c) {
+            gameBoard.cells[r][c].cardOwner = -1;
+            gameBoard.cells[r][c].cardIndex = -1;
+        }
+    }
 
+    // Decide how big each cell should be
+    gameBoard.cellWidth = 80;
+    gameBoard.cellHeight = 120;
 
+    // Position the 5×5 grid in the middle of the screen
+    int totalBoardWidth = BOARD_COLS * gameBoard.cellWidth;
+    int totalBoardHeight = BOARD_ROWS * gameBoard.cellHeight;
+    gameBoard.boardX = (SCREEN_WIDTH - totalBoardWidth) / 2;
+    gameBoard.boardY = (SCREEN_HEIGHT - totalBoardHeight) / 2;
+}
 
+void GameApp::startGame() {
+    player1.hand.clear();
+    player2.hand.clear();
 
+    int numCards = (selectedGameMode == GameMode::SEVEN_CARDS) ? 7 : 10;
 
+    // Just an example: create dummy cards for each player
+    for (int i = 0; i < numCards; ++i) {
+        Cardx cardP1;
+        cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
+        cardP1.beingDragged = false;
+        cardP1.offsetX = 0;
+        cardP1.offsetY = 0;
+        cardP1.faceUp = true;  // if it’s the current player’s turn
+        player1.hand.push_back(cardP1);
 
+        Cardx cardP2;
+        cardP2.rect = { 100 + i * 70, 100, 60, 90 }; // or wherever you want to place them
+        cardP2.beingDragged = false;
+        cardP2.offsetX = 0;
+        cardP2.offsetY = 0;
+        cardP2.faceUp = false; // hidden if it’s not their turn
+        player2.hand.push_back(cardP2);
+    }
+
+    currentPlayerIndex = 0;  // start with player1, for example
+    initBoard();            // reset the 5x5 board to empty
+    // Potentially set game state
+    currentState = PLAY;
+}
+
+void GameApp::switchTurns() {
+    // Switch from 0 to 1, or 1 to 0
+    currentPlayerIndex = (currentPlayerIndex == 0) ? 1 : 0;
+
+    // Hide the now-inactive player's cards, show the active player's cards
+    for (auto& c : player1.hand) {
+        c.faceUp = (currentPlayerIndex == 0);
+    }
+    for (auto& c : player2.hand) {
+        c.faceUp = (currentPlayerIndex == 1);
+    }
+}
+
+void GameApp::placeCardOnBoard(Cardx& card, int ownerID, int cardIndex) {
+    // Loop through each cell
+    for (int r = 0; r < BOARD_ROWS; ++r) {
+        for (int c = 0; c < BOARD_COLS; ++c) {
+            // If that cell is empty
+            if (gameBoard.cells[r][c].cardOwner == -1) {
+                // Compute the bounding box of this cell
+                int cellX = gameBoard.boardX + c * gameBoard.cellWidth;
+                int cellY = gameBoard.boardY + r * gameBoard.cellHeight;
+                SDL_Rect cellRect = { cellX, cellY, gameBoard.cellWidth, gameBoard.cellHeight };
+
+                // Check if the card's center is inside the cell rect, or some overlap check
+                int cardCenterX = card.rect.x + card.rect.w / 2;
+                int cardCenterY = card.rect.y + card.rect.h / 2;
+
+                if (cardCenterX >= cellRect.x && cardCenterX <= cellRect.x + cellRect.w &&
+                    cardCenterY >= cellRect.y && cardCenterY <= cellRect.y + cellRect.h)
+                {
+                    // Snap the card to the center of this cell
+                    card.rect.x = cellX + (gameBoard.cellWidth - card.rect.w) / 2;
+                    card.rect.y = cellY + (gameBoard.cellHeight - card.rect.h) / 2;
+
+                    // Mark the cell as occupied
+                    gameBoard.cells[r][c].cardOwner = ownerID;
+                    gameBoard.cells[r][c].cardIndex = cardIndex;
+
+                    switchTurns();
+
+                    return;
+                }
+            }
+        }
+    }
+}

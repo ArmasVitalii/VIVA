@@ -7,7 +7,30 @@
 static const int SCREEN_WIDTH = 1920;
 static const int SCREEN_HEIGHT = 1080;
 static const int FPS = 60;
-static const int FRAME_DELAY = 100 / FPS;
+static const int FRAME_DELAY = 1000 / FPS;
+
+
+////////////////////////////////////////////////Board Logic
+static const int BOARD_ROWS = 5;
+static const int BOARD_COLS = 5;
+
+struct BoardCell {
+	int cardOwner;  // 0 or 1 (which player), or -1 if empty
+	int cardIndex;  // index of card in the player’s hand, or -1 if empty
+};
+
+class Board_UI {
+public:
+	BoardCell cells[BOARD_ROWS][BOARD_COLS];
+
+	// Could store coordinate system or cell size here
+	int cellWidth, cellHeight;
+	int boardX, boardY; // top-left corner of the 5×5 grid
+};
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 
 //Button and Card Structs
 struct Button {
@@ -16,11 +39,27 @@ struct Button {
 	bool hovered;
 };
 
-struct Card {
+////////////////////////////////
+enum class GameMode {
+	SEVEN_CARDS,
+	TEN_CARDS
+};
+//////////////////////////////////////
+
+struct Cardx {
 	SDL_Rect rect;			//The position and size on the screen
 	bool beingDragged;		//Are we currently dragging this card?
 	int offsetX, offsetY;	// Mouse offsets when dragging
+	bool faceUp;
 };
+
+//////////////////////////////////////////
+struct Player_UI {
+	std::vector<Cardx> hand;  // The cards this player holds
+	// You can also store “name”, “score”, etc.
+};
+//////////////////////////////////////////
+
 
 //Game Application Class
 class GameApp {
@@ -29,8 +68,24 @@ public:
 	bool init();
 	void run();
 	void clean();
+	void switchTurns();
 
 private:
+	//////////////////////////////////////////
+
+	Player_UI player1;
+	Player_UI player2;
+	int currentPlayerIndex;  // 0 = player1’s turn, 1 = player2’s turn
+
+	GameMode selectedGameMode;
+
+	Board_UI gameBoard;
+
+	void initBoard();
+	void startGame();
+	void placeCardOnBoard(Cardx& card, int ownerID, int cardIndex);
+	//////////////////////////////////////////
+
 	//SDL Components
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -52,7 +107,7 @@ private:
 	Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
 
 	//Game Board
-	std::vector<Card> cards;	//The 5 movable cards
+	std::vector<Cardx> cards;	//The 5 movable cards
 	SDL_Point boardPos;			// Where to draw the board
 
 	enum GameState {
