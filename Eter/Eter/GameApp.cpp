@@ -126,8 +126,73 @@ bool GameApp::init()
     initButtons();
     initBoard(); // Board cells, position, etc.
 
+    initCardTextures();
+    initPlayerHands();
+
     return true;
 }
+
+void GameApp::initCardTextures()
+{
+    std::vector<std::string> cardPaths = {
+        "../assets/blue_card_1.png", "../assets/blue_card_1.png", 
+        "../assets/blue_card_2.png", "../assets/blue_card_2.png", 
+        "../assets/blue_card_3.png", "../assets/blue_card_3.png", 
+        "../assets/blue_card_4.png"                             
+    };
+
+    for (const auto& path : cardPaths) {
+        SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
+        if (!texture) {
+            std::cerr << "Failed to load texture: " << path << " - " << IMG_GetError() << std::endl;
+        }
+        else {
+            blueCardTextures.push_back(texture);
+        }
+    }
+
+    cardPaths = {
+        "../assets/red_card_1.png", "../assets/red_card_1.png",   
+        "../assets/red_card_2.png", "../assets/red_card_2.png",  
+        "../assets/red_card_3.png", "../assets/red_card_3.png",  
+        "../assets/red_card_4.png"                                 
+    };
+
+    for (const auto& path : cardPaths) {
+        SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
+        if (!texture) {
+            std::cerr << "Failed to load texture: " << path << " - " << IMG_GetError() << std::endl;
+        }
+        else {
+            redCardTextures.push_back(texture);
+        }
+    }
+}
+
+void GameApp::initPlayerHands()
+{
+
+    // Initialize Player 1 cards
+    for (int i = 0; i < 7; ++i) {
+        Cardx card;
+        card.value = (i < 2) ? 1 : (i < 4) ? 2 : (i < 6) ? 3 : 4;
+        card.rect = { 100 + i * 120, 800, 100, 150 };
+        card.faceUp = true;
+        card.texture = blueCardTextures[card.value - 1];
+        player1.hand.push_back(card);
+    }
+
+    // Initialize Player 2 cards
+    for (int i = 0; i < 7; ++i) {
+        Cardx card;
+        card.value = (i < 2) ? 1 : (i < 4) ? 2 : (i < 6) ? 3 : 4;
+        card.rect = { 100 + i * 120, 100, 100, 150 };
+        card.faceUp = false;
+        card.texture = redCardTextures[card.value - 1];
+        player2.hand.push_back(card);
+    }
+}
+
 
 
 // --------------------------------------------------------------------
@@ -708,7 +773,6 @@ void GameApp::startGame()
             cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
             cardP1.beingDragged = false;
             cardP1.faceUp = true;  // player1 is active at start
-            cardP1.texture = blueCardTextures[cardP1.value - 1];
             player1.hand.push_back(cardP1);
 
             Cardx cardP2;
@@ -716,7 +780,6 @@ void GameApp::startGame()
             cardP2.rect = { 100 + i * 70, 100, 60, 90 };
             cardP2.beingDragged = false;
             cardP2.faceUp = false; // hidden if not active
-            cardP2.texture = redCardTextures[cardP2.value - 1];
             player2.hand.push_back(cardP2);
         }
 
