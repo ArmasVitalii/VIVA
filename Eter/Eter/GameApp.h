@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL_ttf.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -87,6 +88,8 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
 
+    TTF_Font* m_font;
+    
     // Splash / Fade logic
     SDL_Texture* splashTexture;
     int splashAlpha;
@@ -129,6 +132,8 @@ private:
     void handleEvents();
     void update(Uint32 deltaTime);
     void render();
+
+    void renderText(SDL_Renderer* renderer, const std::string& text, TTF_Font* font, SDL_Color color, SDL_Rect* buttonRect);
 
     // Splash
     void updateSplash(Uint32 deltaTime);

@@ -13,7 +13,8 @@ GameApp::GameApp()
     fadeDuration(4500),
     fadeIn(true),
     currentPlayerIndex(0),
-    selectedGameMode(GameMode::SEVEN_CARDS) // default
+    selectedGameMode(GameMode::SEVEN_CARDS),
+    m_font(TTF_OpenFont("../../assets/Arial.ttf", 16))
 {
 }
 
@@ -178,6 +179,9 @@ void GameApp::initButtons()
     int buttonHeight = 100;
     int gap = 10;
 
+    SDL_Texture* texture = NULL;
+    
+
     // Main menu buttons (bottom-middle)
     int xPos = (SCREEN_WIDTH - buttonWidth) / 2;
     int yPos = SCREEN_HEIGHT - 350; // offset from bottom
@@ -185,6 +189,10 @@ void GameApp::initButtons()
     playButton.rect = { xPos, yPos, buttonWidth, buttonHeight };
     playButton.text = "Play";
     playButton.hovered = false;
+    SDL_Surface* textSurface = TTF_RenderText_Shaded(m_font, playButton.text.c_str(), SDL_Color(255.f, 255.f, 255.f, 255.f), SDL_Color(0.f, 0.f, 0.f, 0.f));
+    texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_RenderCopy(renderer, texture, NULL, &playButton.rect);
+    SDL_FreeSurface(textSurface);
 
     settingsButton.rect = { xPos, yPos + (buttonHeight + gap),
                              buttonWidth, buttonHeight };
@@ -412,6 +420,41 @@ void GameApp::render()
     }
 
     SDL_RenderPresent(renderer);
+}
+
+void GameApp::renderText(SDL_Renderer* renderer, const std::string& text, TTF_Font* font, SDL_Color color, SDL_Rect* buttonRect)
+{
+    // Create a surface with the text rendered on it
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), color);
+    if (!textSurface) {
+        std::cerr << "Failed to create text surface: " << TTF_GetError() << std::endl;
+        return;
+    }
+
+    // Create a texture from the surface
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_FreeSurface(textSurface);  // Free the surface after creating the texture
+
+    if (!textTexture) {
+        std::cerr << "Failed to create texture from text: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    // Get the dimensions of the text texture
+    int textWidth = 0, textHeight = 0;
+    SDL_QueryTexture(textTexture, NULL, NULL, &textWidth, &textHeight);
+
+    // Position the text centered within the button's rectangle
+    SDL_Rect textRect = {
+        buttonRect->x + (buttonRect->w - textWidth) / 2,
+        buttonRect->y + (buttonRect->h - textHeight) / 2,
+        textWidth,
+        textHeight
+    };
+
+    // Render the text texture
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);  // Clean up the texture after rendering
 }
 
 // --------------------------------------------------------------------
