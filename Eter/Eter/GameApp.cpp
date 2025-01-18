@@ -13,8 +13,7 @@ GameApp::GameApp()
     fadeDuration(4500),
     fadeIn(true),
     currentPlayerIndex(0),
-    selectedGameMode(GameMode::SEVEN_CARDS),
-    m_font(TTF_OpenFont("../../assets/Arial.ttf", 16))
+    selectedGameMode(GameMode::SEVEN_CARDS)
 {
 }
 
@@ -23,6 +22,16 @@ GameApp::GameApp()
 // --------------------------------------------------------------------
 bool GameApp::init()
 {
+    if (TTF_Init() < 0) {
+        std::cerr << "SDL_ttf could not initialize! Error: " << TTF_GetError() << std::endl;
+        return false;
+    }
+    m_font = TTF_OpenFont("../assets/Arial.ttf", 24); // Increased size for better visibility
+    if (!m_font) {
+        std::cerr << "Failed to load font! Error: " << TTF_GetError() << std::endl;
+        return false;
+    }
+
     // 1) SDL init
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
     {
@@ -150,6 +159,10 @@ void GameApp::run()
 // --------------------------------------------------------------------
 void GameApp::clean()
 {
+    if (m_font) {
+        TTF_CloseFont(m_font);
+    }
+    TTF_Quit();
     if (splashTexture)   SDL_DestroyTexture(splashTexture);
     if (mainMenuBg)      SDL_DestroyTexture(mainMenuBg);
     if (settingsBg)      SDL_DestroyTexture(settingsBg);
@@ -518,18 +531,30 @@ void GameApp::renderMainMenu()
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     SDL_RenderCopy(renderer, mainMenuBg, nullptr, &dst);
 
-    // Draw the 3 buttons
-    auto drawBtn = [&](const Button& b) {
+    SDL_Color buttonColor = { 70, 70, 70, 255 };  // Dark gray for button background
+    SDL_Color hoverColor = { 100, 100, 100, 255 }; // Lighter gray for hover
+    SDL_Color textColor = { 255, 255, 255, 255 };  // White text
+
+    auto drawButton = [&]( Button& btn) {
+        // Draw button background
         SDL_SetRenderDrawColor(renderer,
-            b.hovered ? 200 : 255,
-            b.hovered ? 200 : 255,
-            b.hovered ? 0 : 255,
+            btn.hovered ? hoverColor.r : buttonColor.r,
+            btn.hovered ? hoverColor.g : buttonColor.g,
+            btn.hovered ? hoverColor.b : buttonColor.b,
             255);
-        SDL_RenderFillRect(renderer, &b.rect);
+        SDL_RenderFillRect(renderer, &btn.rect);
+
+        // Draw button border
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(renderer, &btn.rect);
+
+        // Render button text
+        renderText(renderer, btn.text, m_font, textColor, &btn.rect);
         };
-    drawBtn(playButton);
-    drawBtn(settingsButton);
-    drawBtn(quitButton);
+
+    drawButton(playButton);
+    drawButton(settingsButton);
+    drawButton(quitButton);
 }
 
 // --------------------------------------------------------------------
@@ -551,18 +576,32 @@ void GameApp::renderSettingsMenu()
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     SDL_RenderCopy(renderer, settingsBg, nullptr, &dst);
 
-    auto drawBtn = [&](const Button& b) {
+    // Draw buttons
+    SDL_Color buttonColor = { 70, 70, 70, 255 };
+    SDL_Color hoverColor = { 100, 100, 100, 255 };
+    SDL_Color textColor = { 255, 255, 255, 255 };
+
+    auto drawButton = [&]( Button& btn) {
+        // Draw button background
         SDL_SetRenderDrawColor(renderer,
-            b.hovered ? 200 : 255,
-            b.hovered ? 200 : 255,
-            b.hovered ? 0 : 255,
+            btn.hovered ? hoverColor.r : buttonColor.r,
+            btn.hovered ? hoverColor.g : buttonColor.g,
+            btn.hovered ? hoverColor.b : buttonColor.b,
             255);
-        SDL_RenderFillRect(renderer, &b.rect);
+        SDL_RenderFillRect(renderer, &btn.rect);
+
+        // Draw button border
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(renderer, &btn.rect);
+
+        // Render button text
+        renderText(renderer, btn.text, m_font, textColor, &btn.rect);
         };
-    drawBtn(settingsButton1);
-    drawBtn(settingsButton2);
-    drawBtn(settingsButton3);
-    drawBtn(settingsBackButton);
+
+    drawButton(settingsButton1);
+    drawButton(settingsButton2);
+    drawButton(settingsButton3);
+    drawButton(settingsBackButton);
 }
 
 // --------------------------------------------------------------------
@@ -628,15 +667,24 @@ void GameApp::renderGameBoard()
     }
 
     // Render Back button
-    auto drawBtn = [&](const Button& b) {
+    auto drawButton = [&]( Button& btn) {
+        SDL_Color buttonColor = { 70, 70, 70, 255 };
+        SDL_Color hoverColor = { 100, 100, 100, 255 };
+        SDL_Color textColor = { 255, 255, 255, 255 };
+
         SDL_SetRenderDrawColor(renderer,
-            b.hovered ? 200 : 255,
-            b.hovered ? 200 : 255,
-            b.hovered ? 0 : 255,
+            btn.hovered ? hoverColor.r : buttonColor.r,
+            btn.hovered ? hoverColor.g : buttonColor.g,
+            btn.hovered ? hoverColor.b : buttonColor.b,
             255);
-        SDL_RenderFillRect(renderer, &b.rect);
-        };
-    drawBtn(settingsBackButton);
+        SDL_RenderFillRect(renderer, &btn.rect);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(renderer, &btn.rect);
+
+        renderText(renderer, btn.text, m_font, textColor, &btn.rect);
+     };
+    drawButton(settingsBackButton);
 }
 
 // --------------------------------------------------------------------
