@@ -1,4 +1,4 @@
-#include "GameApp.h"
+ï»¿#include "GameApp.h"
 
 // --------------------------------------------------------------------
 // CONSTRUCTOR
@@ -129,6 +129,7 @@ bool GameApp::init()
     return true;
 }
 
+
 // --------------------------------------------------------------------
 // MAIN LOOP
 // --------------------------------------------------------------------
@@ -254,7 +255,7 @@ void GameApp::initBoard()
     int totalBoardWidth = BOARD_COLS * gameBoard.cellWidth;
     int totalBoardHeight = BOARD_ROWS * gameBoard.cellHeight;
 
-    // Center the 5×5 board in the screen
+    // Center the 5Ã—5 board in the screen
     gameBoard.boardX = (SCREEN_WIDTH - totalBoardWidth) / 2;
     gameBoard.boardY = (SCREEN_HEIGHT - totalBoardHeight) / 2;
 }
@@ -623,7 +624,7 @@ void GameApp::renderGameBoard()
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     SDL_RenderCopy(renderer, gameBoardBg, nullptr, &dst);
 
-    // (Optional) draw the 5×5 grid lines
+    // (Optional) draw the 5Ã—5 grid lines
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     for (int r = 0; r <= BOARD_ROWS; ++r) {
         int y = gameBoard.boardY + r * gameBoard.cellHeight;
@@ -641,7 +642,7 @@ void GameApp::renderGameBoard()
     Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
     for (auto& card : activePlayer.hand)
     {
-        if (card.faceUp) {
+        if (card.faceUp ) {
             // white for face-up
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
@@ -657,8 +658,9 @@ void GameApp::renderGameBoard()
     Player_UI& inactivePlayer = (currentPlayerIndex == 0) ? player2 : player1;
     for (auto& card : inactivePlayer.hand)
     {
-        if (card.faceUp) {
+        if (card.faceUp ) {
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_RenderCopy(renderer, card.texture, nullptr, &card.rect);
         }
         else {
             SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
@@ -706,6 +708,7 @@ void GameApp::startGame()
             cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
             cardP1.beingDragged = false;
             cardP1.faceUp = true;  // player1 is active at start
+            cardP1.texture = blueCardTextures[cardP1.value - 1];
             player1.hand.push_back(cardP1);
 
             Cardx cardP2;
@@ -713,13 +716,14 @@ void GameApp::startGame()
             cardP2.rect = { 100 + i * 70, 100, 60, 90 };
             cardP2.beingDragged = false;
             cardP2.faceUp = false; // hidden if not active
+            cardP2.texture = redCardTextures[cardP2.value - 1];
             player2.hand.push_back(cardP2);
         }
 
-        // 3) Force a 3×3 board (If your code uses board init constants, just ensure ROWS=3, COLS=3)
+        // 3) Force a 3Ã—3 board (If your code uses board init constants, just ensure ROWS=3, COLS=3)
         // Example: If you normally do something like "initBoard(ROWS, COLS)", pass 3,3 or
-        // just have your initBoard() function be specifically for 3×3 in training.
-        initBoard(); // you might set it up so it’s always 3×3 for training mode
+        // just have your initBoard() function be specifically for 3Ã—3 in training.
+        initBoard(); // you might set it up so itâ€™s always 3Ã—3 for training mode
 
     }
     else {

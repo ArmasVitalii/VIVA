@@ -4,9 +4,9 @@
 #include "GameApp.h"
 
 int main(int argc, char* argv[]) {
-	
-	/*Menu eterMenu;
-	eterMenu.handleMatch();*/
+
+    /*Menu eterMenu;
+    eterMenu.handleMatch();*/
 
     (void)argc; (void)argv;
 
@@ -18,5 +18,5 @@ int main(int argc, char* argv[]) {
     app.run();
     app.clean();
 
-	return 0;
+    return 0;
 }

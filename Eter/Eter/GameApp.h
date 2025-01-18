@@ -33,6 +33,7 @@ struct Cardx {
     int offsetX, offsetY; // For mouse dragging offsets
     bool faceUp;       // True if visible to the user, false if hidden
     int value;
+    SDL_Texture* texture;
 };
 
 // Board cell to track which card is placed
@@ -121,12 +122,19 @@ private:
     GameState currentState;
     bool running;
 
+    //textures
+    std::vector<SDL_Texture*>blueCardTextures;
+    std::vector<SDL_Texture*>redCardTextures;
+
     // ------------- PRIVATE METHODS -------------
     Uint32 getTick();
 
     // Initialization helpers
     void initButtons();
     void initBoard();
+    void initCardTextures();
+    void initPlayerHands();
+    void cleanCardTextures();
 
     // Event, update, render loops
     void handleEvents();
