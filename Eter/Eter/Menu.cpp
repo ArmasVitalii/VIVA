@@ -12,14 +12,29 @@ bool Menu::askBooleanOption(const std::string& question)
 Gamemode Menu::showMenu()
 {
     std::string selectedMode;
+    int seconds{ -1 };
 
-    std::cout << "\nChoose a gamemode (Training, Mage, Magic, MageAndMagic): ";
+    std::cout << "\nChoose a gamemode (Training, Mage, Magic, MageAndMagic, Timer): ";
     std::cin >> selectedMode;
 
+    if (selectedMode == "Timer" || selectedMode == "timer")
+    {
+        std::cout << "\nEnter the gamemode to apply Speed to (Training, Mage, Magic, MageAndMagic): ";
+        std::cin >> selectedMode;
+        std::cout << "\nEnter the number of secconds per game (30,60,120): ";
+        std::cin >> seconds;
+        if (seconds != 30 && seconds != 60 && seconds != 120)
+        {
+            std::cout << "\nTimer unavailable!";
+            seconds = -1;
+        }
+    }
+ 
     Gamemode selectedGamemode = GamemodeDistributor::generateGamemode(selectedMode,
-        askBooleanOption("Do you want illusions in the game? (y/n): "), 
-        askBooleanOption("Do you want explosions in the game? (y/n): "));
-
+            askBooleanOption("\nDo you want illusions in the game? (y/n): "),
+            askBooleanOption("\nDo you want explosions in the game? (y/n): "),
+            seconds);
+  
 
     std::system("cls");
 

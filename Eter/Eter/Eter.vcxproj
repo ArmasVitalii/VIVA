@@ -182,6 +182,7 @@
     <ClCompile Include="StormSurge.cpp" />
     <ClCompile Include="Support.cpp" />
     <ClCompile Include="Tide.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WaterMage.cpp" />
     <ClCompile Include="Wave.cpp" />
   </ItemGroup>
@@ -230,6 +231,7 @@
     <ClInclude Include="StormSurge.h" />
     <ClInclude Include="Support.h" />
     <ClInclude Include="Tide.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="WaterMage.h" />
     <ClInclude Include="Wave.h" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "Gamemode.h"
 
 Gamemode::Gamemode(bool is4x4, const std::list<uint8_t>& cardList, uint8_t maxNumberOfGames, const std::vector<std::shared_ptr<AbstractMage>>& mages,
-    const std::vector<std::shared_ptr<AbstractMagic>>& magicPowers, bool hasIlusions, bool hasExplosions, bool hasTimer)
+    const std::vector<std::shared_ptr<AbstractMagic>>& magicPowers, bool hasIlusions, bool hasExplosions, int timerSeconds)
     : m_is4x4(is4x4),
     m_cardList(cardList),
     m_maxNumberOfGames(maxNumberOfGames),
@@ -9,7 +9,7 @@ Gamemode::Gamemode(bool is4x4, const std::list<uint8_t>& cardList, uint8_t maxNu
     m_magicPowers(magicPowers),
     m_hasIlusions(hasIlusions),
     m_hasExplosions(hasExplosions),
-    m_hasTimer(hasTimer)
+    m_timerSeconds(timerSeconds)
 {
 }
 
@@ -48,9 +48,9 @@ bool Gamemode::getHasExplosions() const
     return m_hasExplosions;
 }
 
-bool Gamemode::getHasTimer() const
+int Gamemode::getTimerSeconds() const
 {
-    return m_hasTimer;
+    return m_timerSeconds;
 }
 
 void Gamemode::setHasIlusions(bool value)
@@ -104,7 +104,7 @@ void Gamemode::printSetup() const
 
     std::cout << "Has Illusions: " << (m_hasIlusions ? "Yes" : "No") << std::endl;
     std::cout << "Has Explosions: " << (m_hasExplosions ? "Yes" : "No") << std::endl;
-    std::cout << "Has Timer: " << (m_hasTimer ? "Yes" : "No") << std::endl;
+    std::cout << "Has Timer: " << (m_timerSeconds != 0 ? "Yes" : "No") << std::endl;
     std::cout << "========================\n";
 }
 

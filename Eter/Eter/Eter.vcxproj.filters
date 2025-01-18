@@ -139,6 +139,9 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -277,6 +280,9 @@
       <Filter>Header Files\temp aux</Filter>
     </ClInclude>
     <ClInclude Include="GameApp.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>

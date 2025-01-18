@@ -184,7 +184,6 @@ bool Bridge::verifyColumnExplosionCriteria() const
 
     for (const auto& pair : m_columnPocket)
     {
-        std::cout << "\n\n\nColumn pair: " << pair.first + pair.second << '\n';
         if (pair.first + pair.second == requiredSum)
         {
             count++;
@@ -194,7 +193,6 @@ bool Bridge::verifyColumnExplosionCriteria() const
             }
         }
     }
-    std::cout << "\n\n\n\nColumn: " << count << "\n";
 
     return false;
 }

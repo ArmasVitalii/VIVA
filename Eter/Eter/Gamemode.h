@@ -17,7 +17,7 @@ private:
     std::vector<std::shared_ptr<AbstractMagic>>         m_magicPowers{};
     bool                                                m_hasIlusions{ false };
     bool                                                m_hasExplosions{ false };
-    bool                                                m_hasTimer{ false };
+    int                                                 m_timerSeconds{ -1 };
 
 public:
     Gamemode(bool is4x4,
@@ -27,7 +27,7 @@ public:
         const std::vector<std::shared_ptr<AbstractMagic>>& magicPowers,
         bool hasIlusions,
         bool hasExplosions,
-        bool hasTimer);
+        int timerSeconds);
 
     bool                                                getIs4x4() const;
     const std::list<uint8_t>&                           getCardList() const;
@@ -36,7 +36,7 @@ public:
     const std::vector<std::shared_ptr<AbstractMagic>>&  getMagicPowers() const;
     bool                                                getHasIlusions() const;
     bool                                                getHasExplosions() const;
-    bool                                                getHasTimer() const;
+    int                                                 getTimerSeconds() const;
 
     void                                                setHasIlusions(bool value);
     void                                                setHasExplosions(bool value);

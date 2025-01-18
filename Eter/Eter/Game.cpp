@@ -56,6 +56,21 @@ void Game::resetGame()
 	m_board.resetBoard();
 }
 
+void Game::startTimer()
+{
+	m_currentTimer.get().start();
+}
+
+void Game::stopTimer()
+{
+	m_currentTimer.get().stop();
+}
+
+bool Game::timerRanOutOfTime() const
+{
+	return !m_currentTimer.get().hasTimeLeft();
+}
+
 void Game::printLogic() const
 {
 	std::cout << "\n> Currently playing as Player " << static_cast<int>(m_currentPlayer) + 1;
@@ -140,6 +155,14 @@ PlayerEnum Game::checkWinCase4() const
 
 
 	return sum%baseValue > 0u ? PlayerEnum::Player1 : PlayerEnum::Player2;
+}
+
+PlayerEnum Game::onTimerTimeout() const
+{
+	if (m_currentPlayer == PlayerEnum::Player1)
+		return PlayerEnum::Player2;
+	else
+		return PlayerEnum::Player1;
 }
 
 const std::shared_ptr<AbstractMage>& Game::getMage(PlayerEnum currentPlayer) const
@@ -234,6 +257,7 @@ bool Game::verifyDiagonalWin(PlayerEnum currentPlayer) const
 void Game::switchPlayer()
 {
 	m_currentPlayer = (m_currentPlayer == PlayerEnum::Player1 ? PlayerEnum::Player2 : PlayerEnum::Player1);
+	m_currentTimer = (m_currentTimer.get() == m_timerPlayer1 ? std::ref(m_timerPlayer2) : std::ref(m_timerPlayer1));
 	//std::cout << "\nSwitch player to Player " << static_cast<int>(m_currentPlayer) + 1;
 }
 
@@ -528,6 +552,7 @@ PlayerEnum Game::playGame()
 	while (true)
 	{
 		printLogic();
+		startTimer();
 		handleChoice(getPlayerChoice());
 		
 
@@ -536,7 +561,8 @@ PlayerEnum Game::playGame()
 			auto winner = (m_currentPlayer == PlayerEnum::Player1 ? "\nWon Player 1" : "\nWon Player 2");
 			std::cout << winner;
 			break;
-		}else if (checkWinCase2(m_currentPlayer) || checkWinCase3(m_currentPlayer))
+		}
+		else if (checkWinCase2(m_currentPlayer) || checkWinCase3(m_currentPlayer))
 		{
 			auto winner = (m_currentPlayer == PlayerEnum::Player1 ? "Player 1" : "Player 2");
 			auto loser = (m_currentPlayer == PlayerEnum::Player1 ? "Player 2" : "Player 1");
@@ -550,7 +576,15 @@ PlayerEnum Game::playGame()
 			return checkWinCase4();
 		}
 
+		if (timerRanOutOfTime())
+		{
+			std::cout << "\nPlayer " << static_cast<int>(m_currentPlayer) + 1 << " has ran out of time!\n"
+					  <<"\n==============================================================\n";
+			return onTimerTimeout();
+		}
 
+
+		stopTimer();
 		switchPlayer();
 	}
 	return m_currentPlayer;

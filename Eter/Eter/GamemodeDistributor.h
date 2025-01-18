@@ -15,10 +15,10 @@ private:
         Timer
     };
 
-    static Gamemode     generateGamemode(AllGamemodes gamemodeType, bool hasIllusions, bool hasExplosions);
+    static Gamemode     generateGamemode(AllGamemodes gamemodeType, bool hasIllusions, bool hasExplosions, int seconds);
 
     static AllGamemodes stringToEnum(std::string_view gamemodeName);
 
 public:
-    static Gamemode     generateGamemode(std::string_view gamemodeName, bool hasIllusions = false, bool hasExplosions = false);
+    static Gamemode     generateGamemode(std::string_view gamemodeName, bool hasIllusions = false, bool hasExplosions = false, int seconds = -1);
 };
