@@ -172,7 +172,7 @@ void GameApp::initCardTextures()
 void GameApp::initPlayerHands()
 {
 
-    // Initialize Player 1 cards
+    // Initialize Player 1 cards 
     for (int i = 0; i < 7; ++i) {
         Cardx card;
         card.value = (i < 2) ? 1 : (i < 4) ? 2 : (i < 6) ? 3 : 4;
@@ -193,7 +193,21 @@ void GameApp::initPlayerHands()
     }
 }
 
+void GameApp::cleanCardTextures()
+{
+    for (auto texture : blueCardTextures)
+    {
+        if (texture) SDL_DestroyTexture(texture);
+    }
+    blueCardTextures.clear();
 
+    for (auto texture : redCardTextures)
+    {
+        if (texture) SDL_DestroyTexture(texture);
+    }
+    redCardTextures.clear();
+
+}
 
 // --------------------------------------------------------------------
 // MAIN LOOP
@@ -773,6 +787,7 @@ void GameApp::startGame()
             cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
             cardP1.beingDragged = false;
             cardP1.faceUp = true;  // player1 is active at start
+            cardP1.texture = blueCardTextures[cardP1.value - 1];
             player1.hand.push_back(cardP1);
 
             Cardx cardP2;
@@ -780,6 +795,7 @@ void GameApp::startGame()
             cardP2.rect = { 100 + i * 70, 100, 60, 90 };
             cardP2.beingDragged = false;
             cardP2.faceUp = false; // hidden if not active
+            cardP2.texture = redCardTextures[cardP2.value - 1];
             player2.hand.push_back(cardP2);
         }
 
