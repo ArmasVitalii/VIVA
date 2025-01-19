@@ -44,9 +44,9 @@ Gamemode Menu::showMenu()
 void Menu::handleMatch()
 {
     Game_UI* game = new Game_UI();
-    game->HandleEvents();
-    game->Update();
-    game->Render();
+    game->handleEvents();
+    game->update();
+    game->render();
 
     Match eterMatch(showMenu());
     eterMatch.startMatch();

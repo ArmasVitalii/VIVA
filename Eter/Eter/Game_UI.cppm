@@ -12,21 +12,21 @@ export class __declspec(dllexport) Game_UI
 public:
 	Game_UI();
 	~Game_UI();
-	void				InitUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);
+	void				initUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen);
 
-	void				HandleEvents();
+	void				handleEvents();
 
-	void				Update();
-	void				Render();
-	void				Clean();
+	void				update();
+	void				render();
+	void				clean();
 
-	bool				Running();
+	bool				running();
 
 private:
 
 	bool				m_isRunning;
-	SDL_Window* m_window;
-	SDL_Renderer* m_renderer;
+	SDL_Window*			m_window;
+	SDL_Renderer*		m_renderer;
 };
 
 

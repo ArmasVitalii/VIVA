@@ -8,7 +8,7 @@ SDL_Texture* texture;
 
 Game_UI::Game_UI()
 {
-	this->InitUI("Eter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
+	this->initUI("Eter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
 
 }
 
@@ -19,7 +19,7 @@ Game_UI::~Game_UI()
 }
 
 
-void Game_UI::InitUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen) {
+void Game_UI::initUI(const char* title, int x_pos, int y_pos, int width, int height, bool fullscreen) {
 
 	int flags = 0;
 
@@ -57,7 +57,7 @@ void Game_UI::InitUI(const char* title, int x_pos, int y_pos, int width, int hei
 	SDL_FreeSurface(temporarySurface);
 }
 
-void Game_UI::HandleEvents()
+void Game_UI::handleEvents()
 {
 
 	SDL_Event event;
@@ -74,12 +74,12 @@ void Game_UI::HandleEvents()
 	std::cout << "Hi!";
 }
 
-void Game_UI::Update()
+void Game_UI::update()
 {
 
 }
 
-void Game_UI::Render()
+void Game_UI::render()
 {
 	SDL_RenderClear(m_renderer);
 	//Render Stuff
@@ -87,7 +87,7 @@ void Game_UI::Render()
 	SDL_RenderPresent(m_renderer);
 }
 
-void Game_UI::Clean()
+void Game_UI::clean()
 {
 	SDL_DestroyWindow(m_window);
 	SDL_DestroyRenderer(m_renderer);
@@ -96,4 +96,4 @@ void Game_UI::Clean()
 }
 
 
-bool Game_UI::Running() { return m_isRunning; };
+bool Game_UI::running() { return m_isRunning; };
