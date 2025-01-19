@@ -91,14 +91,6 @@
 
 **VIVA** presents the **Eter Board Game**, a strategic, turn-based game implemented in modern C++. The game involves tactical decisions and careful planning to outsmart opponents and secure victory. This project is crafted to demonstrate proficiency in modern C++ principles.
 
-<!--
-### 🛠 Features
-
-- **Dynamic Game Engine**: Implements real-time updates and event handling.
-- **Advanced AI Opponents**: Opponents simulate realistic behaviors and adaptive strategies.
-- **User-Friendly CLI and GUI**: Available for different gameplay preferences.
-- **Save & Load**: Game state persistence for easy save/load functionality.
-
 ---
 
 ## 🚀 Getting Started
@@ -109,6 +101,12 @@
 - A C++ compiler (GCC, Clang, or MSVC)
 
 ### Installation
+- Set the display scale and layout to 100% to get the right GUI render
 
+## 🎥 Video Presentation
 
--->
+<p align="center">
+  <a href="https://youtu.be/6cPqABYGLDE" target="_blank">
+    <img src="https://img.shields.io/badge/Watch_on_YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch on YouTube" />
+  </a>
+</p>
