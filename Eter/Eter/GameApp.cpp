@@ -134,40 +134,49 @@ bool GameApp::init()
 
 void GameApp::initCardTextures()
 {
-    std::vector<std::string> cardPaths = {
-        "../assets/blue_card_1.png", "../assets/blue_card_1.png", 
-        "../assets/blue_card_2.png", "../assets/blue_card_2.png", 
-        "../assets/blue_card_3.png", "../assets/blue_card_3.png", 
-        "../assets/blue_card_4.png"                             
+    // Clear vectors in case this is called more than once
+    blueCardTextures.clear();
+    redCardTextures.clear();
+
+    // --- BLUE CARDS ---
+    std::vector<std::string> bluePaths = {
+        "../assets/blue_card_1.png",
+        "../assets/blue_card_2.png",
+        "../assets/blue_card_3.png",
+        "../assets/blue_card_4.png"
     };
 
-    for (const auto& path : cardPaths) {
+    for (const auto& path : bluePaths) {
         SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
         if (!texture) {
-            std::cerr << "Failed to load texture: " << path << " - " << IMG_GetError() << std::endl;
+            std::cerr << "Failed to load texture: " << path
+                << " - " << IMG_GetError() << std::endl;
         }
         else {
             blueCardTextures.push_back(texture);
         }
     }
 
-    cardPaths = {
-        "../assets/red_card_1.png", "../assets/red_card_1.png",   
-        "../assets/red_card_2.png", "../assets/red_card_2.png",  
-        "../assets/red_card_3.png", "../assets/red_card_3.png",  
-        "../assets/red_card_4.png"                                 
+    // --- RED CARDS ---
+    std::vector<std::string> redPaths = {
+        "../assets/red_card_1.png",
+        "../assets/red_card_2.png",
+        "../assets/red_card_3.png",
+        "../assets/red_card_4.png"
     };
 
-    for (const auto& path : cardPaths) {
+    for (const auto& path : redPaths) {
         SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
         if (!texture) {
-            std::cerr << "Failed to load texture: " << path << " - " << IMG_GetError() << std::endl;
+            std::cerr << "Failed to load texture: " << path
+                << " - " << IMG_GetError() << std::endl;
         }
         else {
             redCardTextures.push_back(texture);
         }
     }
 }
+
 
 void GameApp::initPlayerHands()
 {
@@ -700,59 +709,63 @@ void GameApp::updateGameBoard(Uint32 deltaTime)
 
 void GameApp::renderGameBoard()
 {
+    // 1) Draw the game board background
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     SDL_RenderCopy(renderer, gameBoardBg, nullptr, &dst);
 
-    // (Optional) draw the 5×5 grid lines
+    // 2) (Optional) Draw the board's grid lines
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     for (int r = 0; r <= BOARD_ROWS; ++r) {
         int y = gameBoard.boardY + r * gameBoard.cellHeight;
-        SDL_RenderDrawLine(renderer, gameBoard.boardX, y,
+        SDL_RenderDrawLine(renderer,
+            gameBoard.boardX, y,
             gameBoard.boardX + BOARD_COLS * gameBoard.cellWidth,
             y);
     }
     for (int c = 0; c <= BOARD_COLS; ++c) {
         int x = gameBoard.boardX + c * gameBoard.cellWidth;
-        SDL_RenderDrawLine(renderer, x, gameBoard.boardY,
+        SDL_RenderDrawLine(renderer,
+            x, gameBoard.boardY,
             x, gameBoard.boardY + BOARD_ROWS * gameBoard.cellHeight);
     }
 
-    // Render active player's cards
+    // 3) Render the *active* player's cards
     Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
     for (auto& card : activePlayer.hand)
     {
-        if (card.faceUp ) {
-            // white for face-up
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-        }
-        else {
-            // grey if hidden
-            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-        }
-        SDL_RenderFillRect(renderer, &card.rect);
-    }
-
-    // Render inactive player's cards (face-down?)
-    Player_UI& inactivePlayer = (currentPlayerIndex == 0) ? player2 : player1;
-    for (auto& card : inactivePlayer.hand)
-    {
-        if (card.faceUp ) {
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        if (card.faceUp) {
+            // Show the card’s texture if face-up
             SDL_RenderCopy(renderer, card.texture, nullptr, &card.rect);
         }
         else {
+            // Draw a gray rectangle for face-down
             SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+            SDL_RenderFillRect(renderer, &card.rect);
         }
-        SDL_RenderFillRect(renderer, &card.rect);
     }
 
-    // Render Back button
-    auto drawButton = [&]( Button& btn) {
+    // 4) Render the *inactive* player's cards
+    Player_UI& inactivePlayer = (currentPlayerIndex == 0) ? player2 : player1;
+    for (auto& card : inactivePlayer.hand)
+    {
+        if (card.faceUp) {
+            // Show the card’s texture if face-up
+            SDL_RenderCopy(renderer, card.texture, nullptr, &card.rect);
+        }
+        else {
+            // Draw a gray rectangle for face-down
+            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+            SDL_RenderFillRect(renderer, &card.rect);
+        }
+    }
+
+    // 5) Render the Back button
+    auto drawButton = [&](Button& btn) {
         SDL_Color buttonColor = { 70, 70, 70, 255 };
         SDL_Color hoverColor = { 100, 100, 100, 255 };
         SDL_Color textColor = { 255, 255, 255, 255 };
 
+        // Button background
         SDL_SetRenderDrawColor(renderer,
             btn.hovered ? hoverColor.r : buttonColor.r,
             btn.hovered ? hoverColor.g : buttonColor.g,
@@ -760,13 +773,16 @@ void GameApp::renderGameBoard()
             255);
         SDL_RenderFillRect(renderer, &btn.rect);
 
+        // Border
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawRect(renderer, &btn.rect);
 
+        // Text label
         renderText(renderer, btn.text, m_font, textColor, &btn.rect);
-     };
+        };
     drawButton(settingsBackButton);
 }
+
 
 // --------------------------------------------------------------------
 // START GAME (Give each player cards, etc.)
@@ -776,61 +792,72 @@ void GameApp::startGame()
     // Clear old hands
     player1.hand.clear();
     player2.hand.clear();
-    if (selectedGameMode == GameMode::TRAINING) {
+
+    if (selectedGameMode == GameMode::TRAINING)
+    {
         // 1) Hard-code the 7 training card values
         std::vector<int> trainingValues = { 1,1,2,2,3,3,4 };
 
         // 2) For each player, create 7 cards with these values
         for (int i = 0; i < 7; ++i) {
+            int v = trainingValues[i];
+
             Cardx cardP1;
-            cardP1.value = trainingValues[i];
+            cardP1.value = v;
             cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
             cardP1.beingDragged = false;
             cardP1.faceUp = true;  // player1 is active at start
-            cardP1.texture = blueCardTextures[cardP1.value - 1];
+            cardP1.texture = blueCardTextures[v - 1];
             player1.hand.push_back(cardP1);
 
             Cardx cardP2;
-            cardP2.value = trainingValues[i];
+            cardP2.value = v;
             cardP2.rect = { 100 + i * 70, 100, 60, 90 };
             cardP2.beingDragged = false;
             cardP2.faceUp = false; // hidden if not active
-            cardP2.texture = redCardTextures[cardP2.value - 1];
+            cardP2.texture = redCardTextures[v - 1];
             player2.hand.push_back(cardP2);
         }
 
-        // 3) Force a 3×3 board (If your code uses board init constants, just ensure ROWS=3, COLS=3)
-        // Example: If you normally do something like "initBoard(ROWS, COLS)", pass 3,3 or
-        // just have your initBoard() function be specifically for 3×3 in training.
-        initBoard(); // you might set it up so it’s always 3×3 for training mode
+        // 3) Force a 3×3 board if training
+        initBoard();
 
     }
-    else {
+    else
+    {
         // Decide how many cards per player
         int numCards = (selectedGameMode == GameMode::SEVEN_CARDS) ? 7 : 10;
 
-        // Create dummy cards for each player
+        // Use any pattern you want for these cards.
+        // Example: i=0..6 or i=0..9 cycling ranks 1..4
         for (int i = 0; i < numCards; ++i)
         {
+            int v = (i % 4) + 1; // cycles through 1,2,3,4,1,2,3,4,...
+
             // Player 1's card
             Cardx cardP1;
+            cardP1.value = v;
             cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
             cardP1.beingDragged = false;
             cardP1.offsetX = 0;
             cardP1.offsetY = 0;
             cardP1.faceUp = true; // player1 is active initially
+            cardP1.texture = blueCardTextures[v - 1];
             player1.hand.push_back(cardP1);
 
             // Player 2's card
             Cardx cardP2;
+            cardP2.value = v;
             cardP2.rect = { 100 + i * 70, 100, 60, 90 };
             cardP2.beingDragged = false;
             cardP2.offsetX = 0;
             cardP2.offsetY = 0;
             cardP2.faceUp = false; // hidden if not their turn
+            cardP2.texture = redCardTextures[v - 1];
             player2.hand.push_back(cardP2);
         }
     }
+
     // Active player = player1
     currentPlayerIndex = 0;
 
@@ -840,6 +867,7 @@ void GameApp::startGame()
     // Go to play state
     currentState = PLAY;
 }
+
 
 // --------------------------------------------------------------------
 // SWITCH TURNS (Flip faceUp states, etc.)
