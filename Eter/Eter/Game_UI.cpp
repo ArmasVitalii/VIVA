@@ -2,7 +2,6 @@
 #include <SDL_Image.h>
 module Game_UI;
 
-//cel bun
 SDL_Texture* texture;
 
 

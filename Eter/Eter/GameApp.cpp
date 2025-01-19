@@ -4,16 +4,16 @@
 // CONSTRUCTOR
 // --------------------------------------------------------------------
 GameApp::GameApp()
-    : window(nullptr),
-    renderer(nullptr),
-    running(true),
-    currentState(SPLASH),
-    splashAlpha(0),
-    splashTimer(0),
-    fadeDuration(4500),
-    fadeIn(true),
-    currentPlayerIndex(0),
-    selectedGameMode(GameMode::SEVEN_CARDS)
+    : m_window(nullptr),
+    m_renderer(nullptr),
+    m_running(true),
+    m_currentState(SPLASH),
+    m_splashAlpha(0),
+    m_splashTimer(0),
+    m_fadeDuration(4500),
+    m_fadeIn(true),
+    m_currentPlayerIndex(0),
+    m_selectedGameMode(GameMode::SEVEN_CARDS)
 {
 }
 
@@ -50,11 +50,11 @@ bool GameApp::init()
     }
 
     // 3) Create window
-    window = SDL_CreateWindow("Eter Game",
+    m_window = SDL_CreateWindow("Eter Game",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         SCREEN_WIDTH, SCREEN_HEIGHT,
         SDL_WINDOW_SHOWN);
-    if (!window)
+    if (!m_window)
     {
         std::cerr << "Window could not be created! Error: "
             << SDL_GetError() << std::endl;
@@ -62,8 +62,8 @@ bool GameApp::init()
     }
 
     // 4) Create renderer
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer)
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+    if (!m_renderer)
     {
         std::cerr << "Renderer could not be created! Error: "
             << SDL_GetError() << std::endl;
@@ -79,7 +79,7 @@ bool GameApp::init()
                 << IMG_GetError() << std::endl;
             return false;
         }
-        splashTexture = SDL_CreateTextureFromSurface(renderer, surf);
+        m_splashTexture = SDL_CreateTextureFromSurface(m_renderer, surf);
         SDL_FreeSurface(surf);
     }
 
@@ -92,7 +92,7 @@ bool GameApp::init()
                 << IMG_GetError() << std::endl;
             return false;
         }
-        mainMenuBg = SDL_CreateTextureFromSurface(renderer, surf);
+        m_mainMenuBg = SDL_CreateTextureFromSurface(m_renderer, surf);
         SDL_FreeSurface(surf);
     }
     {
@@ -103,7 +103,7 @@ bool GameApp::init()
                 << IMG_GetError() << std::endl;
             return false;
         }
-        settingsBg = SDL_CreateTextureFromSurface(renderer, surf);
+        m_settingsBg = SDL_CreateTextureFromSurface(m_renderer, surf);
         SDL_FreeSurface(surf);
     }
     {
@@ -114,13 +114,13 @@ bool GameApp::init()
                 << IMG_GetError() << std::endl;
             return false;
         }
-        gameBoardBg = SDL_CreateTextureFromSurface(renderer, surf);
+        m_gameBoardBg = SDL_CreateTextureFromSurface(m_renderer, surf);
         SDL_FreeSurface(surf);
     }
 
     // 7) Prepare splash fade
-    SDL_SetTextureBlendMode(splashTexture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(splashTexture, splashAlpha);
+    SDL_SetTextureBlendMode(m_splashTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(m_splashTexture, m_splashAlpha);
 
     // 8) Init buttons & board
     initButtons();
@@ -135,8 +135,8 @@ bool GameApp::init()
 void GameApp::initCardTextures()
 {
     // Clear vectors in case this is called more than once
-    blueCardTextures.clear();
-    redCardTextures.clear();
+    m_blueCardTextures.clear();
+    m_redCardTextures.clear();
 
     // --- BLUE CARDS ---
     std::vector<std::string> bluePaths = {
@@ -147,13 +147,13 @@ void GameApp::initCardTextures()
     };
 
     for (const auto& path : bluePaths) {
-        SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
+        SDL_Texture* texture = IMG_LoadTexture(m_renderer, path.c_str());
         if (!texture) {
             std::cerr << "Failed to load texture: " << path
                 << " - " << IMG_GetError() << std::endl;
         }
         else {
-            blueCardTextures.push_back(texture);
+            m_blueCardTextures.push_back(texture);
         }
     }
 
@@ -166,13 +166,13 @@ void GameApp::initCardTextures()
     };
 
     for (const auto& path : redPaths) {
-        SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
+        SDL_Texture* texture = IMG_LoadTexture(m_renderer, path.c_str());
         if (!texture) {
             std::cerr << "Failed to load texture: " << path
                 << " - " << IMG_GetError() << std::endl;
         }
         else {
-            redCardTextures.push_back(texture);
+            m_redCardTextures.push_back(texture);
         }
     }
 }
@@ -187,8 +187,8 @@ void GameApp::initPlayerHands()
         card.value = (i < 2) ? 1 : (i < 4) ? 2 : (i < 6) ? 3 : 4;
         card.rect = { 100 + i * 120, 800, 100, 150 };
         card.faceUp = true;
-        card.texture = blueCardTextures[card.value - 1];
-        player1.hand.push_back(card);
+        card.texture = m_blueCardTextures[card.value - 1];
+        m_player1.hand.push_back(card);
     }
 
     // Initialize Player 2 cards
@@ -197,24 +197,24 @@ void GameApp::initPlayerHands()
         card.value = (i < 2) ? 1 : (i < 4) ? 2 : (i < 6) ? 3 : 4;
         card.rect = { 100 + i * 120, 100, 100, 150 };
         card.faceUp = false;
-        card.texture = redCardTextures[card.value - 1];
-        player2.hand.push_back(card);
+        card.texture = m_redCardTextures[card.value - 1];
+        m_player2.hand.push_back(card);
     }
 }
 
 void GameApp::cleanCardTextures()
 {
-    for (auto texture : blueCardTextures)
+    for (auto texture : m_blueCardTextures)
     {
         if (texture) SDL_DestroyTexture(texture);
     }
-    blueCardTextures.clear();
+    m_blueCardTextures.clear();
 
-    for (auto texture : redCardTextures)
+    for (auto texture : m_redCardTextures)
     {
         if (texture) SDL_DestroyTexture(texture);
     }
-    redCardTextures.clear();
+    m_redCardTextures.clear();
 
 }
 
@@ -225,7 +225,7 @@ void GameApp::run()
 {
     Uint32 lastTick = getTick();
 
-    while (running)
+    while (m_running)
     {
         Uint32 currentTick = getTick();
         Uint32 deltaTime = currentTick - lastTick;
@@ -252,13 +252,13 @@ void GameApp::clean()
         TTF_CloseFont(m_font);
     }
     TTF_Quit();
-    if (splashTexture)   SDL_DestroyTexture(splashTexture);
-    if (mainMenuBg)      SDL_DestroyTexture(mainMenuBg);
-    if (settingsBg)      SDL_DestroyTexture(settingsBg);
-    if (gameBoardBg)     SDL_DestroyTexture(gameBoardBg);
+    if (m_splashTexture)   SDL_DestroyTexture(m_splashTexture);
+    if (m_mainMenuBg)      SDL_DestroyTexture(m_mainMenuBg);
+    if (m_settingsBg)      SDL_DestroyTexture(m_settingsBg);
+    if (m_gameBoardBg)     SDL_DestroyTexture(m_gameBoardBg);
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
 
     IMG_Quit();
     SDL_Quit();
@@ -288,40 +288,40 @@ void GameApp::initButtons()
     int xPos = (SCREEN_WIDTH - buttonWidth) / 2;
     int yPos = SCREEN_HEIGHT - 350; // offset from bottom
 
-    playButton.rect = { xPos, yPos, buttonWidth, buttonHeight };
-    playButton.text = "Play";
-    playButton.hovered = false;
-    SDL_Surface* textSurface = TTF_RenderText_Shaded(m_font, playButton.text.c_str(), SDL_Color(255.f, 255.f, 255.f, 255.f), SDL_Color(0.f, 0.f, 0.f, 0.f));
-    texture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_RenderCopy(renderer, texture, NULL, &playButton.rect);
+    m_playButton.rect = { xPos, yPos, buttonWidth, buttonHeight };
+    m_playButton.text = "Play";
+    m_playButton.hovered = false;
+    SDL_Surface* textSurface = TTF_RenderText_Shaded(m_font, m_playButton.text.c_str(), SDL_Color(255.f, 255.f, 255.f, 255.f), SDL_Color(0.f, 0.f, 0.f, 0.f));
+    texture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+    SDL_RenderCopy(m_renderer, texture, NULL, &m_playButton.rect);
     SDL_FreeSurface(textSurface);
 
-    settingsButton.rect = { xPos, yPos + (buttonHeight + gap),
+    m_settingsButton.rect = { xPos, yPos + (buttonHeight + gap),
                              buttonWidth, buttonHeight };
-    settingsButton.text = "Settings";
-    settingsButton.hovered = false;
+    m_settingsButton.text = "Settings";
+    m_settingsButton.hovered = false;
 
-    quitButton.rect = { xPos, yPos + 2 * (buttonHeight + gap),
+    m_quitButton.rect = { xPos, yPos + 2 * (buttonHeight + gap),
                              buttonWidth, buttonHeight };
-    quitButton.text = "Quit";
-    quitButton.hovered = false;
+    m_quitButton.text = "Quit";
+    m_quitButton.hovered = false;
 
     // Settings menu buttons
-    settingsButton1.rect = { 200, 200, buttonWidth, buttonHeight };
-    settingsButton1.text = "Option A";   // e.g. 7 Cards
-    settingsButton1.hovered = false;
+    m_settingsButton1.rect = { 200, 200, buttonWidth, buttonHeight };
+    m_settingsButton1.text = "Option A";   // e.g. 7 Cards
+    m_settingsButton1.hovered = false;
 
-    settingsButton2.rect = { 200, 310, buttonWidth, buttonHeight };
-    settingsButton2.text = "Option B";   // e.g. 10 Cards
-    settingsButton2.hovered = false;
+    m_settingsButton2.rect = { 200, 310, buttonWidth, buttonHeight };
+    m_settingsButton2.text = "Option B";   // e.g. 10 Cards
+    m_settingsButton2.hovered = false;
 
-    settingsButton3.rect = { 200, 420, buttonWidth, buttonHeight };
-    settingsButton3.text = "Training";
-    settingsButton3.hovered = false;
+    m_settingsButton3.rect = { 200, 420, buttonWidth, buttonHeight };
+    m_settingsButton3.text = "Training";
+    m_settingsButton3.hovered = false;
 
-    settingsBackButton.rect = { 200, 530, buttonWidth, buttonHeight };
-    settingsBackButton.text = "Back";
-    settingsBackButton.hovered = false;
+    m_settingsBackButton.rect = { 200, 530, buttonWidth, buttonHeight };
+    m_settingsBackButton.text = "Back";
+    m_settingsBackButton.hovered = false;
 }
 
 // --------------------------------------------------------------------
@@ -332,20 +332,20 @@ void GameApp::initBoard()
     // Initialize all cells to empty
     for (int r = 0; r < BOARD_ROWS; ++r) {
         for (int c = 0; c < BOARD_COLS; ++c) {
-            gameBoard.cells[r][c].cardOwner = -1;
-            gameBoard.cells[r][c].cardIndex = -1;
+            m_gameBoard.cells[r][c].cardOwner = -1;
+            m_gameBoard.cells[r][c].cardIndex = -1;
         }
     }
 
-    gameBoard.cellWidth = 80;
-    gameBoard.cellHeight = 120;
+    m_gameBoard.cellWidth = 80;
+    m_gameBoard.cellHeight = 120;
 
-    int totalBoardWidth = BOARD_COLS * gameBoard.cellWidth;
-    int totalBoardHeight = BOARD_ROWS * gameBoard.cellHeight;
+    int totalBoardWidth = BOARD_COLS * m_gameBoard.cellWidth;
+    int totalBoardHeight = BOARD_ROWS * m_gameBoard.cellHeight;
 
     // Center the 5×5 board in the screen
-    gameBoard.boardX = (SCREEN_WIDTH - totalBoardWidth) / 2;
-    gameBoard.boardY = (SCREEN_HEIGHT - totalBoardHeight) / 2;
+    m_gameBoard.boardX = (SCREEN_WIDTH - totalBoardWidth) / 2;
+    m_gameBoard.boardY = (SCREEN_HEIGHT - totalBoardHeight) / 2;
 }
 
 // --------------------------------------------------------------------
@@ -357,7 +357,7 @@ void GameApp::handleEvents()
     while (SDL_PollEvent(&e))
     {
         if (e.type == SDL_QUIT) {
-            running = false;
+            m_running = false;
         }
         else if (e.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -367,48 +367,48 @@ void GameApp::handleEvents()
             // -------------------------
             // MAIN MENU
             // -------------------------
-            if (currentState == MAIN_MENU)
+            if (m_currentState == MAIN_MENU)
             {
-                if (isMouseOverButton(mx, my, playButton)) {
-                    currentState = PLAY;
+                if (isMouseOverButton(mx, my, m_playButton)) {
+                    m_currentState = PLAY;
                     startGame();
                 }
-                else if (isMouseOverButton(mx, my, settingsButton)) {
-                    currentState = SETTINGS;
+                else if (isMouseOverButton(mx, my, m_settingsButton)) {
+                    m_currentState = SETTINGS;
                 }
-                else if (isMouseOverButton(mx, my, quitButton)) {
-                    currentState = QUIT;
-                    running = false;
+                else if (isMouseOverButton(mx, my, m_quitButton)) {
+                    m_currentState = QUIT;
+                    m_running = false;
                 }
             }
             // -------------------------
             // SETTINGS
             // -------------------------
-            else if (currentState == SETTINGS)
+            else if (m_currentState == SETTINGS)
             {
-                if (isMouseOverButton(mx, my, settingsBackButton)) {
-                    currentState = MAIN_MENU;
+                if (isMouseOverButton(mx, my, m_settingsBackButton)) {
+                    m_currentState = MAIN_MENU;
                 }
                 // e.g., if Option A means 7 cards, Option B means 10 cards
-                else if (isMouseOverButton(mx, my, settingsButton1)) {
-                    selectedGameMode = GameMode::SEVEN_CARDS;
+                else if (isMouseOverButton(mx, my, m_settingsButton1)) {
+                    m_selectedGameMode = GameMode::SEVEN_CARDS;
                 }
-                else if (isMouseOverButton(mx, my, settingsButton2)) {
-                    selectedGameMode = GameMode::TEN_CARDS;
+                else if (isMouseOverButton(mx, my, m_settingsButton2)) {
+                    m_selectedGameMode = GameMode::TEN_CARDS;
                 }
-                else if (isMouseOverButton(mx, my, settingsButton3)) {
+                else if (isMouseOverButton(mx, my, m_settingsButton3)) {
                     // This sets the game to TRAINING mode
-                    selectedGameMode = GameMode::TRAINING;
+                    m_selectedGameMode = GameMode::TRAINING;
                 }
                 // etc.
             }
             // -------------------------
             // PLAY
             // -------------------------
-            else if (currentState == PLAY)
+            else if (m_currentState == PLAY)
             {
                 // Drag detection on the *active player's* hand
-                Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
+                Player_UI& activePlayer = (m_currentPlayerIndex == 0) ? m_player1 : m_player2;
 
                 for (auto& card : activePlayer.hand)
                 {
@@ -421,8 +421,8 @@ void GameApp::handleEvents()
                     }
                 }
                 // Check if back button clicked
-                if (isMouseOverButton(mx, my, settingsBackButton)) {
-                    currentState = MAIN_MENU;
+                if (isMouseOverButton(mx, my, m_settingsBackButton)) {
+                    m_currentState = MAIN_MENU;
                 }
             }
         }
@@ -431,10 +431,10 @@ void GameApp::handleEvents()
             int mx = e.button.x;
             int my = e.button.y;
 
-            if (currentState == PLAY)
+            if (m_currentState == PLAY)
             {
                 // Release dragged cards from active player
-                Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
+                Player_UI& activePlayer = (m_currentPlayerIndex == 0) ? m_player1 : m_player2;
 
                 for (int i = 0; i < (int)activePlayer.hand.size(); ++i) {
                     Cardx& card = activePlayer.hand[i];
@@ -442,20 +442,20 @@ void GameApp::handleEvents()
                         card.beingDragged = false;
 
                         // Attempt to place on board
-                        placeCardOnBoard(card, currentPlayerIndex, i);
+                        placeCardOnBoard(card, m_currentPlayerIndex, i);
                     }
                 }
             }
         }
         else if (e.type == SDL_MOUSEMOTION)
         {
-            if (currentState == PLAY)
+            if (m_currentState == PLAY)
             {
                 int mx = e.motion.x;
                 int my = e.motion.y;
 
                 // Move any dragged card in active player's hand
-                Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
+                Player_UI& activePlayer = (m_currentPlayerIndex == 0) ? m_player1 : m_player2;
                 for (auto& card : activePlayer.hand)
                 {
                     if (card.beingDragged)
@@ -474,7 +474,7 @@ void GameApp::handleEvents()
 // --------------------------------------------------------------------
 void GameApp::update(Uint32 deltaTime)
 {
-    switch (currentState)
+    switch (m_currentState)
     {
     case SPLASH:
         updateSplash(deltaTime);
@@ -489,7 +489,7 @@ void GameApp::update(Uint32 deltaTime)
         updateGameBoard(deltaTime);
         break;
     case QUIT:
-        running = false;
+        m_running = false;
         break;
     }
 }
@@ -499,10 +499,10 @@ void GameApp::update(Uint32 deltaTime)
 // --------------------------------------------------------------------
 void GameApp::render()
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(m_renderer);
 
-    switch (currentState)
+    switch (m_currentState)
     {
     case SPLASH:
         renderSplash();
@@ -521,7 +521,7 @@ void GameApp::render()
         break;
     }
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(m_renderer);
 }
 
 void GameApp::renderText(SDL_Renderer* renderer, const std::string& text, TTF_Font* font, SDL_Color color, SDL_Rect* buttonRect)
@@ -564,33 +564,33 @@ void GameApp::renderText(SDL_Renderer* renderer, const std::string& text, TTF_Fo
 // --------------------------------------------------------------------
 void GameApp::updateSplash(Uint32 deltaTime)
 {
-    splashTimer += deltaTime;
-    float halfDuration = (float)fadeDuration / 2.0f;
+    m_splashTimer += deltaTime;
+    float halfDuration = (float)m_fadeDuration / 2.0f;
 
-    if (fadeIn)
+    if (m_fadeIn)
     {
         // fade in
-        float ratio = (float)splashTimer / halfDuration;
-        splashAlpha = (int)(255.0f * ratio);
-        if (splashAlpha >= 255)
+        float ratio = (float)m_splashTimer / halfDuration;
+        m_splashAlpha = (int)(255.0f * ratio);
+        if (m_splashAlpha >= 255)
         {
-            splashAlpha = 255;
-            fadeIn = false;
-            splashTimer = 0; // reset to start fade out
+            m_splashAlpha = 255;
+            m_fadeIn = false;
+            m_splashTimer = 0; // reset to start fade out
         }
     }
     else
     {
         // fade out
-        float ratio = (float)splashTimer / halfDuration;
-        splashAlpha = 255 - (int)(255.0f * ratio);
-        if (splashAlpha <= 0)
+        float ratio = (float)m_splashTimer / halfDuration;
+        m_splashAlpha = 255 - (int)(255.0f * ratio);
+        if (m_splashAlpha <= 0)
         {
-            splashAlpha = 0;
-            currentState = MAIN_MENU; // go to menu
+            m_splashAlpha = 0;
+            m_currentState = MAIN_MENU; // go to menu
         }
     }
-    SDL_SetTextureAlphaMod(splashTexture, splashAlpha);
+    SDL_SetTextureAlphaMod(m_splashTexture, m_splashAlpha);
 }
 
 // --------------------------------------------------------------------
@@ -599,7 +599,7 @@ void GameApp::updateSplash(Uint32 deltaTime)
 void GameApp::renderSplash()
 {
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-    SDL_RenderCopy(renderer, splashTexture, nullptr, &dst);
+    SDL_RenderCopy(m_renderer, m_splashTexture, nullptr, &dst);
 }
 
 // --------------------------------------------------------------------
@@ -610,15 +610,15 @@ void GameApp::updateMainMenu()
     int mx, my;
     SDL_GetMouseState(&mx, &my);
 
-    playButton.hovered = isMouseOverButton(mx, my, playButton);
-    settingsButton.hovered = isMouseOverButton(mx, my, settingsButton);
-    quitButton.hovered = isMouseOverButton(mx, my, quitButton);
+    m_playButton.hovered = isMouseOverButton(mx, my, m_playButton);
+    m_settingsButton.hovered = isMouseOverButton(mx, my, m_settingsButton);
+    m_quitButton.hovered = isMouseOverButton(mx, my, m_quitButton);
 }
 
 void GameApp::renderMainMenu()
 {
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-    SDL_RenderCopy(renderer, mainMenuBg, nullptr, &dst);
+    SDL_RenderCopy(m_renderer, m_mainMenuBg, nullptr, &dst);
 
     SDL_Color buttonColor = { 70, 70, 70, 255 };  // Dark gray for button background
     SDL_Color hoverColor = { 100, 100, 100, 255 }; // Lighter gray for hover
@@ -626,24 +626,24 @@ void GameApp::renderMainMenu()
 
     auto drawButton = [&]( Button& btn) {
         // Draw button background
-        SDL_SetRenderDrawColor(renderer,
+        SDL_SetRenderDrawColor(m_renderer,
             btn.hovered ? hoverColor.r : buttonColor.r,
             btn.hovered ? hoverColor.g : buttonColor.g,
             btn.hovered ? hoverColor.b : buttonColor.b,
             255);
-        SDL_RenderFillRect(renderer, &btn.rect);
+        SDL_RenderFillRect(m_renderer, &btn.rect);
 
         // Draw button border
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderDrawRect(renderer, &btn.rect);
+        SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(m_renderer, &btn.rect);
 
         // Render button text
-        renderText(renderer, btn.text, m_font, textColor, &btn.rect);
+        renderText(m_renderer, btn.text, m_font, textColor, &btn.rect);
         };
 
-    drawButton(playButton);
-    drawButton(settingsButton);
-    drawButton(quitButton);
+    drawButton(m_playButton);
+    drawButton(m_settingsButton);
+    drawButton(m_quitButton);
 }
 
 // --------------------------------------------------------------------
@@ -654,16 +654,16 @@ void GameApp::updateSettingsMenu()
     int mx, my;
     SDL_GetMouseState(&mx, &my);
 
-    settingsButton1.hovered = isMouseOverButton(mx, my, settingsButton1);
-    settingsButton2.hovered = isMouseOverButton(mx, my, settingsButton2);
-    settingsButton3.hovered = isMouseOverButton(mx, my, settingsButton3);
-    settingsBackButton.hovered = isMouseOverButton(mx, my, settingsBackButton);
+    m_settingsButton1.hovered = isMouseOverButton(mx, my, m_settingsButton1);
+    m_settingsButton2.hovered = isMouseOverButton(mx, my, m_settingsButton2);
+    m_settingsButton3.hovered = isMouseOverButton(mx, my, m_settingsButton3);
+    m_settingsBackButton.hovered = isMouseOverButton(mx, my, m_settingsBackButton);
 }
 
 void GameApp::renderSettingsMenu()
 {
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-    SDL_RenderCopy(renderer, settingsBg, nullptr, &dst);
+    SDL_RenderCopy(m_renderer, m_settingsBg, nullptr, &dst);
 
     // Draw buttons
     SDL_Color buttonColor = { 70, 70, 70, 255 };
@@ -672,25 +672,25 @@ void GameApp::renderSettingsMenu()
 
     auto drawButton = [&]( Button& btn) {
         // Draw button background
-        SDL_SetRenderDrawColor(renderer,
+        SDL_SetRenderDrawColor(m_renderer,
             btn.hovered ? hoverColor.r : buttonColor.r,
             btn.hovered ? hoverColor.g : buttonColor.g,
             btn.hovered ? hoverColor.b : buttonColor.b,
             255);
-        SDL_RenderFillRect(renderer, &btn.rect);
+        SDL_RenderFillRect(m_renderer, &btn.rect);
 
         // Draw button border
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderDrawRect(renderer, &btn.rect);
+        SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(m_renderer, &btn.rect);
 
         // Render button text
-        renderText(renderer, btn.text, m_font, textColor, &btn.rect);
+        renderText(m_renderer, btn.text, m_font, textColor, &btn.rect);
         };
 
-    drawButton(settingsButton1);
-    drawButton(settingsButton2);
-    drawButton(settingsButton3);
-    drawButton(settingsBackButton);
+    drawButton(m_settingsButton1);
+    drawButton(m_settingsButton2);
+    drawButton(m_settingsButton3);
+    drawButton(m_settingsBackButton);
 }
 
 // --------------------------------------------------------------------
@@ -704,58 +704,58 @@ void GameApp::updateGameBoard(Uint32 deltaTime)
     // Also check the "Back" button hover
     int mx, my;
     SDL_GetMouseState(&mx, &my);
-    settingsBackButton.hovered = isMouseOverButton(mx, my, settingsBackButton);
+    m_settingsBackButton.hovered = isMouseOverButton(mx, my, m_settingsBackButton);
 }
 
 void GameApp::renderGameBoard()
 {
     // 1) Draw the game board background
     SDL_Rect dst = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-    SDL_RenderCopy(renderer, gameBoardBg, nullptr, &dst);
+    SDL_RenderCopy(m_renderer, m_gameBoardBg, nullptr, &dst);
 
     // 2) (Optional) Draw the board's grid lines
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
     for (int r = 0; r <= BOARD_ROWS; ++r) {
-        int y = gameBoard.boardY + r * gameBoard.cellHeight;
-        SDL_RenderDrawLine(renderer,
-            gameBoard.boardX, y,
-            gameBoard.boardX + BOARD_COLS * gameBoard.cellWidth,
+        int y = m_gameBoard.boardY + r * m_gameBoard.cellHeight;
+        SDL_RenderDrawLine(m_renderer,
+            m_gameBoard.boardX, y,
+            m_gameBoard.boardX + BOARD_COLS * m_gameBoard.cellWidth,
             y);
     }
     for (int c = 0; c <= BOARD_COLS; ++c) {
-        int x = gameBoard.boardX + c * gameBoard.cellWidth;
-        SDL_RenderDrawLine(renderer,
-            x, gameBoard.boardY,
-            x, gameBoard.boardY + BOARD_ROWS * gameBoard.cellHeight);
+        int x = m_gameBoard.boardX + c * m_gameBoard.cellWidth;
+        SDL_RenderDrawLine(m_renderer,
+            x, m_gameBoard.boardY,
+            x, m_gameBoard.boardY + BOARD_ROWS * m_gameBoard.cellHeight);
     }
 
     // 3) Render the *active* player's cards
-    Player_UI& activePlayer = (currentPlayerIndex == 0) ? player1 : player2;
+    Player_UI& activePlayer = (m_currentPlayerIndex == 0) ? m_player1 : m_player2;
     for (auto& card : activePlayer.hand)
     {
         if (card.faceUp) {
             // Show the card’s texture if face-up
-            SDL_RenderCopy(renderer, card.texture, nullptr, &card.rect);
+            SDL_RenderCopy(m_renderer, card.texture, nullptr, &card.rect);
         }
         else {
             // Draw a gray rectangle for face-down
-            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-            SDL_RenderFillRect(renderer, &card.rect);
+            SDL_SetRenderDrawColor(m_renderer, 100, 100, 100, 255);
+            SDL_RenderFillRect(m_renderer, &card.rect);
         }
     }
 
     // 4) Render the *inactive* player's cards
-    Player_UI& inactivePlayer = (currentPlayerIndex == 0) ? player2 : player1;
+    Player_UI& inactivePlayer = (m_currentPlayerIndex == 0) ? m_player2 : m_player1;
     for (auto& card : inactivePlayer.hand)
     {
         if (card.faceUp) {
             // Show the card’s texture if face-up
-            SDL_RenderCopy(renderer, card.texture, nullptr, &card.rect);
+            SDL_RenderCopy(m_renderer, card.texture, nullptr, &card.rect);
         }
         else {
             // Draw a gray rectangle for face-down
-            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-            SDL_RenderFillRect(renderer, &card.rect);
+            SDL_SetRenderDrawColor(m_renderer, 100, 100, 100, 255);
+            SDL_RenderFillRect(m_renderer, &card.rect);
         }
     }
 
@@ -766,21 +766,21 @@ void GameApp::renderGameBoard()
         SDL_Color textColor = { 255, 255, 255, 255 };
 
         // Button background
-        SDL_SetRenderDrawColor(renderer,
+        SDL_SetRenderDrawColor(m_renderer,
             btn.hovered ? hoverColor.r : buttonColor.r,
             btn.hovered ? hoverColor.g : buttonColor.g,
             btn.hovered ? hoverColor.b : buttonColor.b,
             255);
-        SDL_RenderFillRect(renderer, &btn.rect);
+        SDL_RenderFillRect(m_renderer, &btn.rect);
 
         // Border
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderDrawRect(renderer, &btn.rect);
+        SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(m_renderer, &btn.rect);
 
         // Text label
-        renderText(renderer, btn.text, m_font, textColor, &btn.rect);
+        renderText(m_renderer, btn.text, m_font, textColor, &btn.rect);
         };
-    drawButton(settingsBackButton);
+    drawButton(m_settingsBackButton);
 }
 
 
@@ -790,10 +790,10 @@ void GameApp::renderGameBoard()
 void GameApp::startGame()
 {
     // Clear old hands
-    player1.hand.clear();
-    player2.hand.clear();
+    m_player1.hand.clear();
+    m_player2.hand.clear();
 
-    if (selectedGameMode == GameMode::TRAINING)
+    if (m_selectedGameMode == GameMode::TRAINING)
     {
         // 1) Hard-code the 7 training card values
         std::vector<int> trainingValues = { 1,1,2,2,3,3,4 };
@@ -807,16 +807,16 @@ void GameApp::startGame()
             cardP1.rect = { 100 + i * 70, SCREEN_HEIGHT - 200, 60, 90 };
             cardP1.beingDragged = false;
             cardP1.faceUp = true;  // player1 is active at start
-            cardP1.texture = blueCardTextures[v - 1];
-            player1.hand.push_back(cardP1);
+            cardP1.texture = m_blueCardTextures[v - 1];
+            m_player1.hand.push_back(cardP1);
 
             Cardx cardP2;
             cardP2.value = v;
             cardP2.rect = { 100 + i * 70, 100, 60, 90 };
             cardP2.beingDragged = false;
             cardP2.faceUp = false; // hidden if not active
-            cardP2.texture = redCardTextures[v - 1];
-            player2.hand.push_back(cardP2);
+            cardP2.texture = m_redCardTextures[v - 1];
+            m_player2.hand.push_back(cardP2);
         }
 
         // 3) Force a 3×3 board if training
@@ -826,7 +826,7 @@ void GameApp::startGame()
     else
     {
         // Decide how many cards per player
-        int numCards = (selectedGameMode == GameMode::SEVEN_CARDS) ? 7 : 10;
+        int numCards = (m_selectedGameMode == GameMode::SEVEN_CARDS) ? 7 : 10;
 
         // Use any pattern you want for these cards.
         // Example: i=0..6 or i=0..9 cycling ranks 1..4
@@ -842,8 +842,8 @@ void GameApp::startGame()
             cardP1.offsetX = 0;
             cardP1.offsetY = 0;
             cardP1.faceUp = true; // player1 is active initially
-            cardP1.texture = blueCardTextures[v - 1];
-            player1.hand.push_back(cardP1);
+            cardP1.texture = m_blueCardTextures[v - 1];
+            m_player1.hand.push_back(cardP1);
 
             // Player 2's card
             Cardx cardP2;
@@ -853,19 +853,19 @@ void GameApp::startGame()
             cardP2.offsetX = 0;
             cardP2.offsetY = 0;
             cardP2.faceUp = false; // hidden if not their turn
-            cardP2.texture = redCardTextures[v - 1];
-            player2.hand.push_back(cardP2);
+            cardP2.texture = m_redCardTextures[v - 1];
+            m_player2.hand.push_back(cardP2);
         }
     }
 
     // Active player = player1
-    currentPlayerIndex = 0;
+    m_currentPlayerIndex = 0;
 
     // Reset the board to empty
     initBoard();
 
     // Go to play state
-    currentState = PLAY;
+    m_currentState = PLAY;
 }
 
 
@@ -875,14 +875,14 @@ void GameApp::startGame()
 void GameApp::switchTurns()
 {
     // Toggle 0 <-> 1
-    currentPlayerIndex = (currentPlayerIndex == 0) ? 1 : 0;
+    m_currentPlayerIndex = (m_currentPlayerIndex == 0) ? 1 : 0;
 
     // Face-up for active player's cards, face-down for inactive
-    for (auto& c : player1.hand) {
-        c.faceUp = (currentPlayerIndex == 0);
+    for (auto& c : m_player1.hand) {
+        c.faceUp = (m_currentPlayerIndex == 0);
     }
-    for (auto& c : player2.hand) {
-        c.faceUp = (currentPlayerIndex == 1);
+    for (auto& c : m_player2.hand) {
+        c.faceUp = (m_currentPlayerIndex == 1);
     }
 }
 
@@ -894,11 +894,11 @@ void GameApp::placeCardOnBoard(Cardx& card, int ownerID, int cardIndex)
     // Check all cells to see if we can place it
     for (int r = 0; r < BOARD_ROWS; ++r) {
         for (int c = 0; c < BOARD_COLS; ++c) {
-            if (gameBoard.cells[r][c].cardOwner == -1) {
+            if (m_gameBoard.cells[r][c].cardOwner == -1) {
                 // bounding box of this cell
-                int cellX = gameBoard.boardX + c * gameBoard.cellWidth;
-                int cellY = gameBoard.boardY + r * gameBoard.cellHeight;
-                SDL_Rect cellRect = { cellX, cellY, gameBoard.cellWidth, gameBoard.cellHeight };
+                int cellX = m_gameBoard.boardX + c * m_gameBoard.cellWidth;
+                int cellY = m_gameBoard.boardY + r * m_gameBoard.cellHeight;
+                SDL_Rect cellRect = { cellX, cellY, m_gameBoard.cellWidth, m_gameBoard.cellHeight };
 
                 // Check if card center is in cell
                 int cardCenterX = card.rect.x + card.rect.w / 2;
@@ -908,12 +908,12 @@ void GameApp::placeCardOnBoard(Cardx& card, int ownerID, int cardIndex)
                     cardCenterY >= cellRect.y && cardCenterY <= cellRect.y + cellRect.h)
                 {
                     // Snap the card to the center
-                    card.rect.x = cellX + (gameBoard.cellWidth - card.rect.w) / 2;
-                    card.rect.y = cellY + (gameBoard.cellHeight - card.rect.h) / 2;
+                    card.rect.x = cellX + (m_gameBoard.cellWidth - card.rect.w) / 2;
+                    card.rect.y = cellY + (m_gameBoard.cellHeight - card.rect.h) / 2;
 
                     // Mark board cell as occupied
-                    gameBoard.cells[r][c].cardOwner = ownerID;
-                    gameBoard.cells[r][c].cardIndex = cardIndex;
+                    m_gameBoard.cells[r][c].cardOwner = ownerID;
+                    m_gameBoard.cells[r][c].cardIndex = cardIndex;
 
                     // Switch turns if your rule is "one card per turn"
                     switchTurns();

@@ -70,37 +70,37 @@ public:
     void clean();
 
 private:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    SDL_Window*                     m_window;
+    SDL_Renderer*                   m_renderer;
 
-    TTF_Font* m_font;
+    TTF_Font*                       m_font;
     
-    SDL_Texture* splashTexture;
-    int splashAlpha;
-    Uint32 splashTimer;
-    int fadeDuration;
-    bool fadeIn;
+    SDL_Texture*                    m_splashTexture;
+    int                             m_splashAlpha;
+    Uint32                          m_splashTimer;
+    int                             m_fadeDuration;
+    bool                            m_fadeIn;
 
-    SDL_Texture* mainMenuBg;
-    SDL_Texture* settingsBg;
-    SDL_Texture* gameBoardBg;
+    SDL_Texture*                    m_mainMenuBg;
+    SDL_Texture*                    m_settingsBg;
+    SDL_Texture*                    m_gameBoardBg;
 
-    Button playButton, settingsButton, quitButton;
-    Button settingsButton1, settingsButton2, settingsButton3, settingsBackButton;
+    Button                          m_playButton, m_settingsButton, m_quitButton;
+    Button                          m_settingsButton1, m_settingsButton2, m_settingsButton3, m_settingsBackButton;
 
-    Boardx gameBoard;
+    Boardx                          m_gameBoard;
+        
+    Player_UI                       m_player1;
+    Player_UI                       m_player2;
+    int                             m_currentPlayerIndex;   
 
-    Player_UI player1;
-    Player_UI player2;
-    int currentPlayerIndex;   
+    GameMode                        m_selectedGameMode;
 
-    GameMode selectedGameMode;
+    GameState                       m_currentState;
+    bool                            m_running;
 
-    GameState currentState;
-    bool running;
-
-    std::vector<SDL_Texture*>blueCardTextures;
-    std::vector<SDL_Texture*>redCardTextures;
+    std::vector<SDL_Texture*>       m_blueCardTextures;
+    std::vector<SDL_Texture*>       m_redCardTextures;
 
     Uint32 getTick();
 
