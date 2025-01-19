@@ -50,6 +50,13 @@ bool Timer::isTimer() const
     return m_initial_duration != -1;
 }
 
+void Timer::resetTimer()
+{
+    std::lock_guard<std::mutex> lock(m_timer_mutex);
+    stop();
+    m_remaining_time = m_initial_duration;
+}
+
 bool Timer::operator==(const Timer& other) const
 {
     return m_initial_duration == other.m_initial_duration &&

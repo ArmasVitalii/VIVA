@@ -54,6 +54,8 @@ void Game::resetGame()
 	m_players[0].initialisePlayerCards();
 	m_players[1].initialisePlayerCards();
 	m_board.resetBoard();
+	m_timerPlayer1.resetTimer();
+	m_timerPlayer2.resetTimer();
 }
 
 void Game::startTimer()
