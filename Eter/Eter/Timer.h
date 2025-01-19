@@ -25,6 +25,7 @@ public:
     void                            start();
     void                            stop();
     bool                            hasTimeLeft() const;
+    bool                            isTimer() const;
 
     bool operator==(const Timer& other) const;
 };

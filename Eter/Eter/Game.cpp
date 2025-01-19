@@ -68,7 +68,7 @@ void Game::stopTimer()
 
 bool Game::timerRanOutOfTime() const
 {
-	return !m_currentTimer.get().hasTimeLeft();
+	return !m_currentTimer.get().hasTimeLeft() && m_currentTimer.get().isTimer();
 }
 
 void Game::printLogic() const

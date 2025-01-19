@@ -5,10 +5,10 @@
 
 int main(int argc, char* argv[]) {
 
-    /*Menu eterMenu;
-    eterMenu.handleMatch();*/
+    Menu eterMenu;
+    eterMenu.handleMatch();
 
-    (void)argc; (void)argv;
+    /*(void)argc; (void)argv;
 
     GameApp app;
     if (!app.init()) {
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     app.run();
-    app.clean();
+    app.clean();*/
 
     return 0;
 }

@@ -45,6 +45,11 @@ bool Timer::hasTimeLeft() const
     return m_remaining_time > 0;
 }
 
+bool Timer::isTimer() const
+{
+    return m_initial_duration != -1;
+}
+
 bool Timer::operator==(const Timer& other) const
 {
     return m_initial_duration == other.m_initial_duration &&
